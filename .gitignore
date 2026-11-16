@@ -41,3 +41,10 @@ example
 # generated native folders
 /ios
 /android
+
+# 환경 변수 (개인 설정)
+.env
+.env*.local
+
+# Claude 미리보기 설정
+.claude/

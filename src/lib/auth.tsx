@@ -1,0 +1,90 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+
+import { api, setSessionExpiredHandler } from '@/lib/api';
+import { sessionStorage } from '@/lib/storage';
+import type { ApiResponse, AuthResult, User } from '@/types/api';
+
+type AuthContextValue = {
+  user: User | null;
+  isLoggedIn: boolean;
+  // 앱을 켠 직후, 저장된 로그인 정보를 읽는 동안 true
+  isLoading: boolean;
+  signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
+  // 회원가입 직후처럼, 서버가 이미 토큰을 준 경우에 로그인 상태로 만든다
+  applyAuthResult: (result: AuthResult) => Promise<void>;
+};
+
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 앱을 켜면 저장된 로그인 정보를 읽는다 (토큰이 만료됐다면 첫 요청 때 자동으로 갱신된다)
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const [token, stored] = await Promise.all([sessionStorage.getAccessToken(), sessionStorage.getUser()]);
+      if (!cancelled) {
+        setUser(token && stored ? stored : null);
+        setIsLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // 로그인 정보가 바뀌면(로그아웃, 세션 만료) 이전 사용자의 화면 데이터가 남지 않도록 캐시를 비운다
+  const resetSession = useCallback(() => {
+    setUser(null);
+    queryClient.clear();
+  }, [queryClient]);
+
+  useEffect(() => {
+    setSessionExpiredHandler(resetSession);
+    return () => setSessionExpiredHandler(null);
+  }, [resetSession]);
+
+  const applyAuthResult = useCallback(async (result: AuthResult) => {
+    await sessionStorage.saveTokens({ accessToken: result.accessToken, refreshToken: result.refreshToken });
+    await sessionStorage.saveUser(result.user);
+    setUser(result.user);
+  }, []);
+
+  const signIn = useCallback(
+    async (email: string, password: string) => {
+      const res = await api.post<ApiResponse<AuthResult>>('/api/auth/signin', { email, password });
+      await applyAuthResult(res.data.data);
+    },
+    [applyAuthResult],
+  );
+
+  const signOut = useCallback(async () => {
+    try {
+      await api.post('/api/auth/signout');
+    } catch {
+      // 서버 호출이 실패해도 이 기기의 로그인 정보는 지운다
+    }
+    await sessionStorage.clear();
+    resetSession();
+  }, [resetSession]);
+
+  const value = useMemo(
+    () => ({ user, isLoggedIn: user !== null, isLoading, signIn, signOut, applyAuthResult }),
+    [user, isLoading, signIn, signOut, applyAuthResult],
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth(): AuthContextValue {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth는 AuthProvider 안에서만 쓸 수 있어요.');
+  }
+  return context;
+}
