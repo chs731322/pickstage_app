@@ -13,3 +13,18 @@ export function emailError(email: string): string | null {
   if (!isValidEmail(email)) return '올바른 이메일 형식이 아니에요.';
   return null;
 }
+
+// 비밀번호: 영문 + 숫자 + 특수문자를 모두 포함해 8~20자 (서버 SignupRequest와 같은 규칙)
+const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,20}$/;
+
+export function isValidPassword(password: string): boolean {
+  return PASSWORD_PATTERN.test(password);
+}
+
+export const PASSWORD_RULE = '영문, 숫자, 특수문자를 모두 포함해 8~20자로 입력해주세요.';
+
+// 닉네임: 앞뒤 공백을 뺀 2~10자
+export function isValidNickname(nickname: string): boolean {
+  const length = nickname.trim().length;
+  return length >= 2 && length <= 10;
+}

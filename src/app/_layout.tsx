@@ -30,6 +30,14 @@ export default function RootLayout() {
   );
 }
 
+// 로그인·회원가입 화면: 위쪽 그라데이션 그림 위에 뒤로 가기 버튼만 보이게 제목줄을 투명하고 제목 없이 둔다
+const authScreenOptions = {
+  title: '',
+  headerTransparent: true,
+  headerBlurEffect: 'none' as const,
+  headerShadowVisible: false,
+};
+
 function RootNavigator() {
   const { isLoggedIn, isLoading } = useAuth();
 
@@ -71,9 +79,9 @@ function RootNavigator() {
 
       {/* 로그아웃 상태에서만 (로그인한 채로 열면 첫 화면으로 보낸다) */}
       <Stack.Protected guard={!isLoggedIn}>
-        <Stack.Screen name="login" options={{ title: '로그인', presentation: 'modal' }} />
-        <Stack.Screen name="signup" options={{ title: '회원가입' }} />
-        <Stack.Screen name="forgot-password" options={{ title: '비밀번호 찾기' }} />
+        <Stack.Screen name="login" options={authScreenOptions} />
+        <Stack.Screen name="signup" options={authScreenOptions} />
+        <Stack.Screen name="forgot-password" options={authScreenOptions} />
       </Stack.Protected>
     </Stack>
   );

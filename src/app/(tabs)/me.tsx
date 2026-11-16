@@ -36,6 +36,14 @@ export default function MyScreen() {
               로그인
             </AppText>
           </Pressable>
+          <Pressable style={styles.signupLink} onPress={() => router.push('/signup')} hitSlop={8}>
+            <AppText color={colors.textSecondary} size={14}>
+              아직 회원이 아니신가요?{' '}
+              <AppText weight="bold" color={colors.brand} size={14}>
+                회원가입
+              </AppText>
+            </AppText>
+          </Pressable>
         </View>
       )}
 
@@ -53,6 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     backgroundColor: colors.brand,
   },
+  signupLink: { alignItems: 'center', paddingTop: spacing.sm },
   secondaryButton: {
     alignItems: 'center',
     marginTop: spacing.sm,

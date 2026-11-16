@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
-import { Screen } from '@/components/Screen';
+import { AuthLayout } from '@/components/AuthLayout';
 import { TextField } from '@/components/TextField';
 import { errorMessage } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
@@ -43,16 +43,7 @@ export default function LoginScreen() {
   }
 
   return (
-    <Screen topInset={false} keyboard>
-      <View style={styles.intro}>
-        <AppText weight="extrabold" size={26}>
-          로그인
-        </AppText>
-        <AppText color={colors.textSecondary} style={styles.introText}>
-          PICKSTAGE에 오신 것을 환영해요!{'\n'}로그인하고 다양한 공연 정보를 만나보세요.
-        </AppText>
-      </View>
-
+    <AuthLayout title="다시 만나서 반가워요" subtitle={'로그인하고 내 취향 공연을 놓치지 마세요.'}>
       <TextField
         label="이메일"
         value={email}
@@ -95,25 +86,23 @@ export default function LoginScreen() {
       <Button title="로그인" onPress={handleSubmit} loading={isSubmitting} />
 
       <View style={styles.links}>
-        <Link href="/forgot-password" replace>
+        <Link href="/forgot-password">
           <AppText color={colors.textSecondary} size={14}>
             비밀번호를 잊으셨나요?
           </AppText>
         </Link>
         <AppText color={colors.border}>|</AppText>
-        <Link href="/signup" replace>
+        <Link href="/signup">
           <AppText weight="bold" color={colors.brand} size={14}>
             회원가입
           </AppText>
         </Link>
       </View>
-    </Screen>
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  intro: { gap: spacing.sm, paddingVertical: spacing.sm },
-  introText: { lineHeight: 22 },
   errorBox: {
     padding: spacing.md,
     borderRadius: radius.sm + 4,
