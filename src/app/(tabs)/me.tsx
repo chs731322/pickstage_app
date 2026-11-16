@@ -118,6 +118,11 @@ export default function MyScreen() {
         {/* 안내 (로그인 없이도 볼 수 있다) */}
         <MenuCard>
           <MenuRow
+            label="공지사항"
+            icon={{ ios: 'megaphone', android: 'campaign', web: 'campaign' }}
+            onPress={() => router.push('/notices')}
+          />
+          <MenuRow
             label="이용약관"
             icon={{ ios: 'doc.text', android: 'description', web: 'description' }}
             onPress={() => openSitePage('/terms')}

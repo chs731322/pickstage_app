@@ -5,6 +5,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, TextInput, View } from
 import { AppText } from '@/components/AppText';
 import { ChecklistCheck } from '@/components/ChecklistCheck';
 import { Screen } from '@/components/Screen';
+import { WeatherCard } from '@/components/WeatherCard';
 import {
   CHECKLIST_CONTENT_MAX,
   useAddChecklistItem,
@@ -56,6 +57,9 @@ export default function ChecklistScreen() {
 
   return (
     <Screen topInset={false} keyboard tone="page">
+      {/* 공연 당일 날씨 (웹의 공연 준비 가이드처럼 체크리스트 위에 함께 보여준다) */}
+      <WeatherCard />
+
       {/* 진행 상황 */}
       <View style={styles.progressCard}>
         <View style={styles.progressTop}>

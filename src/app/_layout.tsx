@@ -73,6 +73,8 @@ function RootNavigator() {
       <Stack.Screen name="venues" options={{ title: '공연장 찾기' }} />
       <Stack.Screen name="venue/[id]" options={{ title: '공연장' }} />
       <Stack.Screen name="user/[id]" options={{ title: '프로필' }} />
+      <Stack.Screen name="notices" options={{ title: '공지사항' }} />
+      <Stack.Screen name="notice/[id]" options={{ title: '공지사항' }} />
       <Stack.Screen name="community/[id]" options={{ title: '' }} />
 
       {/* 로그인한 사람만 (로그아웃 상태로 열면 로그인 화면으로 보낸다) */}
