@@ -75,6 +75,12 @@ function RootNavigator() {
         <Stack.Screen name="notifications" options={{ title: '알림' }} />
         <Stack.Screen name="checklist" options={{ title: '준비 체크리스트' }} />
         <Stack.Screen name="push-settings" options={{ title: '푸시 알림 설정' }} />
+        <Stack.Screen name="my/bookmarks" options={{ title: '찜한 공연' }} />
+        <Stack.Screen name="my/artists" options={{ title: '관심 아티스트' }} />
+        <Stack.Screen name="my/posts" options={{ title: '내가 쓴 글' }} />
+        <Stack.Screen name="my/blocks" options={{ title: '차단한 사용자' }} />
+        <Stack.Screen name="my/profile" options={{ title: '회원정보' }} />
+        <Stack.Screen name="my/password" options={{ title: '비밀번호 변경' }} />
       </Stack.Protected>
 
       {/* 로그아웃 상태에서만 (로그인한 채로 열면 첫 화면으로 보낸다) */}

@@ -25,6 +25,7 @@ import { ReportBlockMenu } from '@/components/ReportBlockMenu';
 import { ReviewFormSheet } from '@/components/ReviewFormSheet';
 import {
   parseFacilities,
+  useCreateReview,
   useVenue,
   useVenueConcertDetails,
   type VenueDetail,
@@ -74,6 +75,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
   const { width } = useWindowDimensions();
   const { isLoggedIn } = useAuth();
   const [reviewOpen, setReviewOpen] = useState(false);
+  const createReview = useCreateReview(venue.id);
   // 이 화면에서 차단한 사용자의 후기는 바로 뺀다
   const [blockedIds, setBlockedIds] = useState<number[]>([]);
   const [page, setPage] = useState(0);
@@ -331,7 +333,13 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
         ) : null}
       </ScrollView>
 
-      <ReviewFormSheet venueId={venue.id} venueName={venue.name} visible={reviewOpen} onClose={() => setReviewOpen(false)} />
+      <ReviewFormSheet
+        title={`${venue.name} 후기`}
+        visible={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        successMessage="후기가 작성되었어요"
+        onSubmit={(values) => createReview.mutateAsync({ venueId: venue.id, ...values })}
+      />
     </View>
   );
 }

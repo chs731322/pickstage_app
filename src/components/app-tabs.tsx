@@ -34,7 +34,7 @@ function label(title: string) {
 }
 
 // 아이콘 24 + 글자 11 + 위아래 여백이 들어가는 높이 (아래쪽 안전 영역 제외)
-const TAB_BAR_HEIGHT = 58;
+export const TAB_BAR_HEIGHT = 58;
 
 // 하단 탭바: 화면 아래에 꽉 차게 붙은 평평한 모양 (아이콘 아래에 글자).
 // 탭 이름(name)은 src/app/(tabs)/ 폴더의 파일 이름과 같아야 한다.

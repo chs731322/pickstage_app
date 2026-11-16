@@ -14,6 +14,8 @@ type AuthContextValue = {
   signOut: () => Promise<void>;
   // 회원가입 직후처럼, 서버가 이미 토큰을 준 경우에 로그인 상태로 만든다
   applyAuthResult: (result: AuthResult) => Promise<void>;
+  // 닉네임을 바꾸는 것처럼 내 정보가 달라졌을 때, 저장된 정보와 화면을 함께 갱신한다
+  updateUser: (user: User) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -63,6 +65,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [applyAuthResult],
   );
 
+  const updateUser = useCallback(async (next: User) => {
+    await sessionStorage.saveUser(next);
+    setUser(next);
+  }, []);
+
   const signOut = useCallback(async () => {
     try {
       await api.post('/api/auth/signout');
@@ -74,8 +81,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [resetSession]);
 
   const value = useMemo(
-    () => ({ user, isLoggedIn: user !== null, isLoading, signIn, signOut, applyAuthResult }),
-    [user, isLoading, signIn, signOut, applyAuthResult],
+    () => ({ user, isLoggedIn: user !== null, isLoading, signIn, signOut, applyAuthResult, updateUser }),
+    [user, isLoading, signIn, signOut, applyAuthResult, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -43,6 +43,8 @@ export function useArtist(id: string | undefined) {
   });
 }
 
+export type InterestedArtist = { id: number; name: string; profileImage: string | null; genre: string | null };
+
 // 내 관심 아티스트 (로그인했을 때만)
 export function useInterestedArtists() {
   const { isLoggedIn } = useAuth();
@@ -50,7 +52,7 @@ export function useInterestedArtists() {
     queryKey: ['artists', 'interests'],
     enabled: isLoggedIn,
     queryFn: async () => {
-      const res = await api.get<ApiResponse<{ id: number }[]>>('/api/artists/interests');
+      const res = await api.get<ApiResponse<InterestedArtist[]>>('/api/artists/interests');
       return res.data.data ?? [];
     },
   });

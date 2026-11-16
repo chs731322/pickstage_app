@@ -14,54 +14,75 @@ import {
 
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
-import { useCreateReview } from '@/features/venues';
 import { errorMessage } from '@/lib/api';
 import { colors, fontFamily, radius, spacing } from '@/theme';
 
 const CONTENT_MAX = 1000;
 
-type Props = { venueId: number; venueName: string; visible: boolean; onClose: () => void };
+export type ReviewValues = {
+  rating: number;
+  content: string;
+  seatSection?: string;
+  viewInfo?: string;
+  standingTip?: string;
+};
 
-// 공연장 후기 쓰는 창 (아래에서 올라오는 시트): 별점, 후기, 좌석·시야·스탠딩 팁
-export function ReviewFormSheet({ venueId, venueName, visible, onClose }: Props) {
-  const createReview = useCreateReview(venueId);
-  const [rating, setRating] = useState(5);
-  const [content, setContent] = useState('');
-  const [seatSection, setSeatSection] = useState('');
-  const [viewInfo, setViewInfo] = useState('');
-  const [standingTip, setStandingTip] = useState('');
+type Props = {
+  title: string;
+  visible: boolean;
+  onClose: () => void;
+  // 수정할 때 처음에 채워둘 값 (없으면 새로 쓰기)
+  initial?: Partial<Record<'content' | 'seatSection' | 'viewInfo' | 'standingTip', string | null>> & { rating?: number };
+  // 저장 요청. 실패하면 예외를 던지면 된다 (오류 안내는 시트가 한다).
+  onSubmit: (values: ReviewValues) => Promise<void>;
+  submitLabel?: string;
+  successMessage: string;
+};
 
+// 공연장 후기 쓰는·고치는 창 (아래에서 올라오는 시트): 별점, 후기, 좌석·시야·스탠딩 팁
+export function ReviewFormSheet({ title, visible, onClose, initial, onSubmit, submitLabel = '등록', successMessage }: Props) {
+  const [rating, setRating] = useState(initial?.rating ?? 5);
+  const [content, setContent] = useState(initial?.content ?? '');
+  const [seatSection, setSeatSection] = useState(initial?.seatSection ?? '');
+  const [viewInfo, setViewInfo] = useState(initial?.viewInfo ?? '');
+  const [standingTip, setStandingTip] = useState(initial?.standingTip ?? '');
+  const [pending, setPending] = useState(false);
+
+  // 닫을 때 입력을 처음 값으로 되돌린다 (새로 쓰기는 비운다)
+  const reset = () => {
+    setRating(initial?.rating ?? 5);
+    setContent(initial?.content ?? '');
+    setSeatSection(initial?.seatSection ?? '');
+    setViewInfo(initial?.viewInfo ?? '');
+    setStandingTip(initial?.standingTip ?? '');
+  };
   const close = () => {
-    setRating(5);
-    setContent('');
-    setSeatSection('');
-    setViewInfo('');
-    setStandingTip('');
+    reset();
     onClose();
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (!content.trim()) {
       Alert.alert('후기 내용을 입력해주세요');
       return;
     }
-    createReview.mutate(
-      {
-        venueId,
+    setPending(true);
+    try {
+      await onSubmit({
         rating,
         content: content.trim(),
         seatSection: seatSection.trim() || undefined,
         viewInfo: viewInfo.trim() || undefined,
         standingTip: standingTip.trim() || undefined,
-      },
-      {
-        onSuccess: () => {
-          close();
-          Alert.alert('후기가 작성되었어요');
-        },
-        onError: (error) => Alert.alert('후기를 등록하지 못했어요', errorMessage(error, '잠시 후 다시 시도해주세요.')),
-      },
-    );
+      });
+      onClose();
+      if (!initial) reset();
+      Alert.alert(successMessage);
+    } catch (error) {
+      Alert.alert('저장하지 못했어요', errorMessage(error, '잠시 후 다시 시도해주세요.'));
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
@@ -71,7 +92,7 @@ export function ReviewFormSheet({ venueId, venueName, visible, onClose }: Props)
         <View style={styles.sheet}>
           <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} contentContainerStyle={styles.body}>
             <AppText weight="extrabold" size={20}>
-              {venueName} 후기
+              {title}
             </AppText>
 
             <View style={styles.stars}>
@@ -125,7 +146,7 @@ export function ReviewFormSheet({ venueId, venueName, visible, onClose }: Props)
                 <Button title="취소" variant="secondary" onPress={close} />
               </View>
               <View style={styles.flex}>
-                <Button title="등록" onPress={submit} loading={createReview.isPending} />
+                <Button title={submitLabel} onPress={submit} loading={pending} />
               </View>
             </View>
           </ScrollView>

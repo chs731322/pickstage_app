@@ -6,22 +6,31 @@ import { Animated, Pressable, StyleSheet, useWindowDimensions, View } from 'reac
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
+import { TAB_BAR_HEIGHT } from '@/components/app-tabs';
 import { usePopularFestivals, type FestivalSummary } from '@/features/festivals';
 import { formatDateRange } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
 import { colors, radius, spacing } from '@/theme';
 
 const GAP = 14;
+// 포스터 아래 정보(태그·제목·공연장·날짜·버튼)와 점, 아래 여백이 차지하는 높이 (화면 높이에서 포스터가 쓸 수 있는 크기를 계산할 때 쓴다)
+const INFO_HEIGHT = 215;
+const DOTS_HEIGHT = 30;
+const HERO_BOTTOM = 24;
 
 // 홈 맨 위 검정 영역: 로고·검색·알림, "PICK YOUR STAGE" 글자, 인기 공연 포스터를 옆으로 넘겨 보는 캐러셀 (웹 메인과 같은 구성)
 export function HeroSection() {
   const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const { data } = usePopularFestivals(5);
   const [index, setIndex] = useState(0);
   const [scrollX] = useState(() => new Animated.Value(0));
 
-  const cardWidth = Math.round(width * 0.56);
+  // 홈을 열었을 때 버튼까지 한 화면에 보이도록, 남는 높이에 맞춰 포스터 크기를 정한다
+  const letteringWidth = width * 0.46;
+  const letteringHeight = (letteringWidth * 609) / 1004;
+  const fixedHeights = insets.top + 54 + letteringHeight + 20 + INFO_HEIGHT + DOTS_HEIGHT + HERO_BOTTOM + TAB_BAR_HEIGHT + insets.bottom;
+  const cardWidth = Math.round(Math.max(130, Math.min(width * 0.56, ((height - fixedHeights) * 3) / 4)));
   const snap = cardWidth + GAP;
   const sidePad = (width - cardWidth) / 2;
   const festivals = data ?? [];
@@ -44,7 +53,7 @@ export function HeroSection() {
 
       <Image
         source={require('../../assets/images/decor/pick-your-stage.webp')}
-        style={[styles.lettering, { width: width * 0.74, height: (width * 0.74 * 609) / 1004 }]}
+        style={[styles.lettering, { width: letteringWidth, height: letteringHeight }]}
         contentFit="contain"
       />
 
@@ -138,7 +147,7 @@ export function HeroSection() {
 }
 
 const styles = StyleSheet.create({
-  hero: { backgroundColor: '#000000', paddingBottom: spacing.lg },
+  hero: { backgroundColor: '#000000', paddingBottom: HERO_BOTTOM },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -147,21 +156,21 @@ const styles = StyleSheet.create({
   },
   logo: { width: 52, height: 38 },
   topIcons: { flexDirection: 'row', alignItems: 'center', gap: 22 },
-  lettering: { alignSelf: 'center', marginTop: spacing.md },
+  lettering: { alignSelf: 'center', marginTop: spacing.sm },
   carousel: { flexGrow: 0, marginTop: spacing.sm },
   poster: {
     borderRadius: 18,
     backgroundColor: '#1c1c20',
   },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
-  info: { alignItems: 'center', gap: 6, paddingHorizontal: spacing.lg, marginTop: spacing.lg },
+  info: { alignItems: 'center', gap: 6, paddingHorizontal: spacing.lg, marginTop: spacing.md },
   tags: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   tag: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.brand },
   centerText: { textAlign: 'center' },
   cta: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
     paddingHorizontal: 30,
-    paddingVertical: 14,
+    paddingVertical: 13,
     borderRadius: radius.pill,
     backgroundColor: colors.brand,
   },
