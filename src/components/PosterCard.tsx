@@ -26,11 +26,11 @@ export function PosterCard({ festival, width = 150 }: { festival: FestivalSummar
           </View>
         )}
       </View>
-      <AppText weight="semibold" size={14} numberOfLines={2} style={styles.title}>
-        {festival.title}
-      </AppText>
-      <AppText color={colors.textMuted} size={12}>
+      <AppText weight="medium" size={13} color={colors.brand} style={styles.date}>
         {formatDateRange(festival.startDate, festival.endDate)}
+      </AppText>
+      <AppText weight="bold" size={16} numberOfLines={2} style={styles.title}>
+        {festival.title}
       </AppText>
     </Pressable>
   );
@@ -47,5 +47,6 @@ const styles = StyleSheet.create({
   },
   poster: { width: '100%', height: '100%' },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
-  title: { minHeight: 36, lineHeight: 18, marginBottom: 2 },
+  date: { marginBottom: 4 },
+  title: { lineHeight: 22 },
 });

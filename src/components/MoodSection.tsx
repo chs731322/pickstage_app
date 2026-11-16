@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { FilterPill } from '@/components/FilterPill';
 import { PosterCard } from '@/components/PosterCard';
 import { SectionHeader } from '@/components/SectionHeader';
 import { MOOD_TABS, useMoodFestivals, type MoodId } from '@/features/festivals';
-import { colors, radius, spacing } from '@/theme';
+import { colors, spacing } from '@/theme';
 
 // "이런 공연 어때요?": 기분에 맞는 탭(혼자 즐기기 / 야외에서 낭만 있게 / 뛰어보자)을 고르면 그에 맞는 공연이 가로로 나온다
 export function MoodSection() {
@@ -21,21 +22,9 @@ export function MoodSection() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.pills}
         style={styles.pillsScroll}>
-        {MOOD_TABS.map((tab) => {
-          const active = tab.id === mood;
-          return (
-            <Pressable
-              key={tab.id}
-              onPress={() => setMood(tab.id)}
-              accessibilityRole="tab"
-              accessibilityState={{ selected: active }}
-              style={[styles.pill, active && styles.pillActive]}>
-              <AppText weight={active ? 'bold' : 'medium'} size={14} color={active ? colors.white : colors.textSecondary}>
-                {tab.label}
-              </AppText>
-            </Pressable>
-          );
-        })}
+        {MOOD_TABS.map((tab) => (
+          <FilterPill key={tab.id} label={tab.label} active={tab.id === mood} onPress={() => setMood(tab.id)} />
+        ))}
       </ScrollView>
 
       {isPending ? (
@@ -62,15 +51,6 @@ const styles = StyleSheet.create({
   section: { gap: spacing.md },
   pillsScroll: { flexGrow: 0 },
   pills: { gap: spacing.sm, paddingHorizontal: spacing.md },
-  pill: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.white,
-  },
-  pillActive: { borderColor: colors.brand, backgroundColor: colors.brand },
   list: { gap: spacing.md, paddingHorizontal: spacing.md },
   loading: { marginVertical: spacing.xl },
   empty: { paddingHorizontal: spacing.md, paddingVertical: spacing.lg },

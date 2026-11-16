@@ -25,9 +25,9 @@ function parseDate(value: string): Date {
   return new Date(y, m - 1, d);
 }
 
-// 공연 기간: 하루면 '2026.11.22', 여러 날이면 '2026.11.20 ~ 2026.11.22'
+// 공연 기간: 하루면 '2026.11.22', 여러 날이면 '2026.11.20 ~ 2026.11.22', 날짜가 없으면 '일정 미정'
 export function formatDateRange(start: string | null, end: string | null): string {
-  if (!start) return '';
+  if (!start) return '일정 미정';
   const s = start.slice(0, 10).replaceAll('-', '.');
   if (!end || end === start) return s;
   return `${s} ~ ${end.slice(0, 10).replaceAll('-', '.')}`;
