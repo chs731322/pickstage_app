@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { api, setSessionExpiredHandler } from '@/lib/api';
+import { unregisterDevice } from '@/lib/push';
 import { loginWithProvider, type SocialProvider } from '@/lib/socialLogin';
 import { sessionStorage } from '@/lib/storage';
 import type { ApiResponse, AuthResult, User } from '@/types/api';
@@ -92,6 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const signOut = useCallback(async () => {
+    // 로그아웃하면 이 기기로 푸시가 가지 않게 먼저 등록을 지운다 (아직 로그인 토큰이 있을 때)
+    await unregisterDevice();
     try {
       await api.post('/api/auth/signout');
     } catch {

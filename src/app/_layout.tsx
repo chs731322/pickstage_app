@@ -8,6 +8,7 @@ import { Platform } from 'react-native';
 
 import { AuthProvider, useAuth } from '@/lib/auth';
 import { queryClient } from '@/lib/queryClient';
+import { PushRegistration } from '@/components/PushRegistration';
 import { colors, fontFamily, fontFiles } from '@/theme';
 
 // 글꼴과 로그인 정보를 다 불러올 때까지 스플래시 화면을 유지한다
@@ -25,6 +26,7 @@ export default function RootLayout() {
       <AuthProvider>
         <StatusBar style="dark" />
         <RootNavigator />
+        <PushRegistration />
       </AuthProvider>
     </QueryClientProvider>
   );

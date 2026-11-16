@@ -57,3 +57,13 @@ export const sessionStorage = {
     await Promise.all(Object.values(KEYS).map(deleteItem));
   },
 };
+
+// 이 기기의 푸시 정보 (로그인 정보와 따로 보관한다: 로그아웃할 때 서버에 등록 해제를 요청하려면 토큰이 필요하다)
+export const pushStorage = {
+  getToken: () => getItem('pushToken'),
+  saveToken: (token: string) => setItem('pushToken', token),
+  clearToken: () => deleteItem('pushToken'),
+  // 마지막으로 서버에서 확인한 "이 기기로 푸시 받기" 켜짐 상태
+  getEnabled: async () => (await getItem('pushEnabled')) !== 'false',
+  saveEnabled: (enabled: boolean) => setItem('pushEnabled', String(enabled)),
+};

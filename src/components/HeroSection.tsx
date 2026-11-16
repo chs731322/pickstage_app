@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppText } from '@/components/AppText';
 import { TAB_BAR_HEIGHT } from '@/components/app-tabs';
 import { usePopularFestivals, type FestivalSummary } from '@/features/festivals';
+import { useUnreadCount } from '@/features/notifications';
 import { formatDateRange } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
 import { colors, radius, spacing } from '@/theme';
@@ -23,6 +24,7 @@ export function HeroSection() {
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const { data } = usePopularFestivals(5);
+  const { data: unreadCount } = useUnreadCount();
   const [index, setIndex] = useState(0);
   const [scrollX] = useState(() => new Animated.Value(0));
 
@@ -45,8 +47,18 @@ export function HeroSection() {
           <Pressable onPress={() => router.push('/performances')} hitSlop={10} accessibilityLabel="공연 검색">
             <SymbolView name={{ ios: 'magnifyingglass', android: 'search', web: 'search' }} tintColor={colors.white} size={24} />
           </Pressable>
-          <Pressable onPress={() => router.push('/notifications')} hitSlop={10} accessibilityLabel="알림">
+          <Pressable
+            onPress={() => router.push('/notifications')}
+            hitSlop={10}
+            accessibilityLabel={unreadCount ? `알림, 안 읽은 알림 ${unreadCount}개` : '알림'}>
             <SymbolView name={{ ios: 'bell', android: 'notifications', web: 'notifications' }} tintColor={colors.white} size={24} />
+            {unreadCount ? (
+              <View style={styles.badge}>
+                <AppText weight="bold" size={10} color={colors.white}>
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </AppText>
+              </View>
+            ) : null}
           </Pressable>
         </View>
       </View>
@@ -155,6 +167,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
   },
   logo: { width: 52, height: 38 },
+  badge: { position: 'absolute', top: -6, right: -8, minWidth: 17, height: 17, paddingHorizontal: 4, borderRadius: 9, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
   topIcons: { flexDirection: 'row', alignItems: 'center', gap: 22 },
   lettering: { alignSelf: 'center', marginTop: spacing.sm },
   carousel: { flexGrow: 0, marginTop: spacing.sm },

@@ -3,7 +3,7 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { SymbolView } from 'expo-symbols';
 import * as WebBrowser from 'expo-web-browser';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -22,6 +22,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { LineupSection } from '@/components/LineupSection';
+import { CustomNotificationSheet } from '@/components/CustomNotificationSheet';
 import { PosterCard } from '@/components/PosterCard';
 import { useBookmarks, useToggleBookmark } from '@/features/bookmarks';
 import { useFestival, useRelatedFestivals, type FestivalDetail } from '@/features/festivals';
@@ -130,6 +131,7 @@ function FestivalBody({
   const { isLoggedIn } = useAuth();
   const { data: bookmarks } = useBookmarks();
   const toggleBookmark = useToggleBookmark(festival.id);
+  const [notifyOpen, setNotifyOpen] = useState(false);
   const { data: related } = useRelatedFestivals(festival);
 
   const isBookmarked = Boolean(bookmarks?.some((b) => b.id === festival.id));
@@ -178,6 +180,17 @@ function FestivalBody({
     toggleBookmark.mutate(isBookmarked, {
       onError: () => Alert.alert('처리하지 못했어요', '잠시 후 다시 시도해주세요.'),
     });
+  };
+
+  const handleNotify = () => {
+    if (!isLoggedIn) {
+      Alert.alert('로그인이 필요해요', '로그인하면 원하는 시각에 알림을 받을 수 있어요.', [
+        { text: '취소', style: 'cancel' },
+        { text: '로그인', onPress: () => router.push('/login') },
+      ]);
+      return;
+    }
+    setNotifyOpen(true);
   };
 
   const handleShare = () =>
@@ -260,6 +273,9 @@ function FestivalBody({
               icon={{ ios: 'square.and.arrow.up', android: 'share', web: 'share' }}
               onPress={handleShare}
             />
+            {!isEnded ? (
+              <ActionButton label="알림" icon={{ ios: 'bell', android: 'notifications', web: 'notifications' }} onPress={handleNotify} />
+            ) : null}
             {festival.externalUrl ? (
               <ActionButton
                 label="공식 사이트"
@@ -358,6 +374,12 @@ function FestivalBody({
           style={styles.bookButton}
         />
       </View>
+      <CustomNotificationSheet
+        festivalId={festival.id}
+        startDate={festival.startDate}
+        visible={notifyOpen}
+        onClose={() => setNotifyOpen(false)}
+      />
     </View>
   );
 }
