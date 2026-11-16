@@ -6,8 +6,8 @@ import { ActivityIndicator, Alert, FlatList, Platform, Pressable, ScrollView, St
 import { AppText } from '@/components/AppText';
 import { FilterPill } from '@/components/FilterPill';
 import { ReviewFormSheet } from '@/components/ReviewFormSheet';
+import { POST_CATEGORY_LABEL } from '@/features/community';
 import {
-  POST_CATEGORY_LABEL,
   useDeleteMyReview,
   useMyPosts,
   useMyReviews,

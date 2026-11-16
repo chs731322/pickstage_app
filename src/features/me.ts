@@ -85,14 +85,6 @@ export async function withdrawAccount() {
 
 // ───── 내가 쓴 글 ─────
 
-export const POST_CATEGORY_LABEL: Record<string, string> = {
-  companion: '동행',
-  lost: '분실물',
-  free: '자유',
-  review: '공연후기',
-  goods: '굿즈거래',
-};
-
 export type MyPost = {
   id: number;
   category: string;

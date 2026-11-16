@@ -4,10 +4,14 @@ import { ActivityIndicator, FlatList, ScrollView, StyleSheet, useWindowDimension
 
 import { AppText } from '@/components/AppText';
 import { HeroSection } from '@/components/HeroSection';
+import { CommunitySection } from '@/components/home/CommunitySection';
+import { InfoTipSection } from '@/components/home/InfoTipSection';
+import { PrepSection } from '@/components/home/PrepSection';
+import { RecommendedSection } from '@/components/home/RecommendedSection';
+import { WeeklyCalendarSection } from '@/components/home/WeeklyCalendarSection';
 import { MoodSection } from '@/components/MoodSection';
 import { SectionHeader } from '@/components/SectionHeader';
 import { TicketCard } from '@/components/TicketCard';
-import { WeatherCard } from '@/components/WeatherCard';
 import { useTicketOpenFestivals } from '@/features/festivals';
 import { useStatusBarStyle } from '@/lib/useStatusBarStyle';
 import { colors, spacing } from '@/theme';
@@ -57,14 +61,12 @@ export default function HomeScreen() {
           )}
         </View>
 
+        <WeeklyCalendarSection />
+        <RecommendedSection />
         <MoodSection />
-
-        <View style={styles.section}>
-          <SectionHeader title="공연 준비" />
-          <View style={styles.padded}>
-            <WeatherCard />
-          </View>
-        </View>
+        <InfoTipSection />
+        <PrepSection />
+        <CommunitySection />
 
         <Image
           source={require('../../../assets/images/decor/stage.webp')}

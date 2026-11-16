@@ -3,11 +3,13 @@ import { useRef, useState, type ComponentRef } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { SocialLoginButtons } from '@/components/SocialLoginButtons';
 import { Button } from '@/components/Button';
 import { AuthLayout } from '@/components/AuthLayout';
 import { TextField } from '@/components/TextField';
 import { errorMessage } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
+import { openSitePage } from '@/lib/links';
 import { emailError } from '@/lib/validation';
 import { colors, radius, spacing } from '@/theme';
 
@@ -85,6 +87,27 @@ export default function LoginScreen() {
 
       <Button title="로그인" onPress={handleSubmit} loading={isSubmitting} />
 
+      {/* 소셜 로그인: 카카오, 구글, (아이폰에서만) Apple */}
+      <View style={styles.divider}>
+        <View style={styles.dividerLine} />
+        <AppText color={colors.textMuted} size={13}>
+          또는
+        </AppText>
+        <View style={styles.dividerLine} />
+      </View>
+      <SocialLoginButtons onError={setServerError} />
+      <AppText color={colors.textMuted} size={12} style={styles.terms}>
+        소셜 로그인으로 계속하면{' '}
+        <AppText color={colors.textSecondary} size={12} style={styles.underline} onPress={() => openSitePage('/terms')}>
+          이용약관
+        </AppText>
+        과{' '}
+        <AppText color={colors.textSecondary} size={12} style={styles.underline} onPress={() => openSitePage('/privacy')}>
+          개인정보처리방침
+        </AppText>
+        에 동의한 것으로 봐요.
+      </AppText>
+
       <View style={styles.links}>
         <Link href="/forgot-password">
           <AppText color={colors.textSecondary} size={14}>
@@ -108,6 +131,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm + 4,
     backgroundColor: '#fff2f2',
   },
+  divider: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  dividerLine: { flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
+  terms: { textAlign: 'center', lineHeight: 18 },
+  underline: { textDecorationLine: 'underline' },
   links: {
     flexDirection: 'row',
     alignItems: 'center',

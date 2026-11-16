@@ -69,12 +69,14 @@ function RootNavigator() {
       <Stack.Screen name="artist/[id]" options={{ title: '아티스트' }} />
       <Stack.Screen name="venue/[id]" options={{ title: '공연장' }} />
       <Stack.Screen name="user/[id]" options={{ title: '프로필' }} />
+      <Stack.Screen name="community/[id]" options={{ title: '' }} />
 
       {/* 로그인한 사람만 (로그아웃 상태로 열면 로그인 화면으로 보낸다) */}
       <Stack.Protected guard={isLoggedIn} redirectTo="/login">
         <Stack.Screen name="notifications" options={{ title: '알림' }} />
         <Stack.Screen name="checklist" options={{ title: '준비 체크리스트' }} />
         <Stack.Screen name="push-settings" options={{ title: '푸시 알림 설정' }} />
+        <Stack.Screen name="community/write" options={{ title: '글쓰기' }} />
         <Stack.Screen name="my/bookmarks" options={{ title: '찜한 공연' }} />
         <Stack.Screen name="my/artists" options={{ title: '관심 아티스트' }} />
         <Stack.Screen name="my/posts" options={{ title: '내가 쓴 글' }} />

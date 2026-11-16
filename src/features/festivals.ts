@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { api } from '@/lib/api';
+import { useAuth } from '@/lib/auth';
 import type { ApiResponse } from '@/types/api';
 
 // 공연 목록 한 줄 (GET /api/festivals 의 content 항목)
@@ -181,6 +182,33 @@ export function useMoodFestivals(mood: MoodId) {
         tab.queries.map((q) => fetchFestivals({ ...q, sort: 'start', size: MOOD_COUNT * 2, upcomingOnly: true })),
       );
       return mergeFestivals(results);
+    },
+  });
+}
+
+// ───── 내 취향 공연 (관심 아티스트가 라인업에 있는 예정 공연, 로그인 필요) ─────
+
+export type RecommendedFestival = {
+  id: number;
+  title: string;
+  posterImage: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  region: string | null;
+  genre: string | null;
+  venueName: string | null;
+  matchedArtists: string[] | null;
+  matchCount: number;
+};
+
+export function useRecommendedFestivals(size = 4) {
+  const { isLoggedIn } = useAuth();
+  return useQuery({
+    queryKey: ['festivals', 'recommended', size, isLoggedIn],
+    enabled: isLoggedIn,
+    queryFn: async () => {
+      const res = await api.get<ApiResponse<RecommendedFestival[]>>('/api/festivals/recommendations', { params: { page: 0, size } });
+      return res.data.data ?? [];
     },
   });
 }
