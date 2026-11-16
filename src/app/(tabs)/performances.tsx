@@ -14,6 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { PosterCard } from '@/components/PosterCard';
 import {
@@ -179,9 +180,13 @@ export default function PerformancesScreen() {
           isPending ? (
             <ActivityIndicator color={colors.brand} style={styles.state} />
           ) : (
-            <AppText color={colors.textMuted} style={[styles.state, styles.center]}>
-              {error ? '공연 정보를 불러오지 못했어요. 아래로 당겨서 다시 시도해보세요.' : '조건에 맞는 공연이 없어요.'}
-            </AppText>
+            <EmptyState
+              variant={error ? 'error' : 'empty'}
+              title={error ? '공연 정보를 불러오지 못했어요' : '조건에 맞는 공연이 없어요'}
+              description={error ? '아래로 당겨서 다시 시도해보세요.' : '지역이나 장르를 바꿔보세요.'}
+              actionLabel={error ? '다시 시도' : hasFilters ? '조건 초기화' : undefined}
+              onAction={error ? () => refetch() : hasFilters ? reset : undefined}
+            />
           )
         }
         ListFooterComponent={isFetchingNextPage ? <ActivityIndicator color={colors.brand} style={styles.footer} /> : undefined}

@@ -1,7 +1,9 @@
+import { router } from 'expo-router';
 import { useHeaderHeight } from 'expo-router/react-navigation';
-import { ActivityIndicator, FlatList, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, FlatList, Platform, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { PosterCard } from '@/components/PosterCard';
 import { useBookmarks } from '@/features/bookmarks';
 import { colors, spacing } from '@/theme';
@@ -38,11 +40,13 @@ export default function MyBookmarksScreen() {
         isPending ? (
           <ActivityIndicator color={colors.brand} style={styles.state} />
         ) : (
-          <View style={styles.state}>
-            <AppText color={colors.textMuted} size={16} style={styles.center}>
-              {error ? '찜한 공연을 불러오지 못했어요.' : '아직 찜한 공연이 없어요.\n공연 상세에서 "찜하기"를 눌러 담아보세요.'}
-            </AppText>
-          </View>
+          <EmptyState
+            variant={error ? 'error' : 'empty'}
+            title={error ? '찜한 공연을 불러오지 못했어요' : '아직 찜한 공연이 없어요'}
+            description={error ? '아래로 당겨서 다시 시도해보세요.' : '공연 상세에서 "찜하기"를 눌러 담아보세요.'}
+            actionLabel={error ? undefined : '공연 둘러보기'}
+            onAction={error ? undefined : () => router.push('/performances')}
+          />
         )
       }
     />

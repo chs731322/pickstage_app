@@ -1,8 +1,9 @@
 import { router } from 'expo-router';
 import { useHeaderHeight } from 'expo-router/react-navigation';
-import { ActivityIndicator, FlatList, Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, FlatList, Platform, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { Avatar } from '@/components/Avatar';
 import { useInterestedArtists } from '@/features/artists';
 import { colors, spacing } from '@/theme';
@@ -46,11 +47,13 @@ export default function MyArtistsScreen() {
         isPending ? (
           <ActivityIndicator color={colors.brand} style={styles.state} />
         ) : (
-          <View style={styles.state}>
-            <AppText color={colors.textMuted} size={16} style={styles.center}>
-              {error ? '관심 아티스트를 불러오지 못했어요.' : '아직 관심 등록한 아티스트가 없어요.\n아티스트 화면에서 추가해보세요.'}
-            </AppText>
-          </View>
+          <EmptyState
+            variant={error ? 'error' : 'empty'}
+            title={error ? '관심 아티스트를 불러오지 못했어요' : '아직 관심 아티스트가 없어요'}
+            description={error ? '아래로 당겨서 다시 시도해보세요.' : '좋아하는 아티스트를 추가하면 맞춤 공연을 추천해드려요.'}
+            actionLabel={error ? undefined : '아티스트 찾기'}
+            onAction={error ? undefined : () => router.push('/artists')}
+          />
         )
       }
     />

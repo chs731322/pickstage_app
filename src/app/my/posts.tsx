@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { ReviewFormSheet } from '@/components/ReviewFormSheet';
 import { POST_CATEGORY_LABEL } from '@/features/community';
@@ -99,15 +100,19 @@ export default function MyPostsScreen() {
           list.isPending ? (
             <ActivityIndicator color={colors.brand} style={styles.state} />
           ) : (
-            <AppText color={colors.textMuted} size={16} style={[styles.state, styles.center]}>
-              {list.error
-                ? '글을 불러오지 못했어요.'
-                : isReviews
-                  ? '아직 작성한 후기가 없어요.'
-                  : category
-                    ? '이 카테고리에 쓴 글이 아직 없어요.'
-                    : '아직 쓴 글이 없어요.\n커뮤니티에서 첫 글을 남겨보세요.'}
-            </AppText>
+            <EmptyState
+              variant={list.error ? 'error' : 'empty'}
+              title={
+                list.error
+                  ? '글을 불러오지 못했어요'
+                  : isReviews
+                    ? '아직 작성한 후기가 없어요'
+                    : category
+                      ? '이 카테고리에 쓴 글이 아직 없어요'
+                      : '아직 쓴 글이 없어요'
+              }
+              description={list.error ? '아래로 당겨서 다시 시도해보세요.' : !isReviews && !category ? '커뮤니티에서 첫 글을 남겨보세요.' : undefined}
+            />
           )
         }
         ListFooterComponent={list.isFetchingNextPage ? <ActivityIndicator color={colors.brand} style={styles.footer} /> : undefined}

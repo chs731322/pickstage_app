@@ -2,6 +2,7 @@ import { useHeaderHeight } from 'expo-router/react-navigation';
 import { ActivityIndicator, Alert, FlatList, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { Avatar } from '@/components/Avatar';
 import { useBlockedUsers, useUnblock, type BlockedUser } from '@/features/me';
 import { errorMessage } from '@/lib/api';
@@ -60,9 +61,11 @@ export default function BlockedUsersScreen() {
         isPending ? (
           <ActivityIndicator color={colors.brand} style={styles.state} />
         ) : (
-          <AppText color={colors.textMuted} size={16} style={[styles.state, styles.center]}>
-            {error ? '차단 목록을 불러오지 못했어요.' : '차단한 사용자가 없어요.'}
-          </AppText>
+          <EmptyState
+            variant={error ? 'error' : 'empty'}
+            title={error ? '차단 목록을 불러오지 못했어요' : '차단한 사용자가 없어요'}
+            description={error ? '아래로 당겨서 다시 시도해보세요.' : undefined}
+          />
         )
       }
     />

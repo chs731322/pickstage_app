@@ -1,7 +1,25 @@
 // PICKSTAGE 앱의 색, 글꼴, 간격. 웹(p1cksta9e.com)과 같은 브랜드 색을 쓴다.
+
+// 브랜드 핑크를 연한 것부터 진한 것까지 나눈 단계. 뱃지·배경·눌림 같은 곳에서 이 단계 중에서 골라 쓴다.
+//  50: 아주 옅은 배경 / 100: 옅은 칩·강조 배경 / 300: 장식 / 500: 브랜드(기본) / 600: 진한 글자·눌림 / 700: 아주 진한 강조
+export const brandScale = {
+  50: '#fff0fa',
+  100: '#ffd9f3',
+  200: '#ffb3e8',
+  300: '#ff80d8',
+  400: '#ff4fc3',
+  500: '#ff00b7',
+  600: '#d6009a',
+  700: '#a8007a',
+} as const;
+
 export const colors = {
-  brand: '#ff00b7',
-  brandSoft: '#fff0fa',
+  brand: brandScale[500],
+  brandSoft: brandScale[50],
+  // 옅은 핑크 칩·강조 박스 배경 (brandSoft보다 한 단계 진함)
+  brandTint: brandScale[100],
+  // 핑크 배경 위에 올리는 진한 핑크 글자
+  brandStrong: brandScale[600],
   brandBg: '#ffd7d7',
   text: '#111111',
   textSecondary: '#545454',

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ActivityIndicator, FlatList, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import {
   NOTIFICATION_TYPE_LABEL,
@@ -80,9 +81,11 @@ export default function NotificationsScreen() {
         isPending ? (
           <ActivityIndicator color={colors.brand} style={styles.state} />
         ) : (
-          <AppText color={colors.textMuted} size={16} style={[styles.state, styles.center]}>
-            {error ? '알림을 불러오지 못했어요.\n아래로 당겨서 다시 시도해보세요.' : unreadOnly ? '안 읽은 알림이 없어요.' : '아직 받은 알림이 없어요.'}
-          </AppText>
+          <EmptyState
+            variant={error ? 'error' : 'empty'}
+            title={error ? '알림을 불러오지 못했어요' : unreadOnly ? '안 읽은 알림이 없어요' : '아직 받은 알림이 없어요'}
+            description={error ? '아래로 당겨서 다시 시도해보세요.' : unreadOnly ? undefined : '찜한 공연의 티켓 오픈, 내 글의 댓글 소식이 여기에 모여요.'}
+          />
         )
       }
       ListFooterComponent={isFetchingNextPage ? <ActivityIndicator color={colors.brand} style={styles.footer} /> : undefined}

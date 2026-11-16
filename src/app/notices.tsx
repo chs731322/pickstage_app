@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ActivityIndicator, FlatList, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { isPinnedNotice, useNotices, type NoticeListItem } from '@/features/notices';
 import { cardShadow, colors, fontFamily, radius, spacing } from '@/theme';
 
@@ -67,13 +68,11 @@ export default function NoticesScreen() {
         isPending ? (
           <ActivityIndicator color={colors.brand} style={styles.state} />
         ) : (
-          <AppText color={colors.textMuted} size={16} style={[styles.state, styles.center]}>
-            {error
-              ? '공지사항을 불러오지 못했어요.\n아래로 당겨서 다시 시도해보세요.'
-              : keyword
-                ? '검색 결과가 없어요.\n다른 검색어로 다시 시도해보세요.'
-                : '등록된 공지사항이 없어요.'}
-          </AppText>
+          <EmptyState
+            variant={error ? 'error' : 'empty'}
+            title={error ? '공지사항을 불러오지 못했어요' : keyword ? '검색 결과가 없어요' : '등록된 공지사항이 없어요'}
+            description={error ? '아래로 당겨서 다시 시도해보세요.' : keyword ? '다른 검색어로 다시 시도해보세요.' : undefined}
+          />
         )
       }
       ListFooterComponent={isFetchingNextPage ? <ActivityIndicator color={colors.brand} style={styles.footer} /> : undefined}

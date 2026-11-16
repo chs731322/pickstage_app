@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import { ActivityIndicator, Platform, Pressable, SectionList, StyleSheet, TextInput, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { useVenueList, venueGroupOf, VENUE_REGIONS, type VenueListItem } from '@/features/venues';
 import { colors, fontFamily, radius, spacing } from '@/theme';
@@ -85,9 +86,11 @@ export default function VenuesScreen() {
         isPending ? (
           <ActivityIndicator color={colors.brand} style={styles.state} />
         ) : (
-          <AppText color={colors.textMuted} size={16} style={[styles.state, styles.center]}>
-            {error ? '공연장 목록을 불러오지 못했어요.\n아래로 당겨서 다시 시도해보세요.' : '조건에 맞는 공연장이 없어요.'}
-          </AppText>
+          <EmptyState
+            variant={error ? 'error' : 'empty'}
+            title={error ? '공연장 목록을 불러오지 못했어요' : '조건에 맞는 공연장이 없어요'}
+            description={error ? '아래로 당겨서 다시 시도해보세요.' : '검색어나 지역을 바꿔보세요.'}
+          />
         )
       }
     />

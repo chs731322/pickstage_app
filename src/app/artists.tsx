@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { ActivityIndicator, Platform, Pressable, SectionList, StyleSheet, TextInput, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { Avatar } from '@/components/Avatar';
 import { useArtistList, type ArtistListItem } from '@/features/artists';
 import { nameGroupOf } from '@/lib/koreanGroup';
@@ -81,9 +82,11 @@ export default function ArtistsScreen() {
         isPending ? (
           <ActivityIndicator color={colors.brand} style={styles.state} />
         ) : (
-          <AppText color={colors.textMuted} size={16} style={[styles.state, styles.center]}>
-            {error ? '아티스트 목록을 불러오지 못했어요.\n아래로 당겨서 다시 시도해보세요.' : '찾는 아티스트가 없어요.'}
-          </AppText>
+          <EmptyState
+            variant={error ? 'error' : 'empty'}
+            title={error ? '아티스트 목록을 불러오지 못했어요' : '찾는 아티스트가 없어요'}
+            description={error ? '아래로 당겨서 다시 시도해보세요.' : '이름을 다시 확인해보세요.'}
+          />
         )
       }
     />

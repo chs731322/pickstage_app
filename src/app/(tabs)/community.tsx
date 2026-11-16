@@ -5,6 +5,7 @@ import { ActivityIndicator, Alert, FlatList, Pressable, ScrollView, StyleSheet, 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
+import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { PostCard } from '@/components/PostCard';
 import { POST_CATEGORY_LABEL, POST_SORTS, usePosts, type PostSort } from '@/features/community';
@@ -72,9 +73,13 @@ export default function CommunityScreen() {
           isPending ? (
             <ActivityIndicator color={colors.brand} style={styles.state} />
           ) : (
-            <AppText color={colors.textMuted} size={16} style={[styles.state, styles.center]}>
-              {error ? '글을 불러오지 못했어요.\n아래로 당겨서 다시 시도해보세요.' : '아직 글이 없어요.\n첫 글을 남겨보세요.'}
-            </AppText>
+            <EmptyState
+              variant={error ? 'error' : 'empty'}
+              title={error ? '글을 불러오지 못했어요' : '아직 글이 없어요'}
+              description={error ? '아래로 당겨서 다시 시도해보세요.' : '첫 글을 남겨보세요.'}
+              actionLabel={error ? '다시 시도' : '글쓰기'}
+              onAction={error ? () => refetch() : handleWrite}
+            />
           )
         }
         ListFooterComponent={isFetchingNextPage ? <ActivityIndicator color={colors.brand} style={styles.footer} /> : undefined}

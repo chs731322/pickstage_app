@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { WeatherTip } from '@/components/WeatherTip';
 import { api, errorMessage } from '@/lib/api';
 import { cardShadow, colors, spacing } from '@/theme';
 import type { ApiResponse, WeatherDay, WeatherSummary } from '@/types/api';
@@ -64,11 +65,7 @@ export function WeatherCard() {
             </View>
           ))}
 
-          {data.isRain && (
-            <AppText color={colors.brand} size={13} weight="medium">
-              비나 눈 예보가 있어요. 우산이나 우비를 챙겨보세요.
-            </AppText>
-          )}
+          <WeatherTip weather={data} />
         </>
       )}
     </View>
