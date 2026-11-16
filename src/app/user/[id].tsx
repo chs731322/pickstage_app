@@ -6,7 +6,7 @@ import { Screen } from '@/components/Screen';
 export default function UserProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   return (
-    <Screen>
+    <Screen topInset={false}>
       <Placeholder title={`사용자 #${id}`} />
     </Screen>
   );

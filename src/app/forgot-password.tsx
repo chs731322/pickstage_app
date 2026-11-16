@@ -3,7 +3,7 @@ import { Screen } from '@/components/Screen';
 
 export default function ForgotPasswordScreen() {
   return (
-    <Screen>
+    <Screen topInset={false}>
       <Placeholder title="비밀번호 찾기" />
     </Screen>
   );

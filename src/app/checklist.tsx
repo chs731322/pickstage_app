@@ -3,7 +3,7 @@ import { Screen } from '@/components/Screen';
 
 export default function ChecklistScreen() {
   return (
-    <Screen>
+    <Screen topInset={false}>
       <Placeholder title="준비 체크리스트" />
     </Screen>
   );

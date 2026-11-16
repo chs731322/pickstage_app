@@ -6,7 +6,7 @@ import { Screen } from '@/components/Screen';
 export default function VenueScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   return (
-    <Screen>
+    <Screen topInset={false}>
       <Placeholder title={`공연장 #${id}`} />
     </Screen>
   );

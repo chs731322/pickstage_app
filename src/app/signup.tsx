@@ -3,7 +3,7 @@ import { Screen } from '@/components/Screen';
 
 export default function SignupScreen() {
   return (
-    <Screen>
+    <Screen topInset={false}>
       <Placeholder title="회원가입" />
     </Screen>
   );

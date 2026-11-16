@@ -10,6 +10,8 @@ export const colors = {
   surface: '#f5f5f7',
   background: '#ffffff',
   danger: '#d90000',
+  // 하단 탭바: 선택하지 않은 탭의 아이콘·글자 색
+  tabInactive: '#9a9aa0',
   white: '#ffffff',
 } as const;
 

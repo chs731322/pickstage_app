@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
 
 import { AuthProvider, useAuth } from '@/lib/auth';
 import { queryClient } from '@/lib/queryClient';
@@ -49,6 +50,8 @@ function RootNavigator() {
         headerTitleStyle: { fontFamily: fontFamily.bold },
         headerBackButtonDisplayMode: 'minimal',
         contentStyle: { backgroundColor: colors.background },
+        // iOS: 제목줄을 흐림 효과가 있는 반투명으로 (내용은 Screen 컴포넌트가 제목줄 높이만큼 아래에서 시작한다)
+        ...(Platform.OS === 'ios' ? { headerTransparent: true, headerBlurEffect: 'systemMaterial' as const } : {}),
       }}>
       {/* 탭 화면들 (헤더는 각 탭 화면이 직접 그린다) */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

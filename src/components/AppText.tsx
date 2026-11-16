@@ -1,11 +1,11 @@
-import { Text, type TextProps } from 'react-native';
+import { Text, type ColorValue, type TextProps } from 'react-native';
 
 import { colors, fontFamily } from '@/theme';
 
 type Props = TextProps & {
   weight?: keyof typeof fontFamily;
   size?: number;
-  color?: string;
+  color?: ColorValue;
 };
 
 // 앱 전체에서 쓰는 글자. Pretendard 굵기를 weight로 고른다 (fontWeight는 쓰지 않는다).

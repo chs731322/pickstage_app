@@ -3,7 +3,7 @@ import { Screen } from '@/components/Screen';
 
 export default function NotificationsScreen() {
   return (
-    <Screen>
+    <Screen topInset={false}>
       <Placeholder title="알림" />
     </Screen>
   );

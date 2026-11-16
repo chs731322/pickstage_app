@@ -1,10 +1,129 @@
-import { Placeholder } from '@/components/Placeholder';
-import { Screen } from '@/components/Screen';
+import { Link } from 'expo-router';
+import { useRef, useState, type ComponentRef } from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
 
+import { AppText } from '@/components/AppText';
+import { Button } from '@/components/Button';
+import { Screen } from '@/components/Screen';
+import { TextField } from '@/components/TextField';
+import { errorMessage } from '@/lib/api';
+import { useAuth } from '@/lib/auth';
+import { emailError } from '@/lib/validation';
+import { colors, radius, spacing } from '@/theme';
+
+// 이메일 로그인. 로그인에 성공하면 로그인 상태가 바뀌면서 이 화면은 자동으로 닫힌다 (src/app/_layout.tsx의 Stack.Protected).
 export default function LoginScreen() {
+  const { signIn } = useAuth();
+  const passwordRef = useRef<ComponentRef<typeof TextInput>>(null);
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  // 입력 검사 문구는 "로그인"을 눌러본 뒤부터 보여준다 (입력하는 중에 빨갛게 되지 않도록)
+  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState('');
+
+  const emailProblem = submitted ? emailError(email) : null;
+  const passwordProblem = submitted && !password ? '비밀번호를 입력해주세요.' : null;
+
+  async function handleSubmit() {
+    if (isSubmitting) return;
+    setSubmitted(true);
+    setServerError('');
+    if (emailError(email) || !password) return;
+
+    setIsSubmitting(true);
+    try {
+      await signIn(email.trim(), password);
+    } catch (error) {
+      // 서버가 보내준 문구를 그대로 보여준다 (예: 이메일·비밀번호 불일치, 이용 정지된 계정)
+      setServerError(errorMessage(error, '로그인 중 오류가 발생했어요.'));
+      setIsSubmitting(false);
+    }
+  }
+
   return (
-    <Screen>
-      <Placeholder title="로그인" />
+    <Screen topInset={false} keyboard>
+      <View style={styles.intro}>
+        <AppText weight="extrabold" size={26}>
+          로그인
+        </AppText>
+        <AppText color={colors.textSecondary} style={styles.introText}>
+          PICKSTAGE에 오신 것을 환영해요!{'\n'}로그인하고 다양한 공연 정보를 만나보세요.
+        </AppText>
+      </View>
+
+      <TextField
+        label="이메일"
+        value={email}
+        onChangeText={setEmail}
+        error={emailProblem}
+        placeholder="이메일을 입력해주세요"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
+        autoComplete="email"
+        textContentType="username"
+        returnKeyType="next"
+        onSubmitEditing={() => passwordRef.current?.focus()}
+        submitBehavior="submit"
+      />
+      <TextField
+        ref={passwordRef}
+        label="비밀번호"
+        value={password}
+        onChangeText={setPassword}
+        error={passwordProblem}
+        placeholder="비밀번호를 입력해주세요"
+        password
+        autoCapitalize="none"
+        autoCorrect={false}
+        autoComplete="current-password"
+        textContentType="password"
+        returnKeyType="go"
+        onSubmitEditing={handleSubmit}
+      />
+
+      {serverError ? (
+        <View style={styles.errorBox} accessibilityRole="alert">
+          <AppText color={colors.danger} size={14}>
+            {serverError}
+          </AppText>
+        </View>
+      ) : null}
+
+      <Button title="로그인" onPress={handleSubmit} loading={isSubmitting} />
+
+      <View style={styles.links}>
+        <Link href="/forgot-password" replace>
+          <AppText color={colors.textSecondary} size={14}>
+            비밀번호를 잊으셨나요?
+          </AppText>
+        </Link>
+        <AppText color={colors.border}>|</AppText>
+        <Link href="/signup" replace>
+          <AppText weight="bold" color={colors.brand} size={14}>
+            회원가입
+          </AppText>
+        </Link>
+      </View>
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  intro: { gap: spacing.sm, paddingVertical: spacing.sm },
+  introText: { lineHeight: 22 },
+  errorBox: {
+    padding: spacing.md,
+    borderRadius: radius.sm + 4,
+    backgroundColor: '#fff2f2',
+  },
+  links: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.md,
+    paddingTop: spacing.sm,
+  },
+});
