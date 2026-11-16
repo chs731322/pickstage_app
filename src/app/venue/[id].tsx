@@ -353,9 +353,11 @@ function ReviewItem({ review, onBlocked }: { review: VenueReview; onBlocked: (us
         <AppText weight="bold" size={15}>
           {review.rating.toFixed(1)}
         </AppText>
-        <AppText weight="semibold" size={15} style={styles.flex} numberOfLines={1}>
-          {review.nickname}
-        </AppText>
+        <Pressable disabled={review.authorId == null} onPress={() => router.push(`/user/${review.authorId}`)} style={styles.flex} hitSlop={4}>
+          <AppText weight="semibold" size={15} numberOfLines={1}>
+            {review.nickname}
+          </AppText>
+        </Pressable>
         <AppText size={13} color={colors.textMuted}>
           {review.createdAt ? review.createdAt.slice(0, 10).replaceAll('-', '.') : ''}
         </AppText>

@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 
@@ -8,10 +9,12 @@ import { Button } from '@/components/Button';
 import { MenuCard, MenuRow } from '@/components/MenuRow';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
+import { pickAndUploadProfileImage } from '@/features/community';
 import {
   usePrivacy,
   useUpdateNickname,
   useUpdatePrivacy,
+  useUpdateProfileImage,
   withdrawAccount,
   type Privacy,
 } from '@/features/me';
@@ -34,6 +37,8 @@ export default function ProfileScreen() {
   const updateNickname = useUpdateNickname();
   const { data: privacy } = usePrivacy();
   const updatePrivacy = useUpdatePrivacy();
+  const updateImage = useUpdateProfileImage();
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   const [nickname, setNickname] = useState(user?.nickname ?? '');
   // 바꾼 닉네임이 사용 가능한지 확인한 결과 (바꾸기 전에는 null)
@@ -47,6 +52,32 @@ export default function ProfileScreen() {
   const changed = trimmed !== user.nickname;
   const checkedOk = check?.nickname === trimmed && check.ok;
   const nicknameInvalid = changed && !isValidNickname(trimmed);
+
+  const savePhoto = (imageUrl: string) =>
+    updateImage.mutate(imageUrl, {
+      onSuccess: () => Alert.alert(imageUrl ? '프로필 사진을 바꿨어요' : '기본 이미지로 바꿨어요'),
+      onError: (error) => Alert.alert('사진을 바꾸지 못했어요', errorMessage(error, '잠시 후 다시 시도해주세요.')),
+    });
+
+  const choosePhoto = async () => {
+    setUploadingPhoto(true);
+    try {
+      const url = await pickAndUploadProfileImage();
+      if (url) savePhoto(url);
+    } catch (error) {
+      Alert.alert('사진을 올리지 못했어요', error instanceof Error ? error.message : '잠시 후 다시 시도해주세요.');
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
+  // 사진을 누르면: 사진 고르기 / 기본 이미지로 / 취소
+  const openPhotoMenu = () =>
+    Alert.alert('프로필 사진', undefined, [
+      { text: '앨범에서 고르기', onPress: choosePhoto },
+      ...(user.profileImage ? [{ text: '기본 이미지로', style: 'destructive' as const, onPress: () => savePhoto('') }] : []),
+      { text: '취소', style: 'cancel' as const },
+    ]);
 
   const handleCheck = async () => {
     if (!isValidNickname(trimmed)) return;
@@ -102,7 +133,19 @@ export default function ProfileScreen() {
   return (
     <Screen topInset={false} keyboard tone="page">
       <View style={styles.avatar}>
-        <Avatar uri={user.profileImage} name={user.nickname} size={88} />
+        <Pressable onPress={openPhotoMenu} disabled={uploadingPhoto || updateImage.isPending} accessibilityRole="button" accessibilityLabel="프로필 사진 바꾸기">
+          <Avatar uri={user.profileImage} name={user.nickname} size={88} />
+          <View style={styles.camera}>
+            {uploadingPhoto || updateImage.isPending ? (
+              <ActivityIndicator color={colors.white} size="small" />
+            ) : (
+              <SymbolView name={{ ios: 'camera.fill', android: 'photo_camera', web: 'photo_camera' }} tintColor={colors.white} size={15} />
+            )}
+          </View>
+        </Pressable>
+        <AppText size={13} color={colors.textMuted}>
+          사진을 눌러 바꿀 수 있어요
+        </AppText>
       </View>
 
       <View style={styles.card}>
@@ -184,7 +227,8 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  avatar: { alignItems: 'center', paddingVertical: spacing.sm },
+  avatar: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.sm },
+  camera: { position: 'absolute', right: -2, bottom: -2, width: 30, height: 30, borderRadius: 15, backgroundColor: colors.brand, borderWidth: 2, borderColor: colors.white, alignItems: 'center', justifyContent: 'center' },
   card: { gap: spacing.md, padding: spacing.md + 2, borderRadius: 22, backgroundColor: colors.white },
   row: { flexDirection: 'row', gap: spacing.sm },
   desc: { lineHeight: 21 },

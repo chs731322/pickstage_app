@@ -32,8 +32,8 @@ export default function MyScreen() {
 
         {isLoggedIn && user ? (
           <>
-            {/* 프로필 */}
-            <Pressable style={styles.profile} onPress={() => router.push('/my/profile')} accessibilityRole="button">
+            {/* 프로필: 누르면 내 프로필 화면(다른 회원에게 보이는 모습). 회원정보 수정은 그 안의 링크나 아래 "회원정보"에서 */}
+            <Pressable style={styles.profile} onPress={() => router.push(`/user/${user.id}`)} accessibilityRole="button">
               <Avatar uri={user.profileImage} name={user.nickname} size={64} />
               <View style={styles.profileText}>
                 <AppText weight="extrabold" size={20}>

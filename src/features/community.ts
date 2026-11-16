@@ -214,19 +214,38 @@ export async function pickAndUploadImages(maxCount: number): Promise<string[]> {
 
   const urls: string[] = [];
   for (const asset of picked.assets.slice(0, maxCount)) {
-    const contentType = asset.mimeType ?? 'image/jpeg';
-    const blob = await (await fetch(asset.uri)).blob();
-    if (blob.size > MAX_UPLOAD_SIZE) throw new UploadError('이미지는 5MB 이하만 올릴 수 있어요.');
-    const presigned = await api.post<ApiResponse<{ uploadUrl: string; fileUrl: string }>>('/api/uploads/presigned-url', {
-      fileName: asset.fileName ?? `photo-${Date.now()}.jpg`,
-      contentType,
-      size: blob.size,
-    });
-    const { uploadUrl, fileUrl } = presigned.data.data;
-    // S3에는 우리 서버용 헤더(로그인 토큰 등)를 붙이지 않고 직접 올린다
-    const put = await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': contentType }, body: blob });
-    if (!put.ok) throw new UploadError('사진을 올리지 못했어요. 잠시 후 다시 시도해주세요.');
-    urls.push(fileUrl);
+    urls.push(await uploadAsset(asset));
   }
   return urls;
+}
+
+// 고른 사진 한 장을 우리 이미지 저장소(S3)에 올리고 주소를 돌려준다
+async function uploadAsset(asset: ImagePicker.ImagePickerAsset): Promise<string> {
+  const contentType = asset.mimeType ?? 'image/jpeg';
+  const blob = await (await fetch(asset.uri)).blob();
+  if (blob.size > MAX_UPLOAD_SIZE) throw new UploadError('이미지는 5MB 이하만 올릴 수 있어요.');
+  const presigned = await api.post<ApiResponse<{ uploadUrl: string; fileUrl: string }>>('/api/uploads/presigned-url', {
+    fileName: asset.fileName ?? `photo-${Date.now()}.jpg`,
+    contentType,
+    size: blob.size,
+  });
+  const { uploadUrl, fileUrl } = presigned.data.data;
+  // S3에는 우리 서버용 헤더(로그인 토큰 등)를 붙이지 않고 직접 올린다
+  const put = await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': contentType }, body: blob });
+  if (!put.ok) throw new UploadError('사진을 올리지 못했어요. 잠시 후 다시 시도해주세요.');
+  return fileUrl;
+}
+
+// 프로필 사진: 사진 한 장을 골라 정사각형으로 자른 뒤 올린다. 고르지 않고 닫으면 null.
+export async function pickAndUploadProfileImage(): Promise<string | null> {
+  const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (!permission.granted) throw new UploadError('사진을 올리려면 사진 보관함 접근을 허용해주세요.');
+  const picked = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ['images'],
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 0.7,
+  });
+  if (picked.canceled || picked.assets.length === 0) return null;
+  return uploadAsset(picked.assets[0]);
 }

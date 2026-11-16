@@ -194,15 +194,23 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
         </AppText>
 
         <View style={styles.author}>
-          <Avatar uri={post.authorProfileImage} name={post.authorNickname ?? '탈'} size={40} />
-          <View style={styles.flex}>
-            <AppText weight="bold" size={16}>
-              {post.authorNickname ?? '탈퇴한 회원'}
-            </AppText>
-            <AppText size={13} color={colors.textMuted}>
-              {timeAgo(post.createdAt)} · 조회 {post.viewCount}
-            </AppText>
-          </View>
+          {/* 작성자를 누르면 프로필로 (탈퇴한 회원은 이동하지 않는다) */}
+          <Pressable
+            style={styles.authorMain}
+            disabled={post.authorId === null}
+            onPress={() => router.push(`/user/${post.authorId}`)}
+            accessibilityRole="button"
+            accessibilityLabel={`${post.authorNickname ?? '작성자'} 프로필 보기`}>
+            <Avatar uri={post.authorProfileImage} name={post.authorNickname ?? '탈'} size={40} />
+            <View style={styles.flex}>
+              <AppText weight="bold" size={16}>
+                {post.authorNickname ?? '탈퇴한 회원'}
+              </AppText>
+              <AppText size={13} color={colors.textMuted}>
+                {timeAgo(post.createdAt)} · 조회 {post.viewCount}
+              </AppText>
+            </View>
+          </Pressable>
           {isMine ? (
             <Pressable onPress={openOwnerMenu} hitSlop={12} accessibilityLabel="내 글 메뉴">
               <SymbolView name={{ ios: 'ellipsis', android: 'more_horiz', web: 'more_horiz' }} tintColor={colors.textMuted} size={22} />
@@ -335,6 +343,7 @@ const styles = StyleSheet.create({
   festivalTag: { flexShrink: 1, paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border },
   title: { lineHeight: 33 },
   author: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm + 2 },
+  authorMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm + 2 },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
   reactions: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.sm },
   likeButton: {

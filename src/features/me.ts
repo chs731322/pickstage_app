@@ -56,9 +56,21 @@ export function useUpdatePrivacy() {
 
 // ───── 내 정보 ─────
 
+// 내 닉네임·사진이 바뀌면, 이미 불러와 둔 화면들(내 프로필, 글·댓글의 작성자 표시)이 옛날 값을 보여주지 않게 새로 받는다
+function useRefreshMyIdentity() {
+  const queryClient = useQueryClient();
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ['user'] });
+    queryClient.invalidateQueries({ queryKey: ['posts'] });
+    queryClient.invalidateQueries({ queryKey: ['post'] });
+    queryClient.invalidateQueries({ queryKey: ['venue'] });
+  };
+}
+
 // 닉네임 변경. 서버가 돌려준 최신 내 정보로 로그인 상태도 함께 갱신한다.
 export function useUpdateNickname() {
   const { user, updateUser } = useAuth();
+  const refreshIdentity = useRefreshMyIdentity();
   return useMutation({
     mutationFn: async (nickname: string) => {
       const res = await api.patch<ApiResponse<User>>('/api/users/mypage', { nickname });
@@ -66,6 +78,7 @@ export function useUpdateNickname() {
     },
     onSuccess: async (data) => {
       if (user) await updateUser({ ...user, nickname: data.nickname, profileImage: data.profileImage ?? user.profileImage });
+      refreshIdentity();
     },
   });
 }
@@ -160,5 +173,21 @@ export function useDeleteMyReview() {
       await api.delete(`/api/reviews/${id}`);
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['my', 'reviews'] }),
+  });
+}
+
+// 프로필 사진 바꾸기. imageUrl이 빈 문자열이면 기본 이미지로 되돌린다. 서버가 돌려준 내 정보로 로그인 상태도 갱신한다.
+export function useUpdateProfileImage() {
+  const { user, updateUser } = useAuth();
+  const refreshIdentity = useRefreshMyIdentity();
+  return useMutation({
+    mutationFn: async (imageUrl: string) => {
+      const res = await api.patch<ApiResponse<User>>('/api/users/mypage', { profileImage: imageUrl });
+      return res.data.data;
+    },
+    onSuccess: async (data) => {
+      if (user) await updateUser({ ...user, profileImage: data.profileImage || null });
+      refreshIdentity();
+    },
   });
 }

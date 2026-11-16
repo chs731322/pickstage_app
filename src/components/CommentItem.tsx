@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
 
@@ -41,12 +42,16 @@ export function CommentItem({ comment, isMine, isReply = false, onReply, onSaveE
 
   return (
     <View style={[styles.row, isReply && styles.reply]}>
-      <Avatar uri={comment.authorProfileImage} name={comment.authorNickname ?? '탈'} size={isReply ? 28 : 34} />
+      <Pressable disabled={comment.authorId === null} onPress={() => router.push(`/user/${comment.authorId}`)} accessibilityRole="button" accessibilityLabel={`${comment.authorNickname ?? '작성자'} 프로필 보기`}>
+        <Avatar uri={comment.authorProfileImage} name={comment.authorNickname ?? '탈'} size={isReply ? 28 : 34} />
+      </Pressable>
       <View style={styles.main}>
         <View style={styles.head}>
-          <AppText weight="bold" size={15} numberOfLines={1} style={styles.name}>
-            {comment.authorNickname ?? '탈퇴한 회원'}
-          </AppText>
+          <Pressable disabled={comment.authorId === null} onPress={() => router.push(`/user/${comment.authorId}`)} style={styles.name} hitSlop={4}>
+            <AppText weight="bold" size={15} numberOfLines={1}>
+              {comment.authorNickname ?? '탈퇴한 회원'}
+            </AppText>
+          </Pressable>
           <AppText size={13} color={colors.textMuted}>
             {timeAgo(comment.createdAt)}
           </AppText>
