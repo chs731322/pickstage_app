@@ -26,7 +26,7 @@ import { PosterCard } from '@/components/PosterCard';
 import { useBookmarks, useToggleBookmark } from '@/features/bookmarks';
 import { useFestival, useRelatedFestivals, type FestivalDetail } from '@/features/festivals';
 import { useAuth } from '@/lib/auth';
-import { daysUntil, formatDateRange, formatOpenAt } from '@/lib/format';
+import { daysUntil, festivalStatus, formatDateRange, formatOpenAt } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
 import { darkHeaderOptions } from '@/lib/darkHeader';
 import { SITE_URL } from '@/lib/links';
@@ -45,6 +45,31 @@ function bookingOptions(festival: FestivalDetail): { vendor: string; url: string
   });
   if (seen.size === 0 && festival.ticketLink) seen.set(festival.ticketLink, { vendor: '예매처', url: festival.ticketLink });
   return [...seen.values()];
+}
+
+type BookAction =
+  | { kind: 'book'; title: string }
+  // 눌러서 공식 사이트로 간다
+  | { kind: 'external'; title: string }
+  // 안내만 보여주고 누를 수 없다
+  | { kind: 'info'; title: string };
+
+// 아래 고정 버튼이 무엇을 할지 정한다 (예매 링크가 없다고 해서 모두 "준비 중"은 아니다)
+function bookAction(festival: FestivalDetail, hasLinks: boolean, isEnded: boolean): BookAction {
+  const tickets = festival.tickets ?? [];
+  if (isEnded) return { kind: 'info', title: '예매 종료' };
+  if (hasLinks) return { kind: 'book', title: '예매하러 가기' };
+  // 링크는 없지만 모든 티켓이 무료면 예매가 필요 없는 공연
+  if (tickets.length > 0 && tickets.every((t) => t.price === 0)) return { kind: 'info', title: '무료 입장' };
+  // 아직 열리지 않은 티켓: 언제 열리는지 알려준다
+  const openAt = festival.ticketOpenAt ?? tickets.map((t) => t.openAt).filter(Boolean).sort()[0] ?? null;
+  if (openAt && new Date(openAt).getTime() > Date.now()) {
+    const days = daysUntil(openAt);
+    const when = days === null || days <= 0 ? '오늘' : `D-${days}`;
+    return { kind: 'info', title: `${when} · ${formatOpenAt(openAt)} 오픈` };
+  }
+  if (festival.externalUrl) return { kind: 'external', title: '공식 사이트에서 확인하기' };
+  return { kind: 'info', title: '예매 정보 준비 중' };
 }
 
 function openLink(url: string) {
@@ -108,12 +133,12 @@ function FestivalBody({
   const { data: related } = useRelatedFestivals(festival);
 
   const isBookmarked = Boolean(bookmarks?.some((b) => b.id === festival.id));
-  const untilEnd = daysUntil(festival.endDate ?? festival.startDate);
-  const isEnded = untilEnd !== null && untilEnd < 0;
-  const untilStart = daysUntil(festival.startDate);
-  const dDay = isEnded ? '종료' : untilStart === null ? null : untilStart <= 0 ? 'D-DAY' : `D-${untilStart}`;
+  // 목록 카드와 같은 기준 (종료 / 진행 중 / D-n)
+  const status = festivalStatus(festival.startDate, festival.endDate);
+  const isEnded = status?.kind === 'ended';
   const genre = festivalGenreLabel(festival.genre);
   const options = useMemo(() => bookingOptions(festival), [festival]);
+  const action = bookAction(festival, options.length > 0, isEnded);
   const posterWidth = Math.min(width * 0.58, 280);
   const lineup = festival.artists ?? [];
   const tickets = festival.tickets ?? [];
@@ -126,7 +151,11 @@ function FestivalBody({
         : null;
 
   const handleBook = () => {
-    if (isEnded || options.length === 0) return;
+    if (action.kind === 'external') {
+      openLink(festival.externalUrl!);
+      return;
+    }
+    if (action.kind !== 'book') return;
     if (options.length === 1) {
       openLink(options[0].url);
     } else {
@@ -186,10 +215,10 @@ function FestivalBody({
         {/* 제목과 기본 정보 */}
         <View style={styles.titleBlock}>
           <View style={styles.tags}>
-            {dDay ? (
-              <View style={[styles.tag, isEnded && styles.tagEnded]}>
+            {status ? (
+              <View style={[styles.tag, isEnded && styles.tagEnded, status.kind === 'live' && styles.tagLive]}>
                 <AppText weight="bold" size={13} color={colors.white}>
-                  {dDay}
+                  {status.label}
                 </AppText>
               </View>
             ) : null}
@@ -323,8 +352,8 @@ function FestivalBody({
       {/* 아래에 고정된 예매 버튼 */}
       <View style={[styles.bottomBar, { paddingBottom: bottomInset + spacing.sm }]}>
         <Button
-          title={isEnded ? '예매 종료' : options.length === 0 ? '예매 정보 준비 중' : '예매하러 가기'}
-          disabled={isEnded || options.length === 0}
+          title={action.title}
+          disabled={action.kind === 'info'}
           onPress={handleBook}
           style={styles.bookButton}
         />
@@ -410,6 +439,7 @@ const styles = StyleSheet.create({
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   tag: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, backgroundColor: colors.brand },
   tagEnded: { backgroundColor: colors.textMuted },
+  tagLive: { backgroundColor: colors.text },
   tagOutline: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
   title: { lineHeight: 35 },
   infoRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },

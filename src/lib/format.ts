@@ -41,3 +41,18 @@ export function ticketDDay(openAt: string | null): string {
   if (days === null) return '-';
   return days <= 0 ? 'OPEN' : `D-${days}`;
 }
+
+// 공연의 진행 상태 표시: 끝났으면 '종료', 시작했고 아직 안 끝났으면 '진행 중', 아니면 'D-3'(당일은 'D-DAY')
+// 날짜가 정해지지 않은 공연은 null (표시하지 않는다)
+export type FestivalStatus = { label: string; kind: 'ended' | 'live' | 'soon' };
+
+export function festivalStatus(start: string | null, end: string | null): FestivalStatus | null {
+  if (!start) return null;
+  const untilStart = daysUntil(start);
+  const untilEnd = daysUntil(end ?? start);
+  if (untilStart === null || untilEnd === null) return null;
+  if (untilEnd < 0) return { label: '종료', kind: 'ended' };
+  if (untilStart < 0) return { label: '진행 중', kind: 'live' };
+  if (untilStart === 0) return { label: 'D-DAY', kind: 'soon' };
+  return { label: `D-${untilStart}`, kind: 'soon' };
+}
