@@ -22,7 +22,7 @@ import {
   useFestivalList,
   type ListFilters,
 } from '@/features/festivals';
-import { festivalGenreLabel } from '@/lib/format';
+import { festivalGenreLabel } from '@/lib/genreLabel';
 import { colors, fontFamily, radius, spacing } from '@/theme';
 
 const COLUMNS = 2;

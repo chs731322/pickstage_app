@@ -1,21 +1,6 @@
-// 날짜·장르 같은 값을 화면에 보여줄 한국어 문구로 바꾼다 (웹 frontend/src 의 같은 이름 함수들과 같은 규칙)
+// 날짜 같은 값을 화면에 보여줄 한국어 문구로 바꾼다 (웹 frontend/src 의 같은 이름 함수들과 같은 규칙)
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
-
-// 공연 장르 코드 -> 이름 (웹 utils/genreLabel.js 의 festivalGenreLabel)
-const FESTIVAL_GENRE: Record<string, string> = {
-  rock: '락·메탈',
-  indie_band: '인디·밴드',
-  hiphop: '힙합',
-  jazz: '재즈',
-  edm: 'EDM',
-  general_music: '종합',
-};
-
-export function festivalGenreLabel(genre: string | null | undefined): string | null {
-  if (!genre) return null;
-  return FESTIVAL_GENRE[genre] ?? null;
-}
 
 const pad = (n: number) => String(n).padStart(2, '0');
 

@@ -1,13 +1,448 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Image } from 'expo-image';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { useHeaderHeight } from 'expo-router/react-navigation';
+import { SymbolView } from 'expo-symbols';
+import * as WebBrowser from 'expo-web-browser';
+import { useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Linking,
+  Platform,
+  Pressable,
+  ScrollView,
+  Share,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
-import { Placeholder } from '@/components/Placeholder';
-import { Screen } from '@/components/Screen';
+import { AppText } from '@/components/AppText';
+import { Button } from '@/components/Button';
+import { PosterCard } from '@/components/PosterCard';
+import { ReportBlockMenu } from '@/components/ReportBlockMenu';
+import { ReviewFormSheet } from '@/components/ReviewFormSheet';
+import {
+  parseFacilities,
+  useVenue,
+  useVenueConcertDetails,
+  type VenueDetail,
+  type VenueReview,
+} from '@/features/venues';
+import { useAuth } from '@/lib/auth';
+import { darkHeaderOptions } from '@/lib/darkHeader';
+import { SITE_URL } from '@/lib/links';
+import { useStatusBarStyle } from '@/lib/useStatusBarStyle';
+import { colors, radius, spacing } from '@/theme';
 
 export default function VenueScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { data: venue, isPending, error, refetch } = useVenue(id);
+  const headerHeight = useHeaderHeight();
+  const topPadding = Platform.OS === 'ios' ? headerHeight : 0;
+
+  if (isPending) {
+    return (
+      <View style={[styles.center, { paddingTop: topPadding }]}>
+        <ActivityIndicator color={colors.brand} />
+      </View>
+    );
+  }
+
+  if (error || !venue) {
+    return (
+      <View style={[styles.center, { paddingTop: topPadding }]}>
+        <AppText weight="bold" size={20}>
+          공연장을 찾을 수 없어요
+        </AppText>
+        <AppText color={colors.textMuted} size={16} style={styles.centerText}>
+          삭제되었거나 잠시 불러오지 못했어요.
+        </AppText>
+        <View style={styles.retry}>
+          <Button title="다시 시도" onPress={() => refetch()} />
+        </View>
+      </View>
+    );
+  }
+
+  return <VenueBody venue={venue} topPadding={topPadding} />;
+}
+
+function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: number }) {
+  useStatusBarStyle('light');
+  const { width } = useWindowDimensions();
+  const { isLoggedIn } = useAuth();
+  const [reviewOpen, setReviewOpen] = useState(false);
+  // 이 화면에서 차단한 사용자의 후기는 바로 뺀다
+  const [blockedIds, setBlockedIds] = useState<number[]>([]);
+  const [page, setPage] = useState(0);
+
+  const images = useMemo(() => (venue.images ?? []).filter((img) => img.imageUrl), [venue.images]);
+  const credits = [...new Set(images.map((img) => img.credit).filter(Boolean))] as string[];
+  const concerts = venue.upcomingConcerts ?? [];
+  const concertDetails = useVenueConcertDetails(concerts.map((c) => c.id));
+  const reviews = (venue.reviews ?? []).filter((r) => r.authorId == null || !blockedIds.includes(r.authorId));
+  const average = reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : null;
+  const directions =
+    venue.latitude && venue.longitude
+      ? `https://www.google.com/maps/dir/?api=1&destination=${venue.latitude},${venue.longitude}`
+      : venue.address
+        ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venue.address)}`
+        : null;
+  const facilities = parseFacilities(venue.facilities);
+  const facts = [
+    venue.capacity ? { label: '수용 인원', value: `${venue.capacity.toLocaleString('ko-KR')}명` } : null,
+    venue.transportInfo ? { label: '교통', value: venue.transportInfo } : null,
+  ].filter((fact): fact is { label: string; value: string } => fact !== null);
+
+  const handleWrite = () => {
+    if (!isLoggedIn) {
+      Alert.alert('로그인이 필요해요', '로그인하면 공연장 후기를 쓸 수 있어요.', [
+        { text: '취소', style: 'cancel' },
+        { text: '로그인', onPress: () => router.push('/login') },
+      ]);
+      return;
+    }
+    setReviewOpen(true);
+  };
+
   return (
-    <Screen topInset={false}>
-      <Placeholder title={`공연장 #${id}`} />
-    </Screen>
+    <View style={styles.root}>
+      <Stack.Screen options={darkHeaderOptions} />
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+        {/* 맨 위: 검정 바탕에 공연장 사진 (옆으로 넘겨 본다) */}
+        <View style={[styles.hero, { paddingTop: topPadding + spacing.md }]}>
+          {images.length > 0 ? (
+            <>
+              <FlatList
+                data={images}
+                keyExtractor={(img) => String(img.id)}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                onMomentumScrollEnd={(e) => setPage(Math.round(e.nativeEvent.contentOffset.x / width))}
+                renderItem={({ item }) => (
+                  <View style={{ width, paddingHorizontal: spacing.md }}>
+                    <Image
+                      source={{ uri: item.imageUrl }}
+                      style={[styles.photo, { height: ((width - spacing.md * 2) * 10) / 16 }]}
+                      contentFit="cover"
+                      transition={150}
+                    />
+                  </View>
+                )}
+              />
+              {images.length > 1 ? (
+                <View style={styles.dots}>
+                  {images.map((img, i) => (
+                    <View key={img.id} style={[styles.dot, i === page && styles.dotActive]} />
+                  ))}
+                </View>
+              ) : null}
+              {credits.length > 0 ? (
+                <AppText size={12} color={colors.heroMuted} style={styles.credit}>
+                  {credits.join(' / ')}
+                </AppText>
+              ) : null}
+            </>
+          ) : (
+            <View style={[styles.photo, styles.noPhoto, { width: width - spacing.md * 2, height: ((width - spacing.md * 2) * 10) / 16 }]}>
+              <AppText color={colors.textMuted}>사진 준비 중</AppText>
+            </View>
+          )}
+        </View>
+        <Image
+          source={require('../../../assets/images/decor/hero-wave.webp')}
+          style={{ width, height: (width * 246) / 1948, marginTop: -1 }}
+          contentFit="fill"
+        />
+
+        <View style={styles.titleBlock}>
+          {venue.region ? (
+            <View style={styles.tag}>
+              <AppText weight="semibold" size={13} color={colors.textSecondary}>
+                {venue.region}
+              </AppText>
+            </View>
+          ) : null}
+          <AppText weight="extrabold" size={27} style={styles.name}>
+            {venue.name}
+          </AppText>
+          {venue.address ? (
+            <AppText size={16} color={colors.textSecondary}>
+              {venue.address}
+            </AppText>
+          ) : null}
+          <View style={styles.actions}>
+            {directions ? (
+              <ActionButton
+                label="길찾기"
+                icon={{ ios: 'location.fill', android: 'directions', web: 'directions' }}
+                onPress={() => Linking.openURL(directions)}
+              />
+            ) : null}
+            <ActionButton
+              label="공유"
+              icon={{ ios: 'square.and.arrow.up', android: 'share', web: 'share' }}
+              onPress={() => Share.share({ message: `${venue.name} — PICKSTAGE에서 확인해보세요.\n${SITE_URL}/venues/${venue.id}` })}
+            />
+          </View>
+        </View>
+
+        <View style={styles.sections}>
+          {facts.length > 0 || venue.facilities ? (
+            <View style={styles.card}>
+              <AppText weight="extrabold" size={21}>
+                공연장 정보
+              </AppText>
+              {facts.map((fact) => (
+                <View key={fact.label} style={styles.fact}>
+                  <AppText weight="bold" size={14} color={colors.textMuted}>
+                    {fact.label}
+                  </AppText>
+                  <AppText size={16} style={styles.factValue}>
+                    {fact.value}
+                  </AppText>
+                </View>
+              ))}
+              {facilities ? (
+                <>
+                  {facilities.phone ? (
+                    <View style={styles.fact}>
+                      <AppText weight="bold" size={14} color={colors.textMuted}>
+                        전화
+                      </AppText>
+                      <Pressable onPress={() => Linking.openURL(`tel:${facilities.phone}`)} hitSlop={6}>
+                        <AppText size={16} color={colors.brand} weight="semibold">
+                          {facilities.phone}
+                        </AppText>
+                      </Pressable>
+                    </View>
+                  ) : null}
+                  {facilities.homepage ? (
+                    <View style={styles.fact}>
+                      <AppText weight="bold" size={14} color={colors.textMuted}>
+                        홈페이지
+                      </AppText>
+                      <Pressable onPress={() => WebBrowser.openBrowserAsync(facilities.homepage!)} hitSlop={6}>
+                        <AppText size={16} color={colors.brand} weight="semibold">
+                          공연장 홈페이지 열기 ›
+                        </AppText>
+                      </Pressable>
+                    </View>
+                  ) : null}
+                  {facilities.available.length > 0 ? (
+                    <View style={styles.fact}>
+                      <AppText weight="bold" size={14} color={colors.textMuted}>
+                        편의시설
+                      </AppText>
+                      <View style={styles.pills}>
+                        {facilities.available.map((label) => (
+                          <View key={label} style={styles.pill}>
+                            <AppText weight="semibold" size={14} color={colors.textSecondary}>
+                              {label}
+                            </AppText>
+                          </View>
+                        ))}
+                      </View>
+                    </View>
+                  ) : null}
+                </>
+              ) : venue.facilities ? (
+                <View style={styles.fact}>
+                  <AppText weight="bold" size={14} color={colors.textMuted}>
+                    편의시설
+                  </AppText>
+                  <AppText size={16} style={styles.factValue}>
+                    {venue.facilities}
+                  </AppText>
+                </View>
+              ) : null}
+            </View>
+          ) : null}
+
+          {/* 후기 */}
+          <View style={styles.card}>
+            <View style={styles.reviewHead}>
+              <View style={styles.flex}>
+                <AppText weight="extrabold" size={21}>
+                  공연장 후기 {reviews.length}
+                </AppText>
+                {average !== null ? (
+                  <View style={styles.average}>
+                    <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={16} />
+                    <AppText weight="bold" size={15}>
+                      {average.toFixed(1)}
+                    </AppText>
+                  </View>
+                ) : null}
+              </View>
+              <Pressable onPress={handleWrite} style={styles.writeButton} accessibilityRole="button">
+                <AppText weight="bold" size={14} color={colors.white}>
+                  후기 작성
+                </AppText>
+              </Pressable>
+            </View>
+            {reviews.length === 0 ? (
+              <AppText size={15} color={colors.textMuted}>
+                아직 등록된 후기가 없어요. 첫 후기를 남겨보세요.
+              </AppText>
+            ) : (
+              reviews.map((review) => (
+                <ReviewItem
+                  key={review.id}
+                  review={review}
+                  onBlocked={(userId) => setBlockedIds((prev) => [...prev, userId])}
+                />
+              ))
+            )}
+          </View>
+        </View>
+
+        {/* 이 공연장에서 하는 공연 */}
+        {concerts.length > 0 ? (
+          <View style={styles.concerts}>
+            <AppText weight="extrabold" size={22} style={styles.concertsTitle}>
+              이 공연장에서 하는 공연
+            </AppText>
+            <FlatList
+              data={concerts}
+              keyExtractor={(item) => String(item.id)}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.concertsList}
+              renderItem={({ item, index }) => {
+                const detail = concertDetails[index]?.data;
+                return (
+                  <PosterCard
+                    festival={{
+                      id: item.id,
+                      title: item.title,
+                      posterImage: detail?.posterImage ?? null,
+                      startDate: item.startDate,
+                      endDate: detail?.endDate ?? null,
+                    }}
+                  />
+                );
+              }}
+            />
+          </View>
+        ) : null}
+      </ScrollView>
+
+      <ReviewFormSheet venueId={venue.id} venueName={venue.name} visible={reviewOpen} onClose={() => setReviewOpen(false)} />
+    </View>
   );
 }
+
+function ReviewItem({ review, onBlocked }: { review: VenueReview; onBlocked: (userId: number) => void }) {
+  const extra = [review.seatSection, review.viewInfo, review.standingTip].filter(Boolean).join(' · ');
+  return (
+    <View style={styles.review}>
+      <View style={styles.reviewTop}>
+        <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={15} />
+        <AppText weight="bold" size={15}>
+          {review.rating.toFixed(1)}
+        </AppText>
+        <AppText weight="semibold" size={15} style={styles.flex} numberOfLines={1}>
+          {review.nickname}
+        </AppText>
+        <AppText size={13} color={colors.textMuted}>
+          {review.createdAt ? review.createdAt.slice(0, 10).replaceAll('-', '.') : ''}
+        </AppText>
+        <ReportBlockMenu
+          targetType="VENUE_REVIEW"
+          targetId={review.id}
+          authorId={review.authorId}
+          authorName={review.nickname}
+          onBlocked={onBlocked}
+        />
+      </View>
+      <AppText size={16} style={styles.reviewContent}>
+        {review.content}
+      </AppText>
+      {review.images && review.images.length > 0 ? (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.reviewPhotos}>
+          {review.images.map((uri) => (
+            <Pressable key={uri} onPress={() => WebBrowser.openBrowserAsync(uri)}>
+              <Image source={{ uri }} style={styles.reviewPhoto} contentFit="cover" />
+            </Pressable>
+          ))}
+        </ScrollView>
+      ) : null}
+      {extra ? (
+        <AppText size={14} color={colors.textMuted}>
+          {extra}
+        </AppText>
+      ) : null}
+    </View>
+  );
+}
+
+function ActionButton({
+  label,
+  icon,
+  onPress,
+}: {
+  label: string;
+  icon: { ios: string; android: string; web: string };
+  onPress: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} style={styles.action} accessibilityRole="button">
+      <SymbolView name={icon as never} tintColor={colors.text} size={22} />
+      <AppText size={13} weight="medium" color={colors.textSecondary}>
+        {label}
+      </AppText>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  root: { flex: 1, backgroundColor: colors.pageBg },
+  content: { paddingBottom: spacing.xl },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
+  centerText: { textAlign: 'center' },
+  retry: { marginTop: spacing.md, alignSelf: 'stretch' },
+  hero: { backgroundColor: '#000000', paddingBottom: spacing.lg },
+  photo: { borderRadius: 18, backgroundColor: '#1c1c20' },
+  noPhoto: { alignSelf: 'center', alignItems: 'center', justifyContent: 'center' },
+  dots: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginTop: spacing.md },
+  dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#555559' },
+  dotActive: { width: 18, backgroundColor: colors.brand },
+  credit: { textAlign: 'center', marginTop: spacing.sm, paddingHorizontal: spacing.md },
+  titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },
+  tag: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 4, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  name: { lineHeight: 35 },
+  actions: { flexDirection: 'row', gap: spacing.lg, paddingVertical: spacing.sm },
+  action: { alignItems: 'center', gap: 4, minWidth: 48 },
+  sections: { gap: spacing.md, padding: spacing.md, paddingTop: 0 },
+  card: {
+    gap: spacing.md,
+    padding: spacing.md + 2,
+    borderRadius: 22,
+    backgroundColor: colors.white,
+    shadowColor: '#1a1a2e',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.07,
+    shadowRadius: 14,
+    elevation: 2,
+  },
+  fact: { gap: 4 },
+  pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: 4 },
+  pill: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.surface },
+  factValue: { lineHeight: 24 },
+  reviewHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  average: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
+  writeButton: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.pill, backgroundColor: colors.brand },
+  review: { gap: spacing.sm, paddingTop: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
+  reviewTop: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  reviewContent: { lineHeight: 24 },
+  reviewPhotos: { gap: spacing.sm },
+  reviewPhoto: { width: 96, height: 96, borderRadius: 12, backgroundColor: colors.surface },
+  concerts: { gap: spacing.md, marginTop: spacing.sm },
+  concertsTitle: { paddingHorizontal: spacing.md },
+  concertsList: { gap: spacing.md, paddingHorizontal: spacing.md },
+});

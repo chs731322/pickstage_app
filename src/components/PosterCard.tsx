@@ -7,8 +7,11 @@ import type { FestivalSummary } from '@/features/festivals';
 import { formatDateRange } from '@/lib/format';
 import { colors, spacing } from '@/theme';
 
+// 카드에 필요한 값만 (공연 목록, 아티스트·공연장의 공연 목록에서 같이 쓴다)
+export type PosterCardFestival = Pick<FestivalSummary, 'id' | 'title' | 'posterImage' | 'startDate' | 'endDate'>;
+
 // 포스터와 이름, 날짜가 있는 공연 카드 (가로로 넘겨 보는 목록용)
-export function PosterCard({ festival, width = 150 }: { festival: FestivalSummary; width?: number }) {
+export function PosterCard({ festival, width = 150 }: { festival: PosterCardFestival; width?: number }) {
   return (
     <Pressable
       onPress={() => router.push(`/festival/${festival.id}`)}

@@ -7,7 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
 import { usePopularFestivals, type FestivalSummary } from '@/features/festivals';
-import { festivalGenreLabel, formatDateRange } from '@/lib/format';
+import { formatDateRange } from '@/lib/format';
+import { festivalGenreLabel } from '@/lib/genreLabel';
 import { colors, radius, spacing } from '@/theme';
 
 const GAP = 14;

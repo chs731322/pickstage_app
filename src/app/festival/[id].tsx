@@ -26,7 +26,9 @@ import { PosterCard } from '@/components/PosterCard';
 import { useBookmarks, useToggleBookmark } from '@/features/bookmarks';
 import { useFestival, useRelatedFestivals, type FestivalDetail } from '@/features/festivals';
 import { useAuth } from '@/lib/auth';
-import { daysUntil, festivalGenreLabel, formatDateRange, formatOpenAt } from '@/lib/format';
+import { daysUntil, formatDateRange, formatOpenAt } from '@/lib/format';
+import { festivalGenreLabel } from '@/lib/genreLabel';
+import { darkHeaderOptions } from '@/lib/darkHeader';
 import { SITE_URL } from '@/lib/links';
 import { useStatusBarStyle } from '@/lib/useStatusBarStyle';
 import { colors, radius, spacing } from '@/theme';
@@ -156,16 +158,7 @@ function FestivalBody({
 
   return (
     <View style={styles.flex}>
-      <Stack.Screen
-        options={{
-          title: '',
-          headerTintColor: colors.white,
-          // iOS는 포스터 위에 떠 있는 투명한 제목줄, 그 외에는 검정 제목줄
-          ...(Platform.OS === 'ios'
-            ? { headerBlurEffect: 'none' as const, headerShadowVisible: false }
-            : { headerStyle: { backgroundColor: '#000000' }, headerShadowVisible: false }),
-        }}
-      />
+      <Stack.Screen options={darkHeaderOptions} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: BOTTOM_BAR_HEIGHT + bottomInset + spacing.lg }}>
