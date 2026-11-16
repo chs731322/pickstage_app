@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import type { CalendarFestival } from '@/lib/calendar';
 import { festivalStatus, formatDateRange } from '@/lib/format';
-import { colors, spacing } from '@/theme';
+import { cardShadow, colors, spacing } from '@/theme';
 
 // 캘린더·홈 주간 캘린더에서 고른 날의 공연 한 줄: 포스터, 상태, 이름, 기간, 공연장 (왼쪽 띠는 달력의 막대 색과 같다)
 export function CalendarEventRow({ festival, color }: { festival: CalendarFestival; color?: string }) {
@@ -51,7 +51,7 @@ export function CalendarEventRow({ festival, color }: { festival: CalendarFestiv
 }
 
 const styles = StyleSheet.create({
-  event: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: 18, backgroundColor: colors.white, overflow: 'hidden' },
+  event: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: 18, backgroundColor: colors.white, overflow: 'hidden', ...cardShadow },
   pressed: { opacity: 0.85 },
   stripe: { position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, backgroundColor: colors.border },
   poster: { width: 66, height: 88, borderRadius: 10, backgroundColor: colors.surface },

@@ -6,7 +6,7 @@ import { AppText } from '@/components/AppText';
 import { Avatar } from '@/components/Avatar';
 import { POST_CATEGORY_LABEL, type PostListItem } from '@/features/community';
 import { timeAgo } from '@/lib/postContent';
-import { colors, spacing } from '@/theme';
+import { cardShadow, colors, spacing } from '@/theme';
 
 // 커뮤니티 목록의 글 한 장: 카테고리·공연, 제목, 본문 앞부분, 작성자와 반응 수
 export function PostCard({ post }: { post: PostListItem }) {
@@ -61,7 +61,7 @@ function Stat({ icon, value }: { icon: { ios: string; android: string; web: stri
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  card: { gap: spacing.sm, padding: spacing.md + 2, borderRadius: 18, backgroundColor: colors.white },
+  card: { gap: spacing.sm, padding: spacing.md + 2, borderRadius: 18, backgroundColor: colors.white, ...cardShadow },
   pressed: { opacity: 0.85 },
   tags: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   tag: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, backgroundColor: colors.brandSoft },

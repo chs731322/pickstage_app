@@ -72,3 +72,21 @@ export function useToggleFavoriteArtist(artistId: number) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['artists', 'interests'] }),
   });
 }
+
+// ───── 아티스트 목록 ─────
+
+export type ArtistListItem = { id: number; name: string; englishName: string | null; profileImage: string | null; upcomingCount: number };
+
+const collator = new Intl.Collator('ko');
+
+// 예정된 공연에 출연하는 아티스트 전체 (서버가 한 번에 준다). 가나다순으로 정렬한다.
+export function useArtistList() {
+  return useQuery({
+    queryKey: ['artists', 'upcoming'],
+    staleTime: 10 * 60_000,
+    queryFn: async () => {
+      const res = await api.get<ApiResponse<ArtistListItem[]>>('/api/artists/upcoming');
+      return [...(res.data.data ?? [])].sort((a, b) => collator.compare(a.name, b.name));
+    },
+  });
+}

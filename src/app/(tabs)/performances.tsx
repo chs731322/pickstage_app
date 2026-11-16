@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import {
@@ -55,9 +56,23 @@ export default function PerformancesScreen() {
 
   const header = (
     <View style={styles.header}>
-      <AppText weight="extrabold" size={28}>
-        공연 탐색
-      </AppText>
+      <View style={styles.titleRow}>
+        <AppText weight="extrabold" size={28}>
+          공연 탐색
+        </AppText>
+        <View style={styles.links}>
+          <Pressable onPress={() => router.push('/artists')} hitSlop={8} style={styles.venueLink} accessibilityRole="button">
+            <AppText weight="bold" size={14} color={colors.brand}>
+              아티스트
+            </AppText>
+          </Pressable>
+          <Pressable onPress={() => router.push('/venues')} hitSlop={8} style={styles.venueLink} accessibilityRole="button">
+            <AppText weight="bold" size={14} color={colors.brand}>
+              공연장
+            </AppText>
+          </Pressable>
+        </View>
+      </View>
 
       {/* 공연명·아티스트 검색 */}
       <View style={styles.search}>
@@ -179,6 +194,9 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.pageBg },
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   column: { gap: GAP, marginBottom: spacing.lg },
+  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  links: { flexDirection: 'row', gap: spacing.sm },
+  venueLink: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
   header: { gap: 14, paddingTop: spacing.md, paddingBottom: spacing.md },
   search: {
     flexDirection: 'row',

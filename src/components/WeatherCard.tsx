@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { api, errorMessage } from '@/lib/api';
-import { colors, radius, spacing } from '@/theme';
+import { cardShadow, colors, spacing } from '@/theme';
 import type { ApiResponse, WeatherDay, WeatherSummary } from '@/types/api';
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
@@ -32,7 +32,7 @@ export function WeatherCard() {
 
   return (
     <View style={styles.card}>
-      <AppText weight="bold" size={16}>
+      <AppText weight="extrabold" size={19}>
         날씨 · 서울
       </AppText>
 
@@ -43,15 +43,15 @@ export function WeatherCard() {
         <>
           <View style={styles.today}>
             <View>
-              <AppText color={colors.textSecondary} size={13}>
+              <AppText color={colors.textSecondary} size={14}>
                 {data.source === 'short' ? '오늘 ' : ''}
                 {formatDay(data.date)}
               </AppText>
-              <AppText weight="extrabold" size={22}>
+              <AppText weight="extrabold" size={26}>
                 {data.sky ?? '날씨 정보 없음'}
               </AppText>
             </View>
-            <AppText weight="bold" size={20} color={colors.brand}>
+            <AppText weight="extrabold" size={24} color={colors.brand}>
               {temps(data)}
             </AppText>
           </View>
@@ -77,12 +77,11 @@ export function WeatherCard() {
 
 const styles = StyleSheet.create({
   card: {
-    gap: spacing.sm,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.background,
+    gap: spacing.sm + 2,
+    padding: spacing.md + 2,
+    borderRadius: 22,
+    backgroundColor: colors.white,
+    ...cardShadow,
   },
   loading: { alignSelf: 'flex-start', marginVertical: spacing.sm },
   today: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.xs },
@@ -90,9 +89,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    borderRadius: radius.sm,
+    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    borderRadius: 14,
     backgroundColor: colors.surface,
   },
 });

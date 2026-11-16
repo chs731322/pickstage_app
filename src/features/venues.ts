@@ -2,6 +2,7 @@ import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/rea
 
 import type { FestivalDetail } from '@/features/festivals';
 import { api } from '@/lib/api';
+import { nameGroupOf } from '@/lib/koreanGroup';
 import type { ApiResponse } from '@/types/api';
 
 export type VenueReview = {
@@ -114,3 +115,27 @@ export function parseFacilities(raw: string | null): VenueFacilities | null {
     return null;
   }
 }
+
+// ───── 공연장 목록 ─────
+
+export type VenueListItem = { id: number; name: string; address: string | null; region: string | null; image: string | null };
+
+export const VENUE_REGIONS = ['전체', '서울', '인천', '경기', '부산', '강원'] as const;
+
+const collator = new Intl.Collator('ko');
+
+// 공연장을 한 번에 모두 받아 가나다순으로 정렬한다 (웹과 같은 방식. 전국 100곳 안팎이라 한 번에 받아도 가볍다)
+export function useVenueList(region: string) {
+  return useQuery({
+    queryKey: ['venues', 'list', region],
+    staleTime: 10 * 60_000,
+    queryFn: async () => {
+      const res = await api.get<ApiResponse<{ content: VenueListItem[] }>>('/api/venues', {
+        params: { region: region === '전체' ? undefined : region, size: 300 },
+      });
+      return [...(res.data.data.content ?? [])].sort((a, b) => collator.compare(a.name, b.name));
+    },
+  });
+}
+
+export const venueGroupOf = nameGroupOf;

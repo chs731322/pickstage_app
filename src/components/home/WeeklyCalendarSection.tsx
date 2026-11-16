@@ -7,7 +7,7 @@ import { CalendarEventRow } from '@/components/CalendarEventRow';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useCalendarFestivals } from '@/features/calendar';
 import { buildLayout, toDateStr, type CalendarFestival } from '@/lib/calendar';
-import { colors, spacing } from '@/theme';
+import { cardShadow, colors, spacing } from '@/theme';
 
 const WEEKDAYS = ['월', '화', '수', '목', '금', '토', '일'];
 const MAX_EVENTS = 3;
@@ -140,7 +140,7 @@ export function WeeklyCalendarSection() {
 
 const styles = StyleSheet.create({
   section: { gap: spacing.md },
-  card: { marginHorizontal: spacing.md, padding: spacing.md, borderRadius: 22, backgroundColor: colors.white, gap: spacing.sm },
+  card: { marginHorizontal: spacing.md, padding: spacing.md, borderRadius: 22, backgroundColor: colors.white, gap: spacing.sm, ...cardShadow },
   weekRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.sm },
   days: { flexDirection: 'row' },
   day: { flex: 1, alignItems: 'center', gap: 4, paddingVertical: 4 },

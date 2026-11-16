@@ -68,7 +68,9 @@ function RootNavigator() {
 
       {/* 로그인 없이도 볼 수 있는 상세 화면 (어느 탭에서든 위에 쌓인다) */}
       <Stack.Screen name="festival/[id]" options={{ title: '공연' }} />
+      <Stack.Screen name="artists" options={{ title: '아티스트 찾기' }} />
       <Stack.Screen name="artist/[id]" options={{ title: '아티스트' }} />
+      <Stack.Screen name="venues" options={{ title: '공연장 찾기' }} />
       <Stack.Screen name="venue/[id]" options={{ title: '공연장' }} />
       <Stack.Screen name="user/[id]" options={{ title: '프로필' }} />
       <Stack.Screen name="community/[id]" options={{ title: '' }} />

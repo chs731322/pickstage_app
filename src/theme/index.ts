@@ -48,3 +48,12 @@ export const buttonGradient = ['#ff5cc6', '#f000b0'] as const;
 
 export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 } as const;
 export const radius = { sm: 8, md: 16, pill: 999 } as const;
+
+// 흰 카드에 은은하게 띄우는 그림자 (홈의 카드들이 같은 느낌이 되도록 한 곳에서 정한다)
+export const cardShadow = {
+  shadowColor: '#1a1a2e',
+  shadowOffset: { width: 0, height: 6 },
+  shadowOpacity: 0.07,
+  shadowRadius: 14,
+  elevation: 2,
+} as const;
