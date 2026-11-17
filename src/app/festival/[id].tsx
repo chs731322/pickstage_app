@@ -216,11 +216,6 @@ function FestivalBody({
             </View>
           )}
         </View>
-        <Image
-          source={require('../../../assets/images/decor/sky-wave-bottom.svg')}
-          style={{ width, height: Math.round((width * 200) / 1920) * 1.3, marginTop: -1 }}
-          contentFit="fill"
-        />
 
         {/* 제목과 기본 정보 */}
         <View style={styles.titleBlock}>
@@ -457,7 +452,7 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
-  hero: { backgroundColor: colors.sky, alignItems: 'center', paddingBottom: spacing.lg },
+  hero: { backgroundColor: colors.pageBg, alignItems: 'center', paddingBottom: spacing.lg },
   poster: { borderRadius: 18, backgroundColor: colors.surface, ...cardShadow },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },

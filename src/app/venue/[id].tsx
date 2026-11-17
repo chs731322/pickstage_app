@@ -152,11 +152,6 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
             </View>
           )}
         </View>
-        <Image
-          source={require('../../../assets/images/decor/sky-wave-bottom.svg')}
-          style={{ width, height: Math.round((width * 200) / 1920) * 1.3, marginTop: -1 }}
-          contentFit="fill"
-        />
 
         <View style={styles.titleBlock}>
           {venue.region ? (
@@ -414,7 +409,7 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
-  hero: { backgroundColor: colors.sky, paddingBottom: spacing.lg },
+  hero: { backgroundColor: colors.pageBg, paddingBottom: spacing.lg },
   photo: { borderRadius: 18, backgroundColor: colors.surface, ...cardShadow },
   noPhoto: { alignSelf: 'center', alignItems: 'center', justifyContent: 'center' },
   dots: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginTop: spacing.md },
