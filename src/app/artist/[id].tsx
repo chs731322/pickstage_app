@@ -1,7 +1,9 @@
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { SymbolView } from 'expo-symbols';
+import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
 import { ActivityIndicator, Alert, FlatList, Platform, Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 
@@ -16,9 +18,17 @@ import {
   type ArtistDetail,
 } from '@/features/artists';
 import { useAuth } from '@/lib/auth';
-import { heroHeaderOptions } from '@/lib/heroHeader';
 import { genreLabel, tagLabels } from '@/lib/genreLabel';
-import { colors, radius, spacing } from '@/theme';
+import { brandScale, colors, radius, spacing } from '@/theme';
+
+// 어두운 사진 배경 위에 투명하게 떠 있는 제목줄: 흰색 뒤로 가기 버튼, 제목 없음 (안드로이드도 투명하게 해서 사진이 맨 위까지 이어지게 한다)
+const artistHeaderOptions = {
+  title: '',
+  headerTransparent: true,
+  headerTintColor: colors.white,
+  headerShadowVisible: false,
+  ...(Platform.OS === 'ios' ? { headerBlurEffect: 'none' as const } : { headerStyle: { backgroundColor: 'transparent' } }),
+};
 
 const ARTIST_TYPE_LABEL: Record<string, string> = {
   solo: '솔로',
@@ -59,11 +69,13 @@ export default function ArtistScreen() {
     );
   }
 
-  return <ArtistBody artist={artist} topPadding={topPadding} />;
+  return <ArtistBody artist={artist} />;
 }
 
-function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: number }) {
+function ArtistBody({ artist }: { artist: ArtistDetail }) {
   const { width } = useWindowDimensions();
+  // 제목줄이 투명하게 사진 위에 떠 있으므로 그 높이만큼 아래에서 시작한다
+  const headerHeight = useHeaderHeight();
   const { isLoggedIn } = useAuth();
   const { data: interests } = useInterestedArtists();
   const toggleFavorite = useToggleFavoriteArtist(artist.id);
@@ -71,10 +83,10 @@ function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: 
   const isFavorite = Boolean(interests?.some((item) => item.id === artist.id));
   const mainGenre = genreLabel(artist.genre);
   const typeLabel = artist.artistType ? (ARTIST_TYPE_LABEL[artist.artistType] ?? artist.artistType) : '';
-  const tags = tagLabels(artist.genreTags, artist.genre);
+  const tags = [mainGenre, typeLabel, ...tagLabels(artist.genreTags, artist.genre)].filter(Boolean).slice(0, 5) as string[];
   const upcoming = artist.upcomingConcerts ?? [];
   const past = artist.pastConcerts ?? [];
-  const avatar = Math.min(width * 0.5, 220);
+  const photo = Math.min(width * 0.52, 220);
   const links = [
     { label: 'Spotify', icon: { ios: 'music.note', android: 'music_note', web: 'music_note' }, url: artist.spotifyUrl },
     { label: 'Instagram', icon: { ios: 'camera', android: 'photo_camera', web: 'photo_camera' }, url: artist.instagramUrl },
@@ -96,45 +108,54 @@ function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: 
 
   return (
     <View style={styles.flex}>
-      <Stack.Screen options={heroHeaderOptions} />
+      <Stack.Screen options={artistHeaderOptions} />
+      {/* 맨 위가 어두운 사진 배경이라 상태바 글자는 흰색 */}
+      <StatusBar style="light" />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
-        {/* 맨 위: 검정 바탕에 프로필 사진 */}
-        <View style={[styles.hero, { paddingTop: topPadding + spacing.md }]}>
+        {/* 맨 위: 프로필 사진을 크게 흐리게 깐 배경 위에 사진 카드, 이름, 태그, 공연 수, 버튼 */}
+        <View style={[styles.hero, { paddingTop: headerHeight + spacing.md }]}>
+          {artist.profileImage ? (
+            <>
+              <Image source={{ uri: artist.profileImage }} style={StyleSheet.absoluteFill} contentFit="cover" blurRadius={60} />
+              <View style={[StyleSheet.absoluteFill, styles.heroShade]} />
+            </>
+          ) : (
+            // 사진이 없는 아티스트는 핑크 그라데이션 배경
+            <LinearGradient
+              colors={[brandScale[300], brandScale[500], brandScale[700]]}
+              style={StyleSheet.absoluteFill}
+            />
+          )}
+
           {artist.profileImage ? (
             <Image
               source={{ uri: artist.profileImage }}
-              style={{ width: avatar, height: avatar, borderRadius: avatar / 2, backgroundColor: colors.surface }}
+              style={[styles.photo, { width: photo, height: photo }]}
               contentFit="cover"
               transition={150}
             />
           ) : (
-            <View style={[styles.noImage, { width: avatar, height: avatar, borderRadius: avatar / 2 }]}>
-              <AppText weight="extrabold" size={64} color={colors.textMuted}>
+            <View style={[styles.photo, styles.noImage, { width: photo, height: photo }]}>
+              <AppText weight="display" size={64} color={colors.brand}>
                 {artist.name.slice(0, 1)}
               </AppText>
             </View>
           )}
-        </View>
 
-        <View style={styles.titleBlock}>
-          {mainGenre || typeLabel ? (
-            <AppText weight="bold" size={15} color={colors.brand}>
-              {[mainGenre, typeLabel].filter(Boolean).join(' · ')}
-            </AppText>
-          ) : null}
-          <AppText weight="extrabold" size={28} style={styles.name}>
+          <AppText weight="display" size={30} color={colors.white} style={styles.name}>
             {artist.name}
           </AppText>
           {artist.englishName ? (
-            <AppText size={16} color={colors.textMuted}>
+            <AppText size={15} color="rgba(255,255,255,0.8)">
               {artist.englishName}
             </AppText>
           ) : null}
+
           {tags.length > 0 ? (
             <View style={styles.tags}>
               {tags.map((tag) => (
                 <View key={tag} style={styles.tag}>
-                  <AppText weight="semibold" size={13} color={colors.textSecondary}>
+                  <AppText weight="semibold" size={13} color={colors.white}>
                     {tag}
                   </AppText>
                 </View>
@@ -142,41 +163,43 @@ function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: 
             </View>
           ) : null}
 
-          <Pressable
-            onPress={handleFavorite}
-            style={[styles.favorite, isFavorite && styles.favoriteActive]}
-            accessibilityRole="button"
-            accessibilityState={{ selected: isFavorite }}>
-            <SymbolView
-              name={
-                isFavorite
-                  ? { ios: 'heart.fill', android: 'favorite', web: 'favorite' }
-                  : { ios: 'heart', android: 'favorite_border', web: 'favorite_border' }
-              }
-              tintColor={isFavorite ? colors.white : colors.brand}
-              size={20}
-            />
-            <AppText weight="bold" size={16} color={isFavorite ? colors.white : colors.brand}>
-              {isFavorite ? '관심 아티스트' : '관심 아티스트로 추가'}
-            </AppText>
-          </Pressable>
+          {/* 반투명 카드 두 장: 예정 공연, 지난 공연 */}
+          <View style={styles.stats}>
+            <StatCard label="예정 공연" value={upcoming.length} />
+            <StatCard label="지난 공연" value={past.length} />
+          </View>
 
-          {links.length > 0 ? (
-            <View style={styles.links}>
-              {links.map((link) => (
-                <Pressable
-                  key={link.label}
-                  onPress={() => WebBrowser.openBrowserAsync(link.url!)}
-                  style={styles.link}
-                  accessibilityRole="link">
-                  <SymbolView name={link.icon as never} tintColor={colors.text} size={18} />
-                  <AppText weight="semibold" size={14}>
-                    {link.label}
-                  </AppText>
-                </Pressable>
-              ))}
-            </View>
-          ) : null}
+          {/* 흰 알약 버튼과 바로가기(스포티파이·인스타그램·공식 사이트) 동그라미 */}
+          <View style={styles.actions}>
+            <Pressable
+              onPress={handleFavorite}
+              style={[styles.favorite, isFavorite && styles.favoriteActive]}
+              accessibilityRole="button"
+              accessibilityState={{ selected: isFavorite }}>
+              <SymbolView
+                name={
+                  isFavorite
+                    ? { ios: 'heart.fill', android: 'favorite', web: 'favorite' }
+                    : { ios: 'heart', android: 'favorite_border', web: 'favorite_border' }
+                }
+                tintColor={isFavorite ? colors.white : colors.brand}
+                size={20}
+              />
+              <AppText weight="bold" size={16} color={isFavorite ? colors.white : colors.brand}>
+                {isFavorite ? '관심 아티스트' : '관심 아티스트로 추가'}
+              </AppText>
+            </Pressable>
+            {links.map((link) => (
+              <Pressable
+                key={link.label}
+                onPress={() => WebBrowser.openBrowserAsync(link.url!)}
+                style={styles.linkCircle}
+                accessibilityRole="link"
+                accessibilityLabel={link.label}>
+                <SymbolView name={link.icon as never} tintColor={colors.white} size={20} />
+              </Pressable>
+            ))}
+          </View>
         </View>
 
         {artist.description ? (
@@ -193,6 +216,19 @@ function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: 
         <ConcertRow title="예정된 공연" concerts={upcoming} />
         <ConcertRow title="출연했던 공연" concerts={past} />
       </ScrollView>
+    </View>
+  );
+}
+
+function StatCard({ label, value }: { label: string; value: number }) {
+  return (
+    <View style={styles.stat}>
+      <AppText weight="display" size={30} color={colors.white}>
+        {value}
+      </AppText>
+      <AppText weight="medium" size={13} color="rgba(255,255,255,0.85)">
+        {label}
+      </AppText>
     </View>
   );
 }
@@ -222,35 +258,68 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
-  hero: { backgroundColor: colors.pageBg, alignItems: 'center', paddingBottom: spacing.lg },
-  noImage: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface },
-  titleBlock: { gap: spacing.sm, padding: spacing.md, alignItems: 'center' },
+  // 맨 위 영역: 아래 모서리를 둥글게 잘라서 뒤의 흐린 사진이 깔끔하게 끝나게 한다
+  hero: {
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.lg,
+    marginBottom: spacing.md,
+    overflow: 'hidden',
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
+  },
+  heroShade: { backgroundColor: 'rgba(20,0,30,0.4)' },
+  photo: {
+    borderRadius: 28,
+    borderWidth: 3,
+    borderColor: 'rgba(255,255,255,0.9)',
+    backgroundColor: colors.surface,
+    marginBottom: spacing.xs,
+  },
+  noImage: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.brandSoft },
   name: { textAlign: 'center' },
   tags: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm, marginTop: 4 },
-  tag: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  tag: {
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.16)',
+  },
+  stats: { flexDirection: 'row', gap: spacing.sm + 4, alignSelf: 'stretch', marginTop: spacing.md },
+  stat: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 2,
+    paddingVertical: spacing.md,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.16)',
+  },
+  actions: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, alignSelf: 'stretch', marginTop: spacing.sm },
   favorite: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.sm,
-    alignSelf: 'stretch',
     height: 52,
-    marginTop: spacing.sm,
     borderRadius: radius.pill,
-    borderWidth: 1.5,
-    borderColor: colors.brand,
     backgroundColor: colors.white,
   },
   favoriteActive: { backgroundColor: colors.brand },
-  links: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm, marginTop: spacing.xs },
-  link: {
-    flexDirection: 'row',
+  linkCircle: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: radius.pill,
-    backgroundColor: colors.white,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.16)',
   },
   card: {
     gap: spacing.md,
