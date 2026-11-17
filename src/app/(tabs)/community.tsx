@@ -100,8 +100,7 @@ export default function CommunityScreen() {
 }
 
 const styles = StyleSheet.create({
-  // 위쪽 안전 영역은 하늘색 띠와 이어지게 하늘색, 목록은 연회색 바탕
-  safe: { flex: 1, backgroundColor: colors.sky },
+  safe: { flex: 1, backgroundColor: colors.pageBg },
   list: { backgroundColor: colors.pageBg },
   content: { gap: spacing.sm + 2, paddingHorizontal: spacing.md, paddingBottom: 100 },
   header: { gap: spacing.md, paddingBottom: spacing.sm },

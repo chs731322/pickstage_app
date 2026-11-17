@@ -151,8 +151,7 @@ export default function MyScreen() {
 }
 
 const styles = StyleSheet.create({
-  // 위쪽 안전 영역은 하늘색 띠와 이어지게 하늘색, 내용은 연회색 바탕
-  safe: { flex: 1, backgroundColor: colors.sky },
+  safe: { flex: 1, backgroundColor: colors.pageBg },
   scroll: { backgroundColor: colors.pageBg },
   content: { gap: spacing.md, padding: spacing.md, paddingTop: 0, paddingBottom: spacing.xl },
   profile: {

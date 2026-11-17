@@ -197,8 +197,7 @@ export default function PerformancesScreen() {
 }
 
 const styles = StyleSheet.create({
-  // 위쪽 안전 영역은 하늘색 띠와 이어지게 하늘색, 목록은 연회색 바탕
-  safe: { flex: 1, backgroundColor: colors.sky },
+  safe: { flex: 1, backgroundColor: colors.pageBg },
   list: { backgroundColor: colors.pageBg },
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   column: { gap: GAP, marginBottom: spacing.lg },
