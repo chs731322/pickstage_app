@@ -6,6 +6,7 @@ import { Animated, FlatList, Pressable, StyleSheet, useWindowDimensions, View } 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
+import { Highlight } from '@/components/Highlight';
 import { TAB_BAR_HEIGHT } from '@/components/app-tabs';
 import { usePopularFestivals, type FestivalSummary } from '@/features/festivals';
 import { useUnreadCount } from '@/features/notifications';
@@ -18,7 +19,9 @@ const GAP = 12;
 const AUTO_MS = 4000;
 // 포스터 아래 정보(태그·제목·공연장·날짜·버튼)와 아래 여백이 차지하는 높이 (화면 높이에서 포스터가 쓸 수 있는 크기를 계산할 때 쓴다)
 const INFO_HEIGHT = 200;
-const HERO_BOTTOM = 24;
+// 배너 위의 "이번 달 주목할 만한 공연" 문구와 그 아래 간격
+const HEADLINE_HEIGHT = 40;
+const HERO_BOTTOM = 32;
 
 // 홈 맨 위 밝은 영역: 로고·검색·알림, 인기 공연 포스터를 한 줄로 늘어놓은 배너.
 // 지금 포스터는 가운데에 크게, 양옆 포스터는 살짝 보이고, 옆으로 밀거나 4초마다 자동으로 넘어간다 (예스24 앱 메인 배너와 같은 방식).
@@ -34,7 +37,7 @@ export function HeroSection() {
   const focused = useRef(true);
 
   // 홈을 열었을 때 버튼까지 한 화면에 보이도록, 남는 높이에 맞춰 포스터 크기를 정한다
-  const fixedHeights = insets.top + 54 + 12 + INFO_HEIGHT + HERO_BOTTOM + TAB_BAR_HEIGHT + insets.bottom;
+  const fixedHeights = insets.top + 54 + HEADLINE_HEIGHT + 32 + INFO_HEIGHT + HERO_BOTTOM + TAB_BAR_HEIGHT + insets.bottom;
   const cardWidth = Math.round(Math.max(130, Math.min(width * 0.62, ((height - fixedHeights) * 3) / 4)));
   const cardHeight = (cardWidth * 4) / 3;
   const snap = cardWidth + GAP;
@@ -66,7 +69,7 @@ export function HeroSection() {
   }, [count, snap, index]);
 
   return (
-    <View style={[styles.hero, { paddingTop: insets.top + spacing.sm }]}>
+    <View style={[styles.hero, { paddingTop: insets.top + spacing.md }]}>
       {/* 로고와 검색·알림 */}
       <View style={styles.topBar}>
         <Image source={require('../../assets/images/logo.png')} style={styles.logo} contentFit="contain" />
@@ -96,6 +99,13 @@ export function HeroSection() {
             ) : null}
           </Pressable>
         </View>
+      </View>
+
+      {/* 배너 위 문구 */}
+      <View style={styles.headline}>
+        <AppText weight="display" size={22} style={styles.centerText}>
+          이번 달 <Highlight>주목할 만한</Highlight> 공연
+        </AppText>
       </View>
 
       {/* 배너: 포스터 뒤의 은은한 분홍 번짐 */}
@@ -214,7 +224,7 @@ export function HeroSection() {
 
 const styles = StyleSheet.create({
   hero: { paddingBottom: HERO_BOTTOM, overflow: 'hidden' },
-  glow: { position: 'absolute', top: 70 },
+  glow: { position: 'absolute', top: 120 },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -235,13 +245,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topIcons: { flexDirection: 'row', alignItems: 'center', gap: 22 },
-  banner: { marginTop: spacing.sm },
+  headline: { alignItems: 'center', marginTop: spacing.lg },
+  banner: { marginTop: spacing.md },
   carousel: { flexGrow: 0, paddingVertical: 8 },
   poster: { borderRadius: 18, overflow: 'hidden', backgroundColor: colors.surface },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   counterWrap: { position: 'absolute', bottom: 18, alignItems: 'flex-end', paddingRight: 10 },
   counter: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.pill, backgroundColor: 'rgba(0,0,0,0.55)' },
-  info: { alignItems: 'center', gap: 6, paddingHorizontal: spacing.lg, marginTop: spacing.sm },
+  info: { alignItems: 'center', gap: 6, paddingHorizontal: spacing.lg, marginTop: spacing.md },
   centerText: { textAlign: 'center' },
   tags: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   tag: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.brand },
