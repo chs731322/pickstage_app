@@ -52,6 +52,8 @@ export const fontFiles = {
   'Pretendard-SemiBold': require('../../assets/fonts/Pretendard-SemiBold.otf'),
   'Pretendard-Bold': require('../../assets/fonts/Pretendard-Bold.otf'),
   'Pretendard-ExtraBold': require('../../assets/fonts/Pretendard-ExtraBold.otf'),
+  // 핵심 제목에만 쓰는 장식 글꼴 (콘텐츠웨이브 Wavve PADO, 상업 이용·앱 탑재 가능, 로고·CI 용도는 불가)
+  'Wavve-PADO': require('../../assets/fonts/WavvePADO-Regular.otf'),
 };
 
 export const fontFamily = {
@@ -60,6 +62,8 @@ export const fontFamily = {
   semibold: 'Pretendard-SemiBold',
   bold: 'Pretendard-Bold',
   extrabold: 'Pretendard-ExtraBold',
+  // 섹션 제목·탭 제목·홈 배너 제목처럼 눈에 띄어야 하는 곳에만 쓴다 (본문에는 쓰지 않는다)
+  display: 'Wavve-PADO',
 } as const;
 
 // 주 버튼의 그라데이션 (밝은 핑크 → 브랜드 핑크, 왼쪽에서 오른쪽)

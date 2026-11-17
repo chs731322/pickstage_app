@@ -36,7 +36,7 @@ export function TabHero({ title, subtitle, decor, decorWidth = 96, decorAspect =
           pointerEvents="none"
         />
         <View style={styles.titleRow}>
-          <AppText weight="extrabold" size={28}>
+          <AppText weight="display" size={30}>
             {title}
           </AppText>
           {action}

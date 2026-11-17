@@ -21,7 +21,7 @@ const INFO_HEIGHT = 200;
 const HERO_BOTTOM = 24;
 
 // 홈 맨 위 밝은 영역: 로고·검색·알림, 인기 공연 포스터를 한 줄로 늘어놓은 배너.
-// 지금 포스터는 왼쪽에 크게, 다음 포스터는 오른쪽에 살짝 보이고, 옆으로 밀거나 4초마다 자동으로 넘어간다 (예스24 앱 메인 배너와 같은 방식).
+// 지금 포스터는 가운데에 크게, 양옆 포스터는 살짝 보이고, 옆으로 밀거나 4초마다 자동으로 넘어간다 (예스24 앱 메인 배너와 같은 방식).
 export function HeroSection() {
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
@@ -35,9 +35,11 @@ export function HeroSection() {
 
   // 홈을 열었을 때 버튼까지 한 화면에 보이도록, 남는 높이에 맞춰 포스터 크기를 정한다
   const fixedHeights = insets.top + 54 + 12 + INFO_HEIGHT + HERO_BOTTOM + TAB_BAR_HEIGHT + insets.bottom;
-  const cardWidth = Math.round(Math.max(130, Math.min(width * 0.66, ((height - fixedHeights) * 3) / 4)));
+  const cardWidth = Math.round(Math.max(130, Math.min(width * 0.62, ((height - fixedHeights) * 3) / 4)));
   const cardHeight = (cardWidth * 4) / 3;
   const snap = cardWidth + GAP;
+  // 지금 포스터가 화면 가운데에 오고, 양옆 포스터가 살짝 보인다
+  const sidePad = (width - cardWidth) / 2;
   const festivals = data ?? [];
   const count = festivals.length;
   const current: FestivalSummary | undefined = festivals[index];
@@ -57,6 +59,7 @@ export function HeroSection() {
       if (Date.now() - touchedAt.current < AUTO_MS - 500) return;
       const next = (index + 1) % count;
       listRef.current?.scrollToOffset({ offset: next * snap, animated: true });
+      setIndex(next);
     }, AUTO_MS);
     // 포스터가 바뀔 때마다 타이머를 새로 시작해서, 손으로 넘긴 뒤에도 4초는 가만히 보여준다
     return () => clearInterval(timer);
@@ -111,11 +114,14 @@ export function HeroSection() {
           showsHorizontalScrollIndicator={false}
           snapToInterval={snap}
           decelerationRate="fast"
-          // 마지막 포스터도 왼쪽에 맞춰 설 수 있게 오른쪽에 여백을 둔다
-          contentContainerStyle={{ paddingLeft: spacing.md, paddingRight: width - cardWidth - spacing.md, gap: GAP }}
+          contentContainerStyle={{ paddingHorizontal: sidePad, gap: GAP }}
           style={styles.carousel}
           onScrollBeginDrag={() => {
             touchedAt.current = Date.now();
+          }}
+          // 스크롤이 멈춘 자리를 기준으로 몇 번째인지 확정한다 (움직이는 중의 값은 마지막 위치를 놓칠 수 있다)
+          onMomentumScrollEnd={(event) => {
+            setIndex(Math.max(0, Math.min(count - 1, Math.round(event.nativeEvent.contentOffset.x / snap))));
           }}
           onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
             useNativeDriver: true,
@@ -157,7 +163,7 @@ export function HeroSection() {
 
         {/* 몇 번째 포스터인지: 지금 포스터의 오른쪽 아래 */}
         {count > 1 ? (
-          <View pointerEvents="none" style={[styles.counterWrap, { left: spacing.md, width: cardWidth }]}>
+          <View pointerEvents="none" style={[styles.counterWrap, { left: sidePad, width: cardWidth }]}>
             <View style={styles.counter}>
               <AppText weight="bold" size={12} color={colors.white}>
                 {index + 1} / {count}
@@ -184,11 +190,11 @@ export function HeroSection() {
               </AppText>
             ) : null}
           </View>
-          <AppText weight="extrabold" size={24} color={colors.text} numberOfLines={2}>
+          <AppText weight="display" size={24} color={colors.text} numberOfLines={2} style={styles.centerText}>
             {current.title}
           </AppText>
           {current.venueName ? (
-            <AppText weight="medium" size={15} color={colors.textSecondary}>
+            <AppText weight="medium" size={15} color={colors.textSecondary} style={styles.centerText}>
               {current.venueName}
             </AppText>
           ) : null}
@@ -235,7 +241,8 @@ const styles = StyleSheet.create({
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   counterWrap: { position: 'absolute', bottom: 18, alignItems: 'flex-end', paddingRight: 10 },
   counter: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.pill, backgroundColor: 'rgba(0,0,0,0.55)' },
-  info: { alignItems: 'flex-start', gap: 6, paddingHorizontal: spacing.md, marginTop: spacing.sm },
+  info: { alignItems: 'center', gap: 6, paddingHorizontal: spacing.lg, marginTop: spacing.sm },
+  centerText: { textAlign: 'center' },
   tags: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   tag: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.brand },
   cta: {

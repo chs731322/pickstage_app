@@ -31,7 +31,7 @@ export function SectionHeader({ title, eyebrow, highlight, highlightColor, icon,
               {eyebrow}
             </AppText>
           ) : null}
-          <AppText weight="extrabold" size={22}>
+          <AppText weight="display" size={23}>
             {renderTitle(title, highlight, highlightColor)}
           </AppText>
         </View>
