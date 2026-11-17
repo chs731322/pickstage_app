@@ -59,16 +59,16 @@ type Page<T> = { content: T[]; page: number; totalElements: number; totalPages: 
 
 const PAGE_SIZE = 12;
 
-// 게시글 목록 (category가 비어 있으면 전체). 스크롤하면 다음 페이지를 이어서 불러온다.
-export function usePosts(category: string, sort: PostSort) {
+// 게시글 목록 (category가 비어 있으면 전체, keyword가 있으면 제목·본문·공연명에서 검색). 스크롤하면 다음 페이지를 이어서 불러온다.
+export function usePosts(category: string, sort: PostSort, keyword = '') {
   const { isLoggedIn } = useAuth();
   return useInfiniteQuery({
     // 로그인 상태가 바뀌면 차단한 사람의 글이 빠지도록 목록을 새로 받는다
-    queryKey: ['posts', 'list', category, sort, isLoggedIn],
+    queryKey: ['posts', 'list', category, sort, keyword, isLoggedIn],
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const res = await api.get<ApiResponse<Page<PostListItem>>>('/api/posts', {
-        params: { category: category || undefined, sort, page: pageParam, size: PAGE_SIZE },
+        params: { category: category || undefined, keyword: keyword || undefined, sort, page: pageParam, size: PAGE_SIZE },
       });
       return res.data.data;
     },
