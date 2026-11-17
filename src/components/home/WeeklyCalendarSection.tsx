@@ -67,7 +67,7 @@ export function WeeklyCalendarSection() {
 
   return (
     <View style={styles.section}>
-      <SectionHeader title="주간 공연 캘린더" onPressMore={() => router.push('/calendar')} />
+      <SectionHeader title="주간 공연 캘린더" eyebrow="THIS WEEK" highlight="주간" highlightColor={colors.white} onPressMore={() => router.push('/calendar')} />
 
       <View style={styles.card}>
         <View style={styles.weekRow}>

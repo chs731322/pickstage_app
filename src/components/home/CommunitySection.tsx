@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { PostCard } from '@/components/PostCard';
+import { PostBubble } from '@/components/PostBubble';
 import { SectionHeader } from '@/components/SectionHeader';
 import { usePosts } from '@/features/community';
 import { useAuth } from '@/lib/auth';
@@ -29,7 +29,7 @@ export function CommunitySection() {
 
   return (
     <View style={styles.section}>
-      <SectionHeader title="동행 구하는 커뮤니티" onPressMore={() => router.push('/community')} />
+      <SectionHeader title="동행 구하는 커뮤니티" eyebrow="TOGETHER" highlight="동행" onPressMore={() => router.push('/community')} />
       <AppText size={15} color={colors.textSecondary} style={styles.desc}>
         같은 공연 가는 사람을 찾아보세요.
       </AppText>
@@ -39,7 +39,7 @@ export function CommunitySection() {
             아직 동행 글이 없어요. 첫 글을 남겨보세요.
           </AppText>
         ) : (
-          posts.map((post) => <PostCard key={post.id} post={post} />)
+          posts.map((post, i) => <PostBubble key={post.id} post={post} flip={i % 2 === 1} />)
         )}
         <Pressable onPress={handleWrite} style={({ pressed }) => [styles.write, pressed && styles.writePressed]} accessibilityRole="button">
           <AppText weight="bold" size={16} color={colors.white}>
@@ -54,7 +54,7 @@ export function CommunitySection() {
 const styles = StyleSheet.create({
   section: { gap: spacing.sm },
   desc: { paddingHorizontal: spacing.md },
-  list: { gap: spacing.sm + 2, paddingHorizontal: spacing.md, marginTop: spacing.xs },
+  list: { gap: spacing.md, paddingHorizontal: spacing.md, marginTop: spacing.xs },
   writePressed: { backgroundColor: colors.brandStrong },
   write: { height: 52, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
 });

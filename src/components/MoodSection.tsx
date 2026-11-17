@@ -15,7 +15,7 @@ export function MoodSection() {
 
   return (
     <View style={styles.section}>
-      <SectionHeader title="이런 공연 어때요?" icon={require('../../assets/images/decor/burst-pink.webp')} />
+      <SectionHeader title="이런 공연 어때요?" eyebrow="FOR YOU" highlight="이런 공연" icon={require('../../assets/images/decor/burst-pink.webp')} />
 
       <ScrollView
         horizontal

@@ -21,7 +21,7 @@ export function PrepSection() {
 
   return (
     <View style={styles.section}>
-      <SectionHeader title="공연 준비" />
+      <SectionHeader title="공연 준비" eyebrow="PREPARE" highlight="준비" />
       <View style={styles.padded}>
         <WeatherCard />
       </View>

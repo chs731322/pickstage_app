@@ -29,10 +29,9 @@ import { useFestival, useRelatedFestivals, type FestivalDetail } from '@/feature
 import { useAuth } from '@/lib/auth';
 import { daysUntil, festivalStatus, formatDateRange, formatOpenAt } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
-import { darkHeaderOptions } from '@/lib/darkHeader';
+import { heroHeaderOptions } from '@/lib/heroHeader';
 import { SITE_URL } from '@/lib/links';
-import { useStatusBarStyle } from '@/lib/useStatusBarStyle';
-import { colors, radius, spacing } from '@/theme';
+import { cardShadow, colors, radius, spacing } from '@/theme';
 
 const BOTTOM_BAR_HEIGHT = 72;
 
@@ -125,8 +124,6 @@ function FestivalBody({
   topPadding: number;
   bottomInset: number;
 }) {
-  // 맨 위가 검정이라 상태바·뒤로가기 글자는 흰색
-  useStatusBarStyle('light');
   const { width } = useWindowDimensions();
   const { isLoggedIn } = useAuth();
   const { data: bookmarks } = useBookmarks();
@@ -200,7 +197,7 @@ function FestivalBody({
 
   return (
     <View style={styles.flex}>
-      <Stack.Screen options={darkHeaderOptions} />
+      <Stack.Screen options={heroHeaderOptions} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: BOTTOM_BAR_HEIGHT + bottomInset + spacing.lg }}>
@@ -220,8 +217,8 @@ function FestivalBody({
           )}
         </View>
         <Image
-          source={require('../../../assets/images/decor/hero-wave.webp')}
-          style={{ width, height: (width * 246) / 1948, marginTop: -1 }}
+          source={require('../../../assets/images/decor/sky-wave-bottom.svg')}
+          style={{ width, height: Math.round((width * 200) / 1920) * 1.3, marginTop: -1 }}
           contentFit="fill"
         />
 
@@ -454,8 +451,8 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
-  hero: { backgroundColor: '#000000', alignItems: 'center', paddingBottom: spacing.lg },
-  poster: { borderRadius: 18, backgroundColor: '#1c1c20' },
+  hero: { backgroundColor: colors.sky, alignItems: 'center', paddingBottom: spacing.lg },
+  poster: { borderRadius: 18, backgroundColor: colors.surface, ...cardShadow },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },

@@ -34,7 +34,7 @@ export default function HomeScreen() {
         <Image source={require('../../../assets/images/decor/sky-wave-top.svg')} style={{ width, height: waveHeight }} contentFit="fill" />
         <View style={styles.zoneFill}>
           <View style={styles.section}>
-            <SectionHeader title="티켓 오픈 일정" onPressMore={() => router.push('/performances')} />
+            <SectionHeader title="티켓 오픈 일정" eyebrow="TICKET OPEN" highlight="티켓 오픈" highlightColor={colors.white} onPressMore={() => router.push('/performances')} />
             {ticketsPending ? (
               <ActivityIndicator color={colors.brand} style={styles.loading} />
             ) : tickets && tickets.length > 0 ? (

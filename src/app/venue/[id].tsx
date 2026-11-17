@@ -32,10 +32,9 @@ import {
   type VenueReview,
 } from '@/features/venues';
 import { useAuth } from '@/lib/auth';
-import { darkHeaderOptions } from '@/lib/darkHeader';
+import { heroHeaderOptions } from '@/lib/heroHeader';
 import { SITE_URL } from '@/lib/links';
-import { useStatusBarStyle } from '@/lib/useStatusBarStyle';
-import { colors, radius, spacing } from '@/theme';
+import { cardShadow, colors, radius, spacing } from '@/theme';
 
 export default function VenueScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -71,7 +70,6 @@ export default function VenueScreen() {
 }
 
 function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: number }) {
-  useStatusBarStyle('light');
   const { width } = useWindowDimensions();
   const { isLoggedIn } = useAuth();
   const [reviewOpen, setReviewOpen] = useState(false);
@@ -111,7 +109,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
 
   return (
     <View style={styles.root}>
-      <Stack.Screen options={darkHeaderOptions} />
+      <Stack.Screen options={heroHeaderOptions} />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
         {/* 맨 위: 검정 바탕에 공연장 사진 (옆으로 넘겨 본다) */}
         <View style={[styles.hero, { paddingTop: topPadding + spacing.md }]}>
@@ -155,8 +153,8 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
           )}
         </View>
         <Image
-          source={require('../../../assets/images/decor/hero-wave.webp')}
-          style={{ width, height: (width * 246) / 1948, marginTop: -1 }}
+          source={require('../../../assets/images/decor/sky-wave-bottom.svg')}
+          style={{ width, height: Math.round((width * 200) / 1920) * 1.3, marginTop: -1 }}
           contentFit="fill"
         />
 
@@ -416,11 +414,11 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
-  hero: { backgroundColor: '#000000', paddingBottom: spacing.lg },
-  photo: { borderRadius: 18, backgroundColor: '#1c1c20' },
+  hero: { backgroundColor: colors.sky, paddingBottom: spacing.lg },
+  photo: { borderRadius: 18, backgroundColor: colors.surface, ...cardShadow },
   noPhoto: { alignSelf: 'center', alignItems: 'center', justifyContent: 'center' },
   dots: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginTop: spacing.md },
-  dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#555559' },
+  dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.white },
   dotActive: { width: 18, backgroundColor: colors.brand },
   credit: { textAlign: 'center', marginTop: spacing.sm, paddingHorizontal: spacing.md },
   titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },

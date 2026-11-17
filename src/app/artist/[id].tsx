@@ -16,9 +16,8 @@ import {
   type ArtistDetail,
 } from '@/features/artists';
 import { useAuth } from '@/lib/auth';
-import { darkHeaderOptions } from '@/lib/darkHeader';
+import { heroHeaderOptions } from '@/lib/heroHeader';
 import { genreLabel, tagLabels } from '@/lib/genreLabel';
-import { useStatusBarStyle } from '@/lib/useStatusBarStyle';
 import { colors, radius, spacing } from '@/theme';
 
 const ARTIST_TYPE_LABEL: Record<string, string> = {
@@ -64,7 +63,6 @@ export default function ArtistScreen() {
 }
 
 function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: number }) {
-  useStatusBarStyle('light');
   const { width } = useWindowDimensions();
   const { isLoggedIn } = useAuth();
   const { data: interests } = useInterestedArtists();
@@ -98,14 +96,14 @@ function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: 
 
   return (
     <View style={styles.flex}>
-      <Stack.Screen options={darkHeaderOptions} />
+      <Stack.Screen options={heroHeaderOptions} />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
         {/* 맨 위: 검정 바탕에 프로필 사진 */}
         <View style={[styles.hero, { paddingTop: topPadding + spacing.md }]}>
           {artist.profileImage ? (
             <Image
               source={{ uri: artist.profileImage }}
-              style={{ width: avatar, height: avatar, borderRadius: avatar / 2, backgroundColor: '#1c1c20' }}
+              style={{ width: avatar, height: avatar, borderRadius: avatar / 2, backgroundColor: colors.surface }}
               contentFit="cover"
               transition={150}
             />
@@ -118,8 +116,8 @@ function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: 
           )}
         </View>
         <Image
-          source={require('../../../assets/images/decor/hero-wave.webp')}
-          style={{ width, height: (width * 246) / 1948, marginTop: -1 }}
+          source={require('../../../assets/images/decor/sky-wave-bottom.svg')}
+          style={{ width, height: Math.round((width * 200) / 1920) * 1.3, marginTop: -1 }}
           contentFit="fill"
         />
 
@@ -229,8 +227,8 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
-  hero: { backgroundColor: '#000000', alignItems: 'center', paddingBottom: spacing.lg },
-  noImage: { alignItems: 'center', justifyContent: 'center', backgroundColor: '#1c1c20' },
+  hero: { backgroundColor: colors.sky, alignItems: 'center', paddingBottom: spacing.lg },
+  noImage: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface },
   titleBlock: { gap: spacing.sm, padding: spacing.md, alignItems: 'center' },
   name: { textAlign: 'center' },
   tags: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm, marginTop: 4 },

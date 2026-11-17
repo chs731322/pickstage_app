@@ -2,12 +2,15 @@ import { SymbolView } from 'expo-symbols';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
+import { Highlight } from '@/components/Highlight';
 import { cardShadow, colors, radius, spacing } from '@/theme';
 
 // 웹 메인의 "DID YOU KNOW?" 공연 준비 팁 (웹 data/mainPageContent.js 와 같은 내용을 자리별로 나눠 보여준다)
 const TIP = {
   label: 'DID YOU KNOW?',
-  title: "페스티벌에서 '명당'은 어디일까요?",
+  title: '페스티벌에서 ',
+  titleHighlight: "'명당'",
+  titleEnd: '은 어디일까요?',
   question: '무조건 앞자리일까요?',
   answer: 'NO!',
   closing: '내 취향에 맞는 나만의 명당을 찾아보세요!',
@@ -43,6 +46,8 @@ export function InfoTipSection() {
 
         <AppText weight="extrabold" size={22} style={styles.title}>
           {TIP.title}
+          <Highlight>{TIP.titleHighlight}</Highlight>
+          {TIP.titleEnd}
         </AppText>
 
         <View style={styles.answerRow}>

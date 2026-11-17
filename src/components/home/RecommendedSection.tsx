@@ -24,7 +24,7 @@ export function RecommendedSection() {
 
   return (
     <View style={styles.section}>
-      <SectionHeader title="내 취향 공연" onPressMore={() => router.push('/my/artists')} />
+      <SectionHeader title="내 취향 공연" eyebrow="MY PICK" highlight="내 취향" onPressMore={() => router.push('/my/artists')} />
       <FlatList
         data={data}
         keyExtractor={(item) => String(item.id)}
