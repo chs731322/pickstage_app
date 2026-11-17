@@ -1,4 +1,3 @@
-import { Image } from 'expo-image';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { SymbolView } from 'expo-symbols';
@@ -21,13 +20,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
+import { ConcertTicket } from '@/components/ConcertTicket';
 import { LineupSection } from '@/components/LineupSection';
 import { CustomNotificationSheet } from '@/components/CustomNotificationSheet';
 import { PosterCard } from '@/components/PosterCard';
 import { useBookmarks, useToggleBookmark } from '@/features/bookmarks';
 import { useFestival, useRelatedFestivals, type FestivalDetail } from '@/features/festivals';
 import { useAuth } from '@/lib/auth';
-import { daysUntil, festivalStatus, formatDateRange, formatOpenAt } from '@/lib/format';
+import { daysUntil, festivalStatus, formatOpenAt } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
 import { heroHeaderOptions } from '@/lib/heroHeader';
 import { SITE_URL } from '@/lib/links';
@@ -138,7 +138,6 @@ function FestivalBody({
   const genre = festivalGenreLabel(festival.genre);
   const options = useMemo(() => bookingOptions(festival), [festival]);
   const action = bookAction(festival, options.length > 0, isEnded);
-  const posterWidth = Math.min(width * 0.58, 280);
   const lineup = festival.artists ?? [];
   const tickets = festival.tickets ?? [];
   const venue = festival.venue;
@@ -201,58 +200,13 @@ function FestivalBody({
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: BOTTOM_BAR_HEIGHT + bottomInset + spacing.lg }}>
-        {/* 맨 위: 검정 바탕에 포스터 */}
+        {/* 맨 위: 세로 티켓 (포스터, 점선, 제목과 날짜·지역·장소·티켓 오픈) */}
         <View style={[styles.hero, { paddingTop: topPadding + spacing.md }]}>
-          {festival.posterImage ? (
-            <Image
-              source={{ uri: festival.posterImage }}
-              style={[styles.poster, { width: posterWidth, height: (posterWidth * 4) / 3 }]}
-              contentFit="cover"
-              transition={150}
-            />
-          ) : (
-            <View style={[styles.poster, styles.noPoster, { width: posterWidth, height: (posterWidth * 4) / 3 }]}>
-              <AppText color={colors.textMuted}>포스터 준비 중</AppText>
-            </View>
-          )}
+          <ConcertTicket festival={festival} status={status} genre={genre} width={width - spacing.md * 2} />
         </View>
 
-        {/* 제목과 기본 정보 */}
+        {/* 찜·공유·알림 */}
         <View style={styles.titleBlock}>
-          <View style={styles.tags}>
-            {status ? (
-              <View style={[styles.tag, isEnded && styles.tagEnded, status.kind === 'live' && styles.tagLive]}>
-                <AppText weight="bold" size={13} color={colors.white}>
-                  {status.label}
-                </AppText>
-              </View>
-            ) : null}
-            {genre ? (
-              <View style={styles.tagOutline}>
-                <AppText weight="semibold" size={13} color={colors.textSecondary}>
-                  {genre}
-                </AppText>
-              </View>
-            ) : null}
-            {festival.region ? (
-              <View style={styles.tagOutline}>
-                <AppText weight="semibold" size={13} color={colors.textSecondary}>
-                  {festival.region}
-                </AppText>
-              </View>
-            ) : null}
-          </View>
-          <AppText weight="extrabold" size={27} style={styles.title}>
-            {festival.title}
-          </AppText>
-          <InfoRow icon={{ ios: 'calendar', android: 'event', web: 'event' }} text={formatDateRange(festival.startDate, festival.endDate)} />
-          {venue ? (
-            <InfoRow
-              icon={{ ios: 'mappin.and.ellipse', android: 'place', web: 'place' }}
-              text={venue.name}
-              onPress={() => router.push(`/venue/${venue.id}`)}
-            />
-          ) : null}
           <View style={styles.actions}>
             <ActionButton
               label={isBookmarked ? '찜 취소' : '찜하기'}
@@ -378,19 +332,6 @@ function FestivalBody({
 
 type SymbolName = { ios: string; android: string; web: string };
 
-function InfoRow({ icon, text, onPress }: { icon: SymbolName; text: string; onPress?: () => void }) {
-  const content = (
-    <View style={styles.infoRow}>
-      <SymbolView name={icon as never} tintColor={colors.textMuted} size={20} />
-      <AppText size={17} color={onPress ? colors.text : colors.textSecondary} style={styles.infoText}>
-        {text}
-      </AppText>
-      {onPress ? <AppText color={colors.textMuted}>›</AppText> : null}
-    </View>
-  );
-  return onPress ? <Pressable onPress={onPress}>{content}</Pressable> : content;
-}
-
 function ActionButton({
   label,
   icon,
@@ -446,7 +387,7 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
-  hero: { backgroundColor: colors.pageBg, alignItems: 'center', paddingBottom: spacing.lg },
+  hero: { paddingHorizontal: spacing.md, paddingBottom: spacing.md },
   poster: { borderRadius: 18, backgroundColor: colors.surface, ...cardShadow },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },
@@ -456,8 +397,6 @@ const styles = StyleSheet.create({
   tagLive: { backgroundColor: colors.text },
   tagOutline: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
   title: { lineHeight: 35 },
-  infoRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  infoText: { flexShrink: 1 },
   actions: { flexDirection: 'row', gap: spacing.lg, paddingVertical: spacing.sm },
   action: { alignItems: 'center', gap: 4, minWidth: 48 },
   sections: { gap: spacing.md, padding: spacing.md, paddingTop: 0, backgroundColor: colors.pageBg },
