@@ -5,7 +5,6 @@ import { ActivityIndicator, FlatList, ScrollView, StyleSheet, useWindowDimension
 import { AppText } from '@/components/AppText';
 import { HeroSection } from '@/components/HeroSection';
 import { CommunitySection } from '@/components/home/CommunitySection';
-import { InfoTipSection } from '@/components/home/InfoTipSection';
 import { PrepSection } from '@/components/home/PrepSection';
 import { RecommendedSection } from '@/components/home/RecommendedSection';
 import { WeeklyCalendarSection } from '@/components/home/WeeklyCalendarSection';
@@ -74,7 +73,6 @@ export default function HomeScreen() {
       <View style={styles.body}>
         <RecommendedSection />
         <MoodSection />
-        <InfoTipSection />
         <PrepSection />
         <CommunitySection />
 
