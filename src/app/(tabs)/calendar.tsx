@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText } from '@/components/AppText';
 import { CalendarEventRow } from '@/components/CalendarEventRow';
 import { FilterPill } from '@/components/FilterPill';
+import { TabHero } from '@/components/TabHero';
 import { useCalendarFestivals } from '@/features/calendar';
 import { buildLayout, buildWeeks, toDateStr } from '@/lib/calendar';
 import { colors, radius, spacing } from '@/theme';
@@ -54,19 +55,24 @@ export default function CalendarScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
-        <View style={styles.titleRow}>
-          <AppText weight="extrabold" size={28}>
-            캘린더
-          </AppText>
-          {!isTodayMonth ? (
-            <Pressable onPress={goToToday} hitSlop={8} style={styles.todayButton} accessibilityRole="button">
-              <AppText weight="bold" size={14} color={colors.brand}>
-                오늘
-              </AppText>
-            </Pressable>
-          ) : null}
-        </View>
+      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+        <TabHero
+          title="캘린더"
+          subtitle="이번 달 공연을 한눈에 봐요"
+          decor={require('../../../assets/images/decor/music-note.webp')}
+          decorWidth={64}
+          decorAspect={286 / 296}
+          action={
+            !isTodayMonth ? (
+              <Pressable onPress={goToToday} hitSlop={8} style={styles.todayButton} accessibilityRole="button">
+                <AppText weight="bold" size={14} color={colors.brand}>
+                  오늘
+                </AppText>
+              </Pressable>
+            ) : undefined
+          }
+          bleed={GRID_PADDING}
+        />
 
         {/* 지역 */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pillsScroll} contentContainerStyle={styles.pills}>
@@ -188,10 +194,11 @@ export default function CalendarScreen() {
 const CELL_HEIGHT = 62;
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.pageBg },
-  content: { gap: spacing.md, padding: GRID_PADDING, paddingBottom: spacing.xl },
-  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  todayButton: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
+  // 위쪽 안전 영역은 하늘색 띠와 이어지게 하늘색, 내용은 연회색 바탕
+  safe: { flex: 1, backgroundColor: colors.sky },
+  scroll: { backgroundColor: colors.pageBg },
+  content: { gap: spacing.md, padding: GRID_PADDING, paddingTop: 0, paddingBottom: spacing.xl },
+  todayButton: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.white },
   // 알약 줄은 화면 양끝까지 스크롤되도록 안쪽 여백만큼 바깥으로 넓힌다
   pillsScroll: { marginHorizontal: -GRID_PADDING, flexGrow: 0 },
   pills: { gap: spacing.sm, paddingHorizontal: GRID_PADDING },

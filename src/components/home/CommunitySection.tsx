@@ -41,7 +41,7 @@ export function CommunitySection() {
         ) : (
           posts.map((post) => <PostCard key={post.id} post={post} />)
         )}
-        <Pressable onPress={handleWrite} style={styles.write} accessibilityRole="button">
+        <Pressable onPress={handleWrite} style={({ pressed }) => [styles.write, pressed && styles.writePressed]} accessibilityRole="button">
           <AppText weight="bold" size={16} color={colors.white}>
             동행 글 쓰기
           </AppText>
@@ -55,5 +55,6 @@ const styles = StyleSheet.create({
   section: { gap: spacing.sm },
   desc: { paddingHorizontal: spacing.md },
   list: { gap: spacing.sm + 2, paddingHorizontal: spacing.md, marginTop: spacing.xs },
+  writePressed: { backgroundColor: colors.brandStrong },
   write: { height: 52, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
 });

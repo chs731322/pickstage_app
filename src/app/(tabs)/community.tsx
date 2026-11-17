@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText } from '@/components/AppText';
 import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
+import { TabHero } from '@/components/TabHero';
 import { PostCard } from '@/components/PostCard';
 import { POST_CATEGORY_LABEL, POST_SORTS, usePosts, type PostSort } from '@/features/community';
 import { useAuth } from '@/lib/auth';
@@ -34,9 +35,13 @@ export default function CommunityScreen() {
 
   const header = (
     <View style={styles.header}>
-      <AppText weight="extrabold" size={28}>
-        커뮤니티
-      </AppText>
+      <TabHero
+        title="커뮤니티"
+        subtitle="같이 갈 사람, 후기, 질문을 나눠요"
+        decor={require('../../../assets/images/decor/cone.webp')}
+        decorWidth={70}
+        decorAspect={390 / 330}
+      />
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pillsScroll} contentContainerStyle={styles.pills}>
         {CATEGORIES.map((c) => (
           <FilterPill key={c.value || 'all'} label={c.label} active={category === c.value} onPress={() => setCategory(c.value)} />
@@ -57,6 +62,7 @@ export default function CommunityScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <FlatList
+        style={styles.list}
         data={posts}
         keyExtractor={(item) => String(item.id)}
         contentContainerStyle={styles.content}
@@ -86,7 +92,7 @@ export default function CommunityScreen() {
       />
 
       {/* 글쓰기 */}
-      <Pressable onPress={handleWrite} style={styles.fab} accessibilityRole="button" accessibilityLabel="글쓰기">
+      <Pressable onPress={handleWrite} style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]} accessibilityRole="button" accessibilityLabel="글쓰기">
         <SymbolView name={{ ios: 'pencil', android: 'edit', web: 'edit' }} tintColor={colors.white} size={22} />
         <AppText weight="bold" size={16} color={colors.white}>
           글쓰기
@@ -97,9 +103,11 @@ export default function CommunityScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.pageBg },
+  // 위쪽 안전 영역은 하늘색 띠와 이어지게 하늘색, 목록은 연회색 바탕
+  safe: { flex: 1, backgroundColor: colors.sky },
+  list: { backgroundColor: colors.pageBg },
   content: { gap: spacing.sm + 2, paddingHorizontal: spacing.md, paddingBottom: 100 },
-  header: { gap: spacing.md, paddingTop: spacing.md, paddingBottom: spacing.sm },
+  header: { gap: spacing.md, paddingBottom: spacing.sm },
   // 알약 줄은 화면 양끝까지 스크롤되도록 안쪽 여백만큼 바깥으로 넓힌다
   pillsScroll: { marginHorizontal: -spacing.md, flexGrow: 0 },
   pills: { gap: spacing.sm, paddingHorizontal: spacing.md },
@@ -107,6 +115,7 @@ const styles = StyleSheet.create({
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center', lineHeight: 24 },
   footer: { marginVertical: spacing.lg },
+  fabPressed: { backgroundColor: colors.brandStrong },
   fab: {
     position: 'absolute',
     right: spacing.md,

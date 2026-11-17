@@ -18,9 +18,8 @@ export const colors = {
   brandSoft: brandScale[50],
   // 옅은 핑크 칩·강조 박스 배경 (brandSoft보다 한 단계 진함)
   brandTint: brandScale[100],
-  // 핑크 배경 위에 올리는 진한 핑크 글자
+  // 핑크 배경 위에 올리는 진한 핑크 글자, 핑크로 채운 버튼을 눌렀을 때의 색
   brandStrong: brandScale[600],
-  brandBg: '#ffd7d7',
   text: '#111111',
   textSecondary: '#545454',
   textMuted: '#7f7f7f',
@@ -37,10 +36,12 @@ export const colors = {
   clearButton: '#b8b8be',
   // 부드러운 화면(로그인·가입)용: 은은한 테두리, 입력칸 포커스 색, 그림자 색 (브랜드 핑크 계열)
   softBorder: '#f0e3ec',
-  focus: '#ff4fc3',
-  shadow: '#ff4fc3',
+  focus: brandScale[400],
+  shadow: brandScale[400],
   // 하단 탭바: 선택하지 않은 탭의 아이콘·글자 색
   tabInactive: '#9a9aa0',
+  // 홈의 파란 띠(티켓 오픈·주간 캘린더 영역) 배경 (웹 메인과 같은 하늘색)
+  sky: '#b7eaff',
   white: '#ffffff',
 } as const;
 
@@ -75,3 +76,4 @@ export const cardShadow = {
   shadowRadius: 14,
   elevation: 2,
 } as const;
+

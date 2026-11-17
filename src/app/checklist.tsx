@@ -90,7 +90,7 @@ export default function ChecklistScreen() {
           onSubmitEditing={handleAdd}
           style={styles.addInput}
         />
-        <Pressable onPress={handleAdd} disabled={!newText.trim() || add.isPending} style={[styles.addButton, !newText.trim() && styles.disabled]} accessibilityRole="button">
+        <Pressable onPress={handleAdd} disabled={!newText.trim() || add.isPending} style={({ pressed }) => [styles.addButton, pressed && styles.addPressed, !newText.trim() && styles.disabled]} accessibilityRole="button">
           <AppText weight="bold" size={15} color={colors.white}>
             담기
           </AppText>
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   addRow: { flexDirection: 'row', gap: spacing.sm },
   addInput: { flex: 1, height: 50, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
   addButton: { height: 50, paddingHorizontal: 22, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
+  addPressed: { backgroundColor: colors.brandStrong },
   disabled: { opacity: 0.4 },
   list: { borderRadius: 22, backgroundColor: colors.white, paddingHorizontal: spacing.md },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: 15, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },

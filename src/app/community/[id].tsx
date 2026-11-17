@@ -318,7 +318,7 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
           <Pressable
             onPress={handleSubmitComment}
             disabled={create.isPending || !draft.trim()}
-            style={[styles.send, (!draft.trim() || create.isPending) && styles.sendDisabled]}
+            style={({ pressed }) => [styles.send, pressed && styles.sendPressed, (!draft.trim() || create.isPending) && styles.sendDisabled]}
             accessibilityRole="button"
             accessibilityLabel="댓글 등록">
             <AppText weight="bold" size={15} color={colors.white}>
@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.text,
   },
+  sendPressed: { backgroundColor: colors.brandStrong },
   send: { height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
   sendDisabled: { opacity: 0.4 },
 });

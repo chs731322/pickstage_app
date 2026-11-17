@@ -6,6 +6,7 @@ import { AppText } from '@/components/AppText';
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
 import { MenuCard, MenuRow } from '@/components/MenuRow';
+import { TabHero } from '@/components/TabHero';
 import { useInterestedArtists } from '@/features/artists';
 import { useBookmarks } from '@/features/bookmarks';
 import { useAuth } from '@/lib/auth';
@@ -25,10 +26,8 @@ export default function MyScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <AppText weight="extrabold" size={28}>
-          마이
-        </AppText>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <TabHero title="마이" decor={require('../../../assets/images/decor/burst-pink.webp')} decorWidth={64} decorAspect={1105 / 956} />
 
         {isLoggedIn && user ? (
           <>
@@ -152,8 +151,10 @@ export default function MyScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.pageBg },
-  content: { gap: spacing.md, padding: spacing.md, paddingBottom: spacing.xl },
+  // 위쪽 안전 영역은 하늘색 띠와 이어지게 하늘색, 내용은 연회색 바탕
+  safe: { flex: 1, backgroundColor: colors.sky },
+  scroll: { backgroundColor: colors.pageBg },
+  content: { gap: spacing.md, padding: spacing.md, paddingTop: 0, paddingBottom: spacing.xl },
   profile: {
     flexDirection: 'row',
     alignItems: 'center',

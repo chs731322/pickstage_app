@@ -94,7 +94,7 @@ export function WeatherTip({ weather }: { weather: WeatherSummary }) {
         <Pressable
           onPress={addAll}
           disabled={adding}
-          style={({ pressed }) => [styles.button, (pressed || adding) && styles.pressed]}
+          style={({ pressed }) => [styles.button, pressed && styles.pressed, adding && styles.adding]}
           accessibilityRole="button">
           <AppText weight="bold" size={14} color={colors.white}>
             {adding ? '추가하는 중...' : `체크리스트에 추가하기 (${missing.length}개)`}
@@ -120,5 +120,6 @@ const styles = StyleSheet.create({
   head: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
   message: { flex: 1, lineHeight: 20 },
   button: { alignItems: 'center', paddingVertical: 11, borderRadius: 999, backgroundColor: colors.brand },
-  pressed: { opacity: 0.7 },
+  pressed: { backgroundColor: colors.brandStrong },
+  adding: { opacity: 0.7 },
 });

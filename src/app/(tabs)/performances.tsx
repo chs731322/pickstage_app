@@ -17,6 +17,7 @@ import { AppText } from '@/components/AppText';
 import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { PosterCard } from '@/components/PosterCard';
+import { TabHero } from '@/components/TabHero';
 import {
   LIST_GENRES,
   LIST_REGIONS,
@@ -57,10 +58,12 @@ export default function PerformancesScreen() {
 
   const header = (
     <View style={styles.header}>
-      <View style={styles.titleRow}>
-        <AppText weight="extrabold" size={28}>
-          공연 탐색
-        </AppText>
+      <TabHero
+        title="공연 탐색"
+        subtitle="곧 열리는 공연을 찾아봐요"
+        decor={require('../../../assets/images/decor/speakers.webp')}
+        decorWidth={116}
+        decorAspect={584 / 774}>
         <View style={styles.links}>
           <Pressable onPress={() => router.push('/artists')} hitSlop={8} style={styles.venueLink} accessibilityRole="button">
             <AppText weight="bold" size={14} color={colors.brand}>
@@ -73,7 +76,6 @@ export default function PerformancesScreen() {
             </AppText>
           </Pressable>
         </View>
-      </View>
 
       {/* 공연명·아티스트 검색 */}
       <View style={styles.search}>
@@ -102,6 +104,7 @@ export default function PerformancesScreen() {
           </Pressable>
         ) : null}
       </View>
+      </TabHero>
 
       {/* 지역 */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pillsScroll}
@@ -160,6 +163,7 @@ export default function PerformancesScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <FlatList
+        style={styles.list}
         data={items}
         keyExtractor={(item) => String(item.id)}
         numColumns={COLUMNS}
@@ -196,13 +200,14 @@ export default function PerformancesScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.pageBg },
+  // 위쪽 안전 영역은 하늘색 띠와 이어지게 하늘색, 목록은 연회색 바탕
+  safe: { flex: 1, backgroundColor: colors.sky },
+  list: { backgroundColor: colors.pageBg },
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   column: { gap: GAP, marginBottom: spacing.lg },
-  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  links: { flexDirection: 'row', gap: spacing.sm },
-  venueLink: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
-  header: { gap: 14, paddingTop: spacing.md, paddingBottom: spacing.md },
+  links: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
+  venueLink: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.pill, backgroundColor: colors.white },
+  header: { gap: 14, paddingBottom: spacing.md },
   search: {
     flexDirection: 'row',
     alignItems: 'center',

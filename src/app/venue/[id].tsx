@@ -280,7 +280,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
                   </View>
                 ) : null}
               </View>
-              <Pressable onPress={handleWrite} style={styles.writeButton} accessibilityRole="button">
+              <Pressable onPress={handleWrite} style={({ pressed }) => [styles.writeButton, pressed && styles.writePressed]} accessibilityRole="button">
                 <AppText weight="bold" size={14} color={colors.white}>
                   후기 작성
                 </AppText>
@@ -446,6 +446,7 @@ const styles = StyleSheet.create({
   factValue: { lineHeight: 24 },
   reviewHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   average: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
+  writePressed: { backgroundColor: colors.brandStrong },
   writeButton: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.pill, backgroundColor: colors.brand },
   review: { gap: spacing.sm, paddingTop: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   reviewTop: { flexDirection: 'row', alignItems: 'center', gap: 6 },
