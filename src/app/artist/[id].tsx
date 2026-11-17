@@ -2,7 +2,6 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useHeaderHeight } from 'expo-router/react-navigation';
-import { SymbolView } from 'expo-symbols';
 import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
 import { ActivityIndicator, Alert, FlatList, Platform, Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
@@ -86,6 +85,7 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
   const tags = [mainGenre, typeLabel, ...tagLabels(artist.genreTags, artist.genre)].filter(Boolean).slice(0, 5) as string[];
   const upcoming = artist.upcomingConcerts ?? [];
   const past = artist.pastConcerts ?? [];
+  const interestCount = artist.interestCount ?? 0;
   const photo = Math.min(width * 0.52, 220);
   const links = [
     { label: 'Spotify', logo: require('../../../assets/images/brand/spotify.svg'), url: artist.spotifyUrl },
@@ -167,27 +167,24 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
           <View style={styles.stats}>
             <StatCard label="예정 공연" value={upcoming.length} />
             <StatCard label="지난 공연" value={past.length} />
+            {/* 관심 수는 0이면 숨긴다 (비어 보이지 않게) */}
+            {interestCount > 0 ? <StatCard label="관심" value={interestCount} /> : null}
           </View>
 
           {/* 흰 알약 버튼과 바로가기(스포티파이·인스타그램·공식 사이트) 동그라미 */}
           <View style={styles.actions}>
+            {/* 하트 하나: 관심 아티스트 추가/해제 (눌러서 채워진 하트가 되면 관심 등록된 것) */}
             <Pressable
               onPress={handleFavorite}
-              style={[styles.favorite, isFavorite && styles.favoriteActive]}
+              style={styles.heart}
               accessibilityRole="button"
+              accessibilityLabel={isFavorite ? '관심 아티스트 해제' : '관심 아티스트로 추가'}
               accessibilityState={{ selected: isFavorite }}>
-              <SymbolView
-                name={
-                  isFavorite
-                    ? { ios: 'heart.fill', android: 'favorite', web: 'favorite' }
-                    : { ios: 'heart', android: 'favorite_border', web: 'favorite_border' }
-                }
-                tintColor={isFavorite ? colors.white : colors.brand}
-                size={20}
+              <Image
+                source={isFavorite ? require('../../../assets/images/brand/heart-filled.svg') : require('../../../assets/images/brand/heart-outline.svg')}
+                style={styles.heartIcon}
+                contentFit="contain"
               />
-              <AppText weight="bold" size={16} color={isFavorite ? colors.white : colors.brand}>
-                {isFavorite ? '관심 아티스트' : '관심 아티스트로 추가'}
-              </AppText>
             </Pressable>
             {links.map((link) => (
               <Pressable
@@ -299,18 +296,16 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.4)',
     backgroundColor: 'rgba(255,255,255,0.16)',
   },
-  actions: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, alignSelf: 'stretch', marginTop: spacing.sm },
-  favorite: {
-    flex: 1,
-    flexDirection: 'row',
+  actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm + 4, alignSelf: 'stretch', marginTop: spacing.sm },
+  heart: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.sm,
-    height: 52,
-    borderRadius: radius.pill,
     backgroundColor: colors.white,
   },
-  favoriteActive: { backgroundColor: colors.brand },
+  heartIcon: { width: 28, height: 28 },
   linkLogo: { width: 24, height: 24 },
   linkCircle: {
     width: 52,

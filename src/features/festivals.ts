@@ -139,14 +139,14 @@ export function usePopularFestivals(size = 5) {
   });
 }
 
-// 티켓이 곧 열리는 공연 (임박순). 하나도 없으면 가장 최근에 열린 것 하나를 대신 보여준다.
+// 티켓이 곧 열리는 공연 (임박순). 하나도 없으면 최근에 열린 공연들을 대신 보여준다.
 export function useTicketOpenFestivals(size = 6) {
   return useQuery({
     queryKey: ['festivals', 'ticket-open', size],
     queryFn: async () => {
       let list = await fetchFestivals({ sort: 'ticket_open', size, upcomingOnly: true });
       if (list.length === 0) {
-        list = await fetchFestivals({ sort: 'ticket_open_recent', size: 1, upcomingOnly: true });
+        list = await fetchFestivals({ sort: 'ticket_open_recent', size, upcomingOnly: true });
       }
       return list.filter((item) => item.ticketOpenAt);
     },

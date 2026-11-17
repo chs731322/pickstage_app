@@ -30,6 +30,8 @@ export type ArtistDetail = {
   description: string | null;
   upcomingConcerts: ArtistConcert[] | null;
   pastConcerts: ArtistConcert[] | null;
+  // 이 아티스트를 관심 아티스트로 등록한 회원 수 (구버전 서버는 내려주지 않는다)
+  interestCount?: number;
 };
 
 export function useArtist(id: string | undefined) {

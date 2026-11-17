@@ -231,7 +231,7 @@ function FestivalBody({
             ) : null}
           </View>
           <AppText size={13} color={colors.textMuted}>
-            찜 {festival.bookmarkCount} · 조회 {festival.viewCount}
+            {festival.bookmarkCount > 0 ? `찜 ${festival.bookmarkCount} · ` : ''}조회 {festival.viewCount}
           </AppText>
         </View>
 
