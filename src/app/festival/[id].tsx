@@ -284,7 +284,7 @@ function FestivalBody({
         <View style={styles.sections}>
           {/* 예매 정보 */}
           {tickets.length > 0 || festival.ticketOpenAt ? (
-            <Card title="예매 정보" icon={{ ios: 'ticket', android: 'confirmation_number', web: 'confirmation_number' }}>
+            <Card title="예매 정보">
               {festival.ticketOpenAt ? (
                 <AppText size={16} color={colors.textSecondary}>
                   티켓 오픈 <AppText weight="bold" size={16} color={colors.brand}>{formatOpenAt(festival.ticketOpenAt)}</AppText>
@@ -298,14 +298,14 @@ function FestivalBody({
 
           {/* 라인업 */}
           {lineup.length > 0 ? (
-            <Card title={`라인업 ${lineup.length}`} icon={{ ios: 'music.mic', android: 'mic', web: 'mic' }}>
+            <Card title={`라인업 ${lineup.length}`}>
               <LineupSection artists={lineup} contentWidth={width - (spacing.md + 2) * 2 - spacing.md * 2} />
             </Card>
           ) : null}
 
           {/* 공연 소개 */}
           {festival.description ? (
-            <Card title="공연 소개" icon={{ ios: 'text.alignleft', android: 'description', web: 'description' }}>
+            <Card title="공연 소개">
               <AppText size={16} color={colors.textSecondary} style={styles.description}>
                 {festival.description}
               </AppText>
@@ -314,7 +314,7 @@ function FestivalBody({
 
           {/* 장소 */}
           {venue ? (
-            <Card title="장소 정보" icon={{ ios: 'mappin.and.ellipse', android: 'place', web: 'place' }}>
+            <Card title="장소 정보">
               <AppText weight="bold" size={17}>{venue.name}</AppText>
               {venue.address ? (
                 <AppText size={15} color={colors.textSecondary}>
@@ -412,18 +412,12 @@ function ActionButton({
   );
 }
 
-function Card({ title, icon, children }: { title: string; icon: { ios: string; android: string; web: string }; children: React.ReactNode }) {
+function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <View style={styles.card}>
-      {/* 옅은 핑크 동그라미 아이콘과 제목 */}
-      <View style={styles.cardHead}>
-        <View style={styles.cardIcon}>
-          <SymbolView name={icon as never} tintColor={colors.brand} size={18} />
-        </View>
-        <AppText weight="display" size={21}>
-          {title}
-        </AppText>
-      </View>
+      <AppText weight="extrabold" size={21}>
+        {title}
+      </AppText>
       {children}
     </View>
   );
@@ -470,12 +464,10 @@ const styles = StyleSheet.create({
   card: {
     gap: spacing.md,
     padding: spacing.md + 2,
-    borderRadius: 24,
+    borderRadius: 22,
     backgroundColor: colors.white,
     ...cardShadow,
   },
-  cardHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  cardIcon: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.brandSoft },
   ticketRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   lineup: { gap: spacing.md, paddingVertical: 4 },
   artist: { width: 76, alignItems: 'center', gap: 6 },
