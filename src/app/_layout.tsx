@@ -8,6 +8,7 @@ import { Platform } from 'react-native';
 
 import { AuthProvider, useAuth } from '@/lib/auth';
 import { queryClient } from '@/lib/queryClient';
+import { BrandSplash } from '@/components/BrandSplash';
 import { PushRegistration } from '@/components/PushRegistration';
 import { colors, fontFamily, fontFiles } from '@/theme';
 
@@ -18,7 +19,7 @@ export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(fontFiles);
 
   if (!fontsLoaded && !fontError) {
-    return null;
+    return <BrandSplash />;
   }
 
   return (
@@ -50,7 +51,7 @@ function RootNavigator() {
   }, [isLoading]);
 
   if (isLoading) {
-    return null;
+    return <BrandSplash />;
   }
 
   return (
