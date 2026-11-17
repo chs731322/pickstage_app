@@ -13,7 +13,7 @@ type Props = {
   danger?: boolean;
 };
 
-// 마이 탭의 한 줄 메뉴: 아이콘, 이름, (값), 화살표
+// 프로필 탭의 한 줄 메뉴: 아이콘, 이름, (값), 화살표
 export function MenuRow({ label, icon, onPress, value, danger = false }: Props) {
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.row, pressed && styles.pressed]} accessibilityRole="button">

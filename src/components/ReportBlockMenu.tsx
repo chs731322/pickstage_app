@@ -59,7 +59,7 @@ export function ReportBlockMenu({ targetType, targetId, authorId, authorName, on
     const name = authorName ? `${authorName}님` : '이 사용자';
     Alert.alert(
       `${name}을 차단할까요?`,
-      '차단하면 이 사용자의 글·댓글·후기가 더 이상 보이지 않아요. 마이페이지 > 차단한 사용자에서 언제든 해제할 수 있어요.',
+      '차단하면 이 사용자의 글·댓글·후기가 더 이상 보이지 않아요. 프로필 > 차단한 사용자에서 언제든 해제할 수 있어요.',
       [
         { text: '취소', style: 'cancel' },
         {

@@ -27,7 +27,7 @@ export default function MyScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <TabHero title="마이" />
+        <TabHero title="프로필" />
 
         {isLoggedIn && user ? (
           <>

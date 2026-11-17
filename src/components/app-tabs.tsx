@@ -85,7 +85,7 @@ export default function AppTabs() {
         name="me"
         options={{
           tabBarIcon: icon({ off: 'person', on: 'person.fill' }, 'person'),
-          tabBarLabel: label('마이'),
+          tabBarLabel: label('프로필'),
         }}
       />
     </Tabs>
