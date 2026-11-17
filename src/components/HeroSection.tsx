@@ -111,7 +111,7 @@ export function HeroSection() {
       {/* 배너: 포스터 뒤의 은은한 분홍 번짐 */}
       <Image
         source={require('../../assets/images/decor/hero-glow.webp')}
-        style={[styles.glow, { width: width * 1.5, height: cardHeight * 1.2, left: -width * 0.25 }]}
+        style={[styles.glow, { width: width * 1.9, height: cardHeight * 1.5, left: -width * 0.45 }]}
         contentFit="fill"
         pointerEvents="none"
       />
@@ -224,7 +224,7 @@ export function HeroSection() {
 
 const styles = StyleSheet.create({
   hero: { paddingBottom: HERO_BOTTOM, overflow: 'hidden' },
-  glow: { position: 'absolute', top: 120 },
+  glow: { position: 'absolute', top: 90 },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -24,14 +24,14 @@ type Props = {
 // 탭 화면 맨 위의 하늘색 제목 띠: 제목과 소개 글, 오른쪽의 장식 그림, 아래쪽 물결 (홈의 하늘색 물결과 같은 모양)
 export function TabHero({ title, subtitle, decor, decorWidth = 96, decorAspect = 1, action, bleed = spacing.md, children }: Props) {
   const { width } = useWindowDimensions();
-  const waveHeight = Math.round((width * 200) / 1920) * 1.3;
+  const waveHeight = Math.round((width * 200) / 1920) * 1.5;
 
   return (
     <View style={{ marginHorizontal: -bleed }}>
       <View style={[styles.band, { paddingHorizontal: bleed }]}>
         <Image
           source={decor}
-          style={{ position: 'absolute', right: bleed - 4, top: 6, width: decorWidth, height: decorWidth * decorAspect }}
+          style={{ position: 'absolute', right: bleed - 4, top: 14, width: decorWidth, height: decorWidth * decorAspect }}
           contentFit="contain"
           pointerEvents="none"
         />
@@ -48,12 +48,12 @@ export function TabHero({ title, subtitle, decor, decorWidth = 96, decorAspect =
         ) : null}
         {children}
       </View>
-      <Image source={require('../../assets/images/decor/sky-wave-bottom.svg')} style={{ width, height: waveHeight, marginTop: -1 }} contentFit="fill" />
+      <Image source={require('../../assets/images/decor/sky-wave-bottom.svg')} style={{ width, height: waveHeight, marginTop: -1, marginBottom: spacing.xs }} contentFit="fill" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  band: { gap: 6, paddingTop: spacing.md, paddingBottom: spacing.xs, backgroundColor: colors.sky },
+  band: { gap: 8, paddingTop: spacing.lg, paddingBottom: spacing.sm, backgroundColor: colors.sky },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
 });

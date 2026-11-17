@@ -78,11 +78,6 @@ export default function HomeScreen() {
         <PrepSection />
         <CommunitySection />
 
-        <Image
-          source={require('../../../assets/images/decor/stage.webp')}
-          style={{ width: width * 0.8, height: (width * 0.8 * 660) / 1618, alignSelf: 'center' }}
-          contentFit="contain"
-        />
       </View>
     </ScrollView>
   );

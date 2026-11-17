@@ -29,7 +29,7 @@ export function CommunitySection() {
 
   return (
     <View style={styles.section}>
-      <SectionHeader title="동행 구하는 커뮤니티" eyebrow="TOGETHER" highlight="동행" onPressMore={() => router.push('/community')} />
+      <SectionHeader title="동행 구하기" eyebrow="TOGETHER" highlight="동행" onPressMore={() => router.push('/community')} />
       <AppText size={15} color={colors.textSecondary} style={styles.desc}>
         같은 공연 가는 사람을 찾아보세요.
       </AppText>
@@ -42,7 +42,7 @@ export function CommunitySection() {
           posts.map((post, i) => <PostBubble key={post.id} post={post} flip={i % 2 === 1} />)
         )}
         <Pressable onPress={handleWrite} style={({ pressed }) => [styles.write, pressed && styles.writePressed]} accessibilityRole="button">
-          <AppText weight="bold" size={16} color={colors.white}>
+          <AppText weight="bold" size={14} color={colors.white}>
             동행 글 쓰기
           </AppText>
         </Pressable>
@@ -56,5 +56,6 @@ const styles = StyleSheet.create({
   desc: { paddingHorizontal: spacing.md },
   list: { gap: spacing.md, paddingHorizontal: spacing.md, marginTop: spacing.xs },
   writePressed: { backgroundColor: colors.brandStrong },
-  write: { height: 52, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
+  // 작은 알약 버튼 (화면 가운데)
+  write: { alignSelf: 'center', height: 40, paddingHorizontal: 22, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center', marginTop: spacing.xs },
 });
