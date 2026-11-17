@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
@@ -21,7 +22,9 @@ const DOT_COUNT = 36;
 
 // 공연 상세 맨 위의 세로 티켓: 위는 포스터, 가운데에 점선과 양쪽 홈(뜯는 선), 아래는 제목과 날짜·지역·장소·티켓 오픈 정보
 export function ConcertTicket({ festival, status, genre, width }: Props) {
-  const posterHeight = Math.round(width * 1.1);
+  // 포스터가 잘리지 않게, 불러온 사진의 가로세로 비율대로 높이를 정한다 (너무 길거나 납작한 사진은 한도 안에서 줄이고, 남는 곳은 흐린 배경으로 채운다)
+  const [ratio, setRatio] = useState(4 / 3);
+  const posterHeight = Math.round(width * Math.min(Math.max(ratio, 0.7), 1.7));
   const venue = festival.venue;
   const isEnded = status?.kind === 'ended';
   const subtitle = [genre, festival.region].filter(Boolean).join(' · ');
@@ -32,7 +35,19 @@ export function ConcertTicket({ festival, status, genre, width }: Props) {
         {/* 포스터 */}
         <View style={{ height: posterHeight, backgroundColor: colors.surface }}>
           {festival.posterImage ? (
-            <Image source={{ uri: festival.posterImage }} style={StyleSheet.absoluteFill} contentFit="cover" transition={150} />
+            <>
+              <Image source={{ uri: festival.posterImage }} style={StyleSheet.absoluteFill} contentFit="cover" blurRadius={40} />
+              <Image
+                source={{ uri: festival.posterImage }}
+                style={StyleSheet.absoluteFill}
+                contentFit="contain"
+                transition={150}
+                onLoad={(event) => {
+                  const { width: w, height: h } = event.source;
+                  if (w > 0 && h > 0) setRatio(h / w);
+                }}
+              />
+            </>
           ) : (
             <View style={[StyleSheet.absoluteFill, styles.noPoster]}>
               <AppText color={colors.textMuted}>포스터 준비 중</AppText>
@@ -48,12 +63,19 @@ export function ConcertTicket({ festival, status, genre, width }: Props) {
         </View>
 
         {/* 정보 */}
-        <View style={[styles.panel, isEnded && styles.panelEnded]}>
-          <AppText weight="display" size={24} style={styles.title} numberOfLines={3}>
+        <View style={styles.panel}>
+          {/* 포스터를 아주 흐리게 깔아서 포스터의 색이 그대로 분위기가 되게 하고, 어둡게 눌러서 흰 글씨가 읽히게 한다 */}
+          {festival.posterImage ? (
+            <Image source={{ uri: festival.posterImage }} style={StyleSheet.absoluteFill} contentFit="cover" blurRadius={90} />
+          ) : null}
+          <View style={[StyleSheet.absoluteFill, festival.posterImage ? styles.shade : styles.shadeNoPoster]} />
+          {isEnded ? <View style={[StyleSheet.absoluteFill, styles.endedShade]} /> : null}
+
+          <AppText weight="display" size={24} color={colors.white} style={styles.title} numberOfLines={3}>
             {festival.title}
           </AppText>
           {subtitle ? (
-            <AppText weight="medium" size={14} color={colors.textSecondary} style={styles.center}>
+            <AppText weight="medium" size={14} color="rgba(255,255,255,0.8)" style={styles.center}>
               {subtitle}
             </AppText>
           ) : null}
@@ -72,7 +94,7 @@ export function ConcertTicket({ festival, status, genre, width }: Props) {
             <Field label="TICKET OPEN" value={festival.ticketOpenAt ? formatOpenAt(festival.ticketOpenAt) : '미정'} flex={1} />
           </View>
 
-          <AppText weight="medium" size={11} color={colors.textMuted} style={styles.number}>
+          <AppText weight="medium" size={11} color="rgba(255,255,255,0.6)" style={styles.number}>
             No. {String(festival.id).padStart(8, '0')}
           </AppText>
         </View>
@@ -93,10 +115,10 @@ export function ConcertTicket({ festival, status, genre, width }: Props) {
 function Field({ label, value, flex, onPress }: { label: string; value: string; flex: number; onPress?: () => void }) {
   const content = (
     <>
-      <AppText weight="semibold" size={11} color={colors.textMuted} style={styles.label}>
+      <AppText weight="semibold" size={11} color="rgba(255,255,255,0.65)" style={styles.label}>
         {label}
       </AppText>
-      <AppText weight="bold" size={15} color={onPress ? colors.brandStrong : colors.text} numberOfLines={2}>
+      <AppText weight="bold" size={15} color={colors.white} numberOfLines={2} style={onPress && styles.link}>
         {value}
         {onPress ? ' ›' : ''}
       </AppText>
@@ -118,8 +140,11 @@ const styles = StyleSheet.create({
   status: { position: 'absolute', top: 14, left: 14, paddingHorizontal: 12, paddingVertical: 5, borderRadius: 999, backgroundColor: colors.brand },
   statusEnded: { backgroundColor: colors.textMuted },
   statusLive: { backgroundColor: colors.text },
-  panel: { gap: spacing.sm + 2, paddingHorizontal: spacing.lg - 4, paddingTop: spacing.lg, paddingBottom: spacing.md + 2, backgroundColor: brandScale[100] },
-  panelEnded: { backgroundColor: colors.surface },
+  panel: { gap: spacing.sm + 2, paddingHorizontal: spacing.lg - 4, paddingTop: spacing.lg, paddingBottom: spacing.md + 2, backgroundColor: brandScale[700], overflow: 'hidden' },
+  shade: { backgroundColor: 'rgba(15,0,25,0.45)' },
+  shadeNoPoster: { backgroundColor: 'rgba(15,0,25,0.1)' },
+  endedShade: { backgroundColor: 'rgba(60,60,70,0.55)' },
+  link: { textDecorationLine: 'underline' },
   title: { textAlign: 'center', lineHeight: 32 },
   center: { textAlign: 'center' },
   grid: { flexDirection: 'row', gap: spacing.md, marginTop: spacing.xs },

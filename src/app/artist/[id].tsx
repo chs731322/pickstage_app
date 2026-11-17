@@ -88,9 +88,9 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
   const past = artist.pastConcerts ?? [];
   const photo = Math.min(width * 0.52, 220);
   const links = [
-    { label: 'Spotify', icon: { ios: 'music.note', android: 'music_note', web: 'music_note' }, url: artist.spotifyUrl },
-    { label: 'Instagram', icon: { ios: 'camera', android: 'photo_camera', web: 'photo_camera' }, url: artist.instagramUrl },
-    { label: '공식 사이트', icon: { ios: 'safari', android: 'public', web: 'public' }, url: artist.officialUrl },
+    { label: 'Spotify', logo: require('../../../assets/images/brand/spotify.svg'), url: artist.spotifyUrl },
+    { label: 'Instagram', logo: require('../../../assets/images/brand/instagram.svg'), url: artist.instagramUrl },
+    { label: '공식 사이트', logo: require('../../../assets/images/brand/website.svg'), url: artist.officialUrl },
   ].filter((link) => link.url);
 
   const handleFavorite = () => {
@@ -196,7 +196,7 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
                 style={styles.linkCircle}
                 accessibilityRole="link"
                 accessibilityLabel={link.label}>
-                <SymbolView name={link.icon as never} tintColor={colors.white} size={20} />
+                <Image source={link.logo} style={styles.linkLogo} contentFit="contain" />
               </Pressable>
             ))}
           </View>
@@ -311,6 +311,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   favoriteActive: { backgroundColor: colors.brand },
+  linkLogo: { width: 24, height: 24 },
   linkCircle: {
     width: 52,
     height: 52,
