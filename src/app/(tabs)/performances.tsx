@@ -60,10 +60,7 @@ export default function PerformancesScreen() {
     <View style={styles.header}>
       <TabHero
         title="공연 탐색"
-        subtitle="곧 열리는 공연을 찾아봐요"
-        decor={require('../../../assets/images/decor/speakers.webp')}
-        decorWidth={116}
-        decorAspect={584 / 774}>
+        subtitle="곧 열리는 공연을 찾아봐요">
         <View style={styles.links}>
           <Pressable onPress={() => router.push('/artists')} hitSlop={8} style={styles.venueLink} accessibilityRole="button">
             <AppText weight="bold" size={14} color={colors.brand}>

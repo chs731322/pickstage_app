@@ -59,9 +59,6 @@ export default function CalendarScreen() {
         <TabHero
           title="캘린더"
           subtitle="이번 달 공연을 한눈에 봐요"
-          decor={require('../../../assets/images/decor/music-note.webp')}
-          decorWidth={64}
-          decorAspect={286 / 296}
           action={
             !isTodayMonth ? (
               <Pressable onPress={goToToday} hitSlop={8} style={styles.todayButton} accessibilityRole="button">

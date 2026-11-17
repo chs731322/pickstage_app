@@ -38,9 +38,6 @@ export default function CommunityScreen() {
       <TabHero
         title="커뮤니티"
         subtitle="같이 갈 사람, 후기, 질문을 나눠요"
-        decor={require('../../../assets/images/decor/cone.webp')}
-        decorWidth={70}
-        decorAspect={390 / 330}
       />
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pillsScroll} contentContainerStyle={styles.pills}>
         {CATEGORIES.map((c) => (

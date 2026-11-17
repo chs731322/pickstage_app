@@ -27,7 +27,7 @@ export default function MyScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <TabHero title="마이" decor={require('../../../assets/images/decor/burst-pink.webp')} decorWidth={64} decorAspect={1105 / 956} />
+        <TabHero title="마이" />
 
         {isLoggedIn && user ? (
           <>
