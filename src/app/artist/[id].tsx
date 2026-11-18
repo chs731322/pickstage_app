@@ -9,6 +9,7 @@ import { ActivityIndicator, Alert, FlatList, Platform, Pressable, ScrollView, St
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { PosterCard } from '@/components/PosterCard';
+import { SpotifyEmbed } from '@/components/SpotifyEmbed';
 import {
   useArtist,
   useInterestedArtists,
@@ -18,6 +19,7 @@ import {
 } from '@/features/artists';
 import { useAuth } from '@/lib/auth';
 import { genreLabel, tagLabels } from '@/lib/genreLabel';
+import { spotifyArtistId } from '@/lib/spotify';
 import { brandScale, colors, radius, spacing } from '@/theme';
 
 // 어두운 사진 배경 위에 투명하게 떠 있는 제목줄: 흰색 뒤로 가기 버튼, 제목 없음 (안드로이드도 투명하게 해서 사진이 맨 위까지 이어지게 한다)
@@ -87,6 +89,7 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
   const past = artist.pastConcerts ?? [];
   const interestCount = artist.interestCount ?? 0;
   const photo = Math.min(width * 0.52, 220);
+  const spotifyId = spotifyArtistId(artist.spotifyUrl);
   const links = [
     { label: 'Spotify', logo: require('../../../assets/images/brand/spotify.svg'), url: artist.spotifyUrl },
     { label: 'Instagram', logo: require('../../../assets/images/brand/instagram.svg'), url: artist.instagramUrl },
@@ -207,6 +210,16 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
             <AppText size={16} color={colors.textSecondary} style={styles.description}>
               {artist.description}
             </AppText>
+          </View>
+        ) : null}
+
+        {/* 스포티파이 공식 플레이어: 인기곡 목록과 미리듣기 (스포티파이 링크가 있는 아티스트만) */}
+        {spotifyId ? (
+          <View style={styles.card}>
+            <AppText weight="extrabold" size={21}>
+              인기곡 듣기
+            </AppText>
+            <SpotifyEmbed artistId={spotifyId} openUrl={artist.spotifyUrl!} />
           </View>
         ) : null}
 
