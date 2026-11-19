@@ -37,6 +37,9 @@ const BOTTOM_BAR_HEIGHT = 72;
 
 type Ticket = NonNullable<FestivalDetail['tickets']>[number];
 
+// 처음에 보여줄 티켓 종류 수
+const TICKET_PREVIEW_COUNT = 3;
+
 // 예매 버튼이 열 링크: 예매처별 링크가 있으면 그것들, 없으면 공연의 기본 예매 링크
 function bookingOptions(festival: FestivalDetail): { vendor: string; url: string }[] {
   const seen = new Map<string, { vendor: string; url: string }>();
@@ -244,9 +247,7 @@ function FestivalBody({
                   티켓 오픈 <AppText weight="bold" size={16} color={colors.brand}>{formatOpenAt(festival.ticketOpenAt)}</AppText>
                 </AppText>
               ) : null}
-              {tickets.map((ticket, index) => (
-                <TicketRow key={`${ticket.label}-${index}`} ticket={ticket} />
-              ))}
+              <TicketList tickets={tickets} />
             </Card>
           ) : null}
 
@@ -364,6 +365,28 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
   );
 }
 
+// 티켓 종류가 많으면 처음 몇 개만 보여주고 나머지는 더보기로 펼친다 (라인업과 같은 방식)
+function TicketList({ tickets }: { tickets: Ticket[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const canExpand = tickets.length > TICKET_PREVIEW_COUNT;
+  const shown = expanded || !canExpand ? tickets : tickets.slice(0, TICKET_PREVIEW_COUNT);
+
+  return (
+    <>
+      {shown.map((ticket, index) => (
+        <TicketRow key={`${ticket.label}-${index}`} ticket={ticket} />
+      ))}
+      {canExpand ? (
+        <Pressable onPress={() => setExpanded((v) => !v)} style={styles.ticketMore} accessibilityRole="button">
+          <AppText weight="bold" size={15} color={colors.textSecondary}>
+            {expanded ? '접기' : `더보기 (${tickets.length - TICKET_PREVIEW_COUNT}개)`}
+          </AppText>
+        </Pressable>
+      ) : null}
+    </>
+  );
+}
+
 function TicketRow({ ticket }: { ticket: Ticket }) {
   return (
     <View style={styles.ticketRow}>
@@ -408,6 +431,7 @@ const styles = StyleSheet.create({
     ...cardShadow,
   },
   ticketRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
+  ticketMore: { alignItems: 'center', justifyContent: 'center', height: 46, borderRadius: 999, backgroundColor: colors.surface },
   lineup: { gap: spacing.md, paddingVertical: 4 },
   artist: { width: 76, alignItems: 'center', gap: 6 },
   avatar: { width: 68, height: 68, borderRadius: 34, backgroundColor: colors.surface },
