@@ -146,16 +146,16 @@ export default function ChecklistScreen() {
 }
 
 const styles = StyleSheet.create({
-  progressCard: { gap: spacing.ms, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  progressCard: { gap: spacing.ms, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   progressTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   track: { height: 10, borderRadius: radius.pill, backgroundColor: colors.surface, overflow: 'hidden' },
   fill: { height: '100%', borderRadius: 5, backgroundColor: colors.brand },
   addRow: { flexDirection: 'row', gap: spacing.sm },
-  addInput: { flex: 1, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
+  addInput: { flex: 1, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.card, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
   addButton: { minHeight: 48, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
   addPressed: { backgroundColor: colors.brandStrong },
   disabled: { opacity: 0.4 },
-  list: { borderRadius: radius.lg, backgroundColor: colors.white, paddingHorizontal: spacing.md },
+  list: { borderRadius: radius.lg, backgroundColor: colors.card, paddingHorizontal: spacing.md },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   label: { flex: 1, lineHeight: 24 },
   doneText: { textDecorationLine: 'line-through' },

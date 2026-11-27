@@ -7,7 +7,7 @@ import { SectionHeader } from '@/components/SectionHeader';
 import { WeatherCard } from '@/components/WeatherCard';
 import { ESSENTIAL_ITEMS, useChecklist, useToggleChecklistItem } from '@/features/checklist';
 import { useAuth } from '@/lib/auth';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const PREVIEW_SIZE = 5;
 
@@ -86,7 +86,7 @@ export function PrepSection() {
 const styles = StyleSheet.create({
   section: { gap: spacing.md },
   padded: { paddingHorizontal: spacing.md },
-  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   head: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   label: { flex: 1, lineHeight: 22 },

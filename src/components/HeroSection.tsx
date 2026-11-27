@@ -12,7 +12,7 @@ import { usePopularFestivals, type FestivalSummary } from '@/features/festivals'
 import { useUnreadCount } from '@/features/notifications';
 import { formatDateRange } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
-import { cardShadow, colors, MAX_FONT_SCALE, radius, spacing } from '@/theme';
+import { colors, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 const GAP = 12;
 // 자동으로 다음 포스터로 넘어가는 간격(밀리초)
@@ -156,7 +156,7 @@ export function HeroSection() {
               <Pressable
                 onPress={() => router.push(`/festival/${item.id}`)}
                 accessibilityLabel={`${item.title} 상세 보기`}
-                style={[styles.poster, cardShadow, { width: cardWidth, height: cardHeight }]}>
+                style={[styles.poster, { width: cardWidth, height: cardHeight }]}>
                 {item.posterImage ? (
                   <Image
                     source={{ uri: item.posterImage }}
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   headline: { alignItems: 'center', marginTop: spacing.lg },
   banner: { marginTop: spacing.md },
   carousel: { flexGrow: 0, paddingVertical: spacing.sm },
-  poster: { borderRadius: radius.lg, overflow: 'hidden', backgroundColor: colors.surface },
+  poster: { borderRadius: radius.lg, overflow: 'hidden', backgroundColor: colors.surface, shadowColor: colors.shadowInk, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 10, elevation: 3 },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   counterWrap: { position: 'absolute', bottom: 18, alignItems: 'flex-end', paddingRight: spacing.ms },
   counter: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: 'rgba(0,0,0,0.55)' },

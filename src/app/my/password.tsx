@@ -76,5 +76,5 @@ export default function PasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
 });

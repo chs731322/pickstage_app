@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import type { FestivalSummary } from '@/features/festivals';
 import { formatOpenAt, ticketDDay } from '@/lib/format';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 // "티켓 오픈 일정" 카드: 큼직한 D-day(OPEN)와 공연 이름, 오픈 시각
 export function TicketCard({ festival }: { festival: FestivalSummary }) {
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderRadius: radius.lg,
     backgroundColor: colors.white,
-    ...cardShadow,
   },
   pressed: { opacity: 0.85 },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },

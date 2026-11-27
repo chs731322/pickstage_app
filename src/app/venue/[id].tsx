@@ -35,7 +35,7 @@ import {
 import { useAuth } from '@/lib/auth';
 import { heroHeaderOptions } from '@/lib/heroHeader';
 import { SITE_URL } from '@/lib/links';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 export default function VenueScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -411,14 +411,14 @@ const styles = StyleSheet.create({
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
   hero: { backgroundColor: colors.pageBg, paddingBottom: spacing.lg },
-  photo: { borderRadius: radius.lg, backgroundColor: colors.surface, ...cardShadow },
-  noPhoto: { alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: colors.white },
+  photo: { borderRadius: radius.lg, backgroundColor: colors.surface },
+  noPhoto: { alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: colors.card },
   dots: { flexDirection: 'row', justifyContent: 'center', gap: spacing.sm, marginTop: spacing.md },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.white },
   dotActive: { width: 18, backgroundColor: colors.brand },
   credit: { textAlign: 'center', marginTop: spacing.sm, paddingHorizontal: spacing.md },
   titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },
-  tag: { alignSelf: 'flex-start', paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  tag: { alignSelf: 'flex-start', paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.card },
   name: { lineHeight: 30 },
   actions: { flexDirection: 'row', gap: spacing.lg, paddingVertical: spacing.sm },
   action: { alignItems: 'center', gap: spacing.xs, minWidth: 48 },
@@ -427,8 +427,7 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     padding: spacing.md,
     borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    ...cardShadow,
+    backgroundColor: colors.card,
   },
   fact: { gap: spacing.xs },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },

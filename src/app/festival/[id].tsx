@@ -33,7 +33,7 @@ import { useAuth } from '@/lib/auth';
 import { daysUntil, festivalStatus, formatOpenAt } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
 import { SITE_URL } from '@/lib/links';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const BOTTOM_BAR_HEIGHT = 72;
 
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
   hero: { paddingHorizontal: spacing.md, paddingBottom: spacing.md },
-  poster: { borderRadius: radius.lg, backgroundColor: colors.surface, ...cardShadow },
+  poster: { borderRadius: radius.lg, backgroundColor: colors.surface },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brand },
@@ -401,8 +401,7 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     padding: spacing.md,
     borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    ...cardShadow,
+    backgroundColor: colors.card,
   },
   ticketRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   ticketMore: { alignItems: 'center', justifyContent: 'center', minHeight: 46, borderRadius: radius.pill, backgroundColor: colors.surface },

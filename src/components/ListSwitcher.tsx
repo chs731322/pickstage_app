@@ -74,7 +74,7 @@ export function ListSwitcher({ value, onChange }: { value: ListKind; onChange: (
 
 const styles = StyleSheet.create({
   title: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  arrow: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center', borderRadius: radius.sm, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  arrow: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center', borderRadius: radius.sm, backgroundColor: colors.card },
   overlay: { flex: 1, justifyContent: 'flex-end' },
   backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)' },
   sheet: { gap: spacing.xs, paddingHorizontal: spacing.md, paddingTop: spacing.ms, borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: colors.white },

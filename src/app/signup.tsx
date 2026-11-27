@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
     gap: 2,
     padding: spacing.md,
     borderRadius: radius.md,
-    backgroundColor: colors.white,
+    backgroundColor: colors.card,
   },
   divider: { height: 1, marginVertical: spacing.sm, backgroundColor: colors.border },
   errorBox: { padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.dangerSoft },

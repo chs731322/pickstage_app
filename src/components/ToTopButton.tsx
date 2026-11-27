@@ -1,7 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet } from 'react-native';
 
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 // 이만큼 내리면 '맨 위로' 버튼을 보여준다
 export const TOP_BUTTON_OFFSET = 400;
@@ -31,7 +31,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.border,
-    ...cardShadow,
+    // 흰 바탕 위에 떠 있는 버튼이라 옅은 그림자를 준다
+    shadowColor: colors.shadowInk,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
   pressed: { opacity: 0.7 },
 });

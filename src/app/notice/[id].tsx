@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { Screen } from '@/components/Screen';
 import { isPinnedNotice, useNotice } from '@/features/notices';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 // 공지사항 상세: 제목, 날짜, 본문
 export default function NoticeDetailScreen() {
@@ -45,7 +45,7 @@ export default function NoticeDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  card: { gap: spacing.sm, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
+  card: { gap: spacing.sm, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.card },
   pin: { alignSelf: 'flex-start', paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
   title: { lineHeight: 30 },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: spacing.sm },

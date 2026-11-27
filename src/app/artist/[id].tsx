@@ -34,7 +34,7 @@ import {
 import { useAuth } from '@/lib/auth';
 import { genreLabel, tagLabels } from '@/lib/genreLabel';
 import { spotifyArtistId } from '@/lib/spotify';
-import { brandScale, cardShadow, colors, radius, spacing } from '@/theme';
+import { brandScale, colors, radius, spacing } from '@/theme';
 
 // 이만큼 내리면 헤더에 바탕이 깔려서 아이콘·상태바 글자를 어둡게 바꾼다
 const SOLID_HEADER_OFFSET = 32;
@@ -318,8 +318,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
     padding: spacing.md,
     borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    ...cardShadow,
+    backgroundColor: colors.card,
   },
   description: { lineHeight: 24 },
   concerts: { gap: spacing.md, marginTop: spacing.md },

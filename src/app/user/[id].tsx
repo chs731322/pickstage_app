@@ -235,18 +235,18 @@ function ReviewCard({ review }: { review: MyReview }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  notice: { gap: spacing.md, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.white },
+  notice: { gap: spacing.md, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.card },
   state: { marginTop: spacing.lg },
   center: { textAlign: 'center' },
-  head: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  head: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   headText: { flex: 1, gap: 2 },
   tabs: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  lock: { alignItems: 'center', gap: spacing.sm, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.white },
+  lock: { alignItems: 'center', gap: spacing.sm, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.card },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.ms },
   artistGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.ms, paddingHorizontal: spacing.md },
   artistName: { textAlign: 'center', marginTop: spacing.sm, lineHeight: 19 },
   list: { gap: spacing.ms },
-  review: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  review: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   reviewTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   reviewContent: { lineHeight: 24 },
 });

@@ -220,10 +220,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.ms,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: colors.card,
   },
-  reasonSelected: { borderColor: colors.brand, backgroundColor: colors.brandSoft },
+  reasonSelected: { backgroundColor: colors.brandSoft },
   detail: {
     minHeight: 80,
     padding: spacing.md,

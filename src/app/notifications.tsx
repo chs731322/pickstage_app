@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   header: { gap: spacing.sm, paddingBottom: spacing.sm },
   pills: { flexDirection: 'row', gap: spacing.sm },
   actions: { flexDirection: 'row', justifyContent: 'space-between' },
-  row: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  row: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   rowUnread: { backgroundColor: colors.brandSoft },
   pressed: { opacity: 0.85 },
   iconWrap: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },

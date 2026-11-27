@@ -2,7 +2,7 @@ import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { useReviewHighlights, type HighlightTarget } from '@/features/reviewHighlights';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const MAX_KEYWORDS = 10;
 const SENTIMENT_LABEL: Record<string, string> = { positive: '긍정', negative: '부정', neutral: '중립' };
@@ -92,7 +92,7 @@ export function ReviewHighlightCard({ target, id, onWrite }: Props) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   head: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   badge: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brandTint },
   loading: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
@@ -104,8 +104,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.ms,
     paddingVertical: spacing.sm,
     borderRadius: radius.pill,
+    // 보통 의견은 선 없이, 긍정·부정만 선 색으로 구분한다
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: 'transparent',
     backgroundColor: colors.surface,
   },
   positive: { borderColor: colors.brand, backgroundColor: colors.brandSoft },

@@ -16,10 +16,10 @@ export const brandScale = {
 // ───── 색 ─────
 // 화면에서는 색 값(#...)을 직접 적지 않고 여기 이름을 쓴다. 새 색이 필요하면 먼저 여기에 단계를 추가한다.
 
-// 회색 단계: 50 화면 바탕 / 100 옅은 칸 / 200 선 / 300 흐린 장식 / 400 꺼진 아이콘 / 500 보조 글자 / 700 본문 보조 / 900 글자
+// 회색 단계: 50 카드·버튼 / 100 카드 안의 칸 / 200 선 / 300 흐린 장식 / 400 꺼진 아이콘 / 500 보조 글자 / 700 본문 보조 / 900 글자
 export const greyScale = {
-  50: '#f8f8fa',
-  100: '#f5f5f7',
+  50: '#f5f6f8',
+  100: '#ecedf0',
   200: '#e6e6e6',
   300: '#b8b8be',
   400: '#9a9aa0',
@@ -63,8 +63,9 @@ export const colors = {
   border: greyScale[200],
   surface: greyScale[100],
   background: '#ffffff',
-  // 모든 화면의 바탕 (흰 카드가 돋보이게 아주 옅은 회색)
-  pageBg: greyScale[50],
+  // 화면 바탕은 흰색, 그 위의 카드·버튼·검색칸은 연회색(card). 선과 그림자 없이 색으로 구분한다.
+  pageBg: '#ffffff',
+  card: greyScale[50],
   // 검정 히어로 위의 보조 글자색
   heroMuted: greyScale[300],
   // 상태 색: 오류·삭제, 오류 안내 바탕, 성공, 별점, 토요일
@@ -125,13 +126,4 @@ export type TextSize = 12 | 13 | 14 | 16 | 18 | 22;
 export const spacing = { xs: 4, sm: 8, ms: 12, md: 16, lg: 24, xl: 32 } as const;
 // 모서리: sm 작은 칩·체크칸 / md 사진·입력칸 / lg 카드 / pill 알약 버튼
 export const radius = { sm: 8, md: 12, lg: 16, pill: 999 } as const;
-
-// 흰 카드에 은은하게 띄우는 그림자 (홈의 카드들이 같은 느낌이 되도록 한 곳에서 정한다)
-export const cardShadow = {
-  shadowColor: colors.shadowInk,
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.04,
-  shadowRadius: 8,
-  elevation: 1,
-} as const;
 

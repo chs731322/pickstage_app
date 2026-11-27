@@ -7,7 +7,7 @@ import { CalendarEventRow } from '@/components/CalendarEventRow';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useCalendarFestivals } from '@/features/calendar';
 import { buildLayout, toDateStr, type CalendarFestival } from '@/lib/calendar';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const WEEKDAYS = ['월', '화', '수', '목', '금', '토', '일'];
 const MAX_EVENTS = 3;
@@ -122,7 +122,7 @@ export function WeeklyCalendarSection() {
         ) : (
           <>
             {events.slice(0, MAX_EVENTS).map((f) => (
-              <CalendarEventRow key={f.id} festival={f} color={colorById[f.id]?.[0]} />
+              <CalendarEventRow onBand key={f.id} festival={f} color={colorById[f.id]?.[0]} />
             ))}
             {events.length > MAX_EVENTS ? (
               <Pressable onPress={() => router.push('/calendar')} style={styles.more} accessibilityRole="button">
@@ -140,7 +140,7 @@ export function WeeklyCalendarSection() {
 
 const styles = StyleSheet.create({
   section: { gap: spacing.md },
-  card: { marginHorizontal: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, gap: spacing.sm, ...cardShadow },
+  card: { marginHorizontal: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, gap: spacing.sm },
   weekRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.sm },
   days: { flexDirection: 'row' },
   day: { flex: 1, alignItems: 'center', gap: spacing.xs, paddingVertical: spacing.xs },

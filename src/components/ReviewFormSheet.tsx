@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   content: { minHeight: 120, textAlignVertical: 'top' },
   photos: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   photo: { width: 72, height: 72, borderRadius: radius.md, backgroundColor: colors.surface },
-  addPhoto: { alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
+  addPhoto: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.card },
   remove: { position: 'absolute', top: 4, right: 4, width: 22, height: 22, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)' },
   buttons: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
 });

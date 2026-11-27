@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { WeatherTip } from '@/components/WeatherTip';
 import { api, errorMessage } from '@/lib/api';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 import type { ApiResponse, WeatherDay, WeatherSummary } from '@/types/api';
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
@@ -77,8 +77,7 @@ const styles = StyleSheet.create({
     gap: spacing.ms,
     padding: spacing.md,
     borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    ...cardShadow,
+    backgroundColor: colors.card,
   },
   loading: { alignSelf: 'flex-start', marginVertical: spacing.sm },
   today: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.xs },

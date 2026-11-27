@@ -5,15 +5,16 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import type { CalendarFestival } from '@/lib/calendar';
 import { festivalStatus, formatDateRange } from '@/lib/format';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 // 캘린더·홈 주간 캘린더에서 고른 날의 공연 한 줄: 포스터, 상태, 이름, 기간, 공연장 (왼쪽 띠는 달력의 막대 색과 같다)
-export function CalendarEventRow({ festival, color }: { festival: CalendarFestival; color?: string }) {
+// onBand: 홈의 하늘색 띠 위에서는 회색 대신 흰 칸
+export function CalendarEventRow({ festival, color, onBand = false }: { festival: CalendarFestival; color?: string; onBand?: boolean }) {
   const status = festivalStatus(festival.startDate, festival.endDate);
   return (
     <Pressable
       onPress={() => router.push(`/festival/${festival.id}`)}
-      style={({ pressed }) => [styles.event, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.event, onBand && styles.onBand, pressed && styles.pressed]}
       accessibilityRole="button">
       <View style={[styles.stripe, color ? { backgroundColor: color } : null]} />
       {festival.posterImage ? (
@@ -51,7 +52,8 @@ export function CalendarEventRow({ festival, color }: { festival: CalendarFestiv
 }
 
 const styles = StyleSheet.create({
-  event: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, overflow: 'hidden', ...cardShadow },
+  event: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card, overflow: 'hidden' },
+  onBand: { backgroundColor: colors.white },
   pressed: { opacity: 0.85 },
   stripe: { position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, backgroundColor: colors.border },
   poster: { width: 66, height: 88, borderRadius: radius.sm, backgroundColor: colors.surface },

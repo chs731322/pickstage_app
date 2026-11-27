@@ -125,7 +125,7 @@ export default function PushSettingsScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   desc: { lineHeight: 21, marginTop: 2 },
   warn: { gap: spacing.sm },

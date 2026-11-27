@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   avatar: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.sm },
   camera: { position: 'absolute', right: -2, bottom: -2, width: 30, height: 30, borderRadius: 15, backgroundColor: colors.brand, borderWidth: 2, borderColor: colors.white, alignItems: 'center', justifyContent: 'center' },
-  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   row: { flexDirection: 'row', gap: spacing.sm },
   desc: { lineHeight: 21 },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },

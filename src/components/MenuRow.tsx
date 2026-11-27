@@ -42,5 +42,5 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, paddingHorizontal: spacing.md },
   pressed: { backgroundColor: colors.surface },
   label: { flex: 1 },
-  card: { borderRadius: radius.lg, backgroundColor: colors.white, overflow: 'hidden' },
+  card: { borderRadius: radius.lg, backgroundColor: colors.card, overflow: 'hidden' },
 });

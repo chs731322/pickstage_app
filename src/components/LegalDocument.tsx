@@ -101,5 +101,5 @@ const styles = StyleSheet.create({
   line: { lineHeight: 22 },
   list: { gap: spacing.sm },
   item: { flexDirection: 'row', gap: spacing.sm },
-  box: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.white },
+  box: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.card },
 });

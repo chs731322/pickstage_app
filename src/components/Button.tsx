@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     overflow: 'hidden',
   },
-  secondary: { borderWidth: 1, borderColor: colors.softBorder, backgroundColor: colors.background },
+  secondary: { backgroundColor: colors.surface },
   shadow: {
     borderRadius: radius.pill,
     shadowColor: colors.shadow,

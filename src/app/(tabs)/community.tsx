@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   // 알약 줄은 화면 양끝까지 스크롤되도록 안쪽 여백만큼 바깥으로 넓힌다
   pillsScroll: { marginHorizontal: -spacing.md, flexGrow: 0 },
   pills: { gap: spacing.sm, paddingHorizontal: spacing.md },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.card },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   sorts: { flexDirection: 'row', gap: spacing.md },
   state: { marginTop: spacing.xl },

@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   festival: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.brandSoft },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  title: { padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.white, fontFamily: fontFamily.bold, fontSize: 18, color: colors.text },
-  content: { minHeight: 240, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, textAlignVertical: 'top' },
-  photo: { alignItems: 'center', paddingVertical: spacing.ms, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  title: { padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.card, fontFamily: fontFamily.bold, fontSize: 18, color: colors.text },
+  content: { minHeight: 240, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.card, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, textAlignVertical: 'top' },
+  photo: { alignItems: 'center', paddingVertical: spacing.ms, borderRadius: radius.md, backgroundColor: colors.card },
 });

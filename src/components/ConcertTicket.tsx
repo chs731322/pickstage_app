@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import type { FestivalDetail } from '@/features/festivals';
 import { formatDateRange, formatOpenAt } from '@/lib/format';
-import { brandScale, cardShadow, colors, radius, spacing } from '@/theme';
+import { brandScale, colors, radius, spacing } from '@/theme';
 
 type Props = {
   festival: FestivalDetail;
@@ -134,7 +134,7 @@ function Field({ label, value, flex, onPress }: { label: string; value: string; 
 }
 
 const styles = StyleSheet.create({
-  shadow: { alignSelf: 'center', borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
+  shadow: { alignSelf: 'center', borderRadius: radius.lg, backgroundColor: colors.white },
   ticket: { borderRadius: radius.lg, overflow: 'hidden' },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   status: { position: 'absolute', top: 14, left: 14, paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brand },

@@ -82,10 +82,10 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     padding: spacing.md,
     borderRadius: radius.lg,
-    backgroundColor: colors.white,
+    backgroundColor: colors.card,
   },
   info: { flex: 1, gap: 2 },
-  button: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border },
+  button: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.surface },
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center' },
 });

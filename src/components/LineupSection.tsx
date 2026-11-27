@@ -73,9 +73,9 @@ export function LineupSection({ artists, contentWidth }: { artists: Artist[]; co
           showsHorizontalScrollIndicator={false}
           style={styles.tabsScroll}
           contentContainerStyle={styles.tabs}>
-          <FilterPill label="전체" active={activeDay === 'all'} onPress={() => setDay('all')} />
+          <FilterPill onCard label="전체" active={activeDay === 'all'} onPress={() => setDay('all')} />
           {groups.map((g) => (
-            <FilterPill key={g.key} label={g.label ?? ''} active={activeDay === g.key} onPress={() => setDay(g.key)} />
+            <FilterPill onCard key={g.key} label={g.label ?? ''} active={activeDay === g.key} onPress={() => setDay(g.key)} />
           ))}
         </ScrollView>
       ) : null}

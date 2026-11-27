@@ -7,7 +7,7 @@ import { AppText } from '@/components/AppText';
 import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { useFaqs } from '@/features/faqs';
-import { cardShadow, colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 // 자주 묻는 질문: 분류로 거르고 검색할 수 있고, 질문을 누르면 답이 펼쳐진다.
 export default function FaqScreen() {
@@ -114,11 +114,11 @@ const styles = StyleSheet.create({
   flex: { flex: 1, gap: 2 },
   list: { flex: 1, backgroundColor: colors.pageBg },
   content: { gap: spacing.sm, paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.card },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.xs },
   state: { marginTop: spacing.xl },
-  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.card },
   question: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   line: { lineHeight: 23 },
   answer: { lineHeight: 24, paddingTop: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },

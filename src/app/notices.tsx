@@ -7,7 +7,7 @@ import { ActivityIndicator, FlatList, Platform, Pressable, StyleSheet, TextInput
 import { AppText } from '@/components/AppText';
 import { EmptyState } from '@/components/EmptyState';
 import { isPinnedNotice, useNotices, type NoticeListItem } from '@/features/notices';
-import { cardShadow, colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 // 공지사항: 제목·내용으로 검색하고, 고정된 공지는 맨 위에 보인다. 누르면 상세로 간다.
 export default function NoticesScreen() {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     marginBottom: spacing.md,
     borderRadius: radius.pill,
-    backgroundColor: colors.white,
+    backgroundColor: colors.card,
   },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   gap: { height: 10 },
@@ -133,8 +133,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     padding: spacing.md,
     borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    ...cardShadow,
+    backgroundColor: colors.card,
   },
   pressed: { opacity: 0.7 },
   info: { flex: 1, gap: spacing.sm },
