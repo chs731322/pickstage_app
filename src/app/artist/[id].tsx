@@ -1,15 +1,29 @@
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { useHeaderHeight } from 'expo-router/react-navigation';
+import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
-import { ActivityIndicator, Alert, FlatList, Platform, Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Animated,
+  FlatList,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  Platform,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { PosterCard } from '@/components/PosterCard';
 import { SpotifyEmbed } from '@/components/SpotifyEmbed';
+import { HeaderIcon, STICKY_HEADER_HEIGHT, StickyHeader } from '@/components/StickyHeader';
 import {
   useArtist,
   useInterestedArtists,
@@ -20,16 +34,10 @@ import {
 import { useAuth } from '@/lib/auth';
 import { genreLabel, tagLabels } from '@/lib/genreLabel';
 import { spotifyArtistId } from '@/lib/spotify';
-import { brandScale, colors, radius, spacing } from '@/theme';
+import { brandScale, cardShadow, colors, radius, spacing } from '@/theme';
 
-// 어두운 사진 배경 위에 투명하게 떠 있는 제목줄: 흰색 뒤로 가기 버튼, 제목 없음 (안드로이드도 투명하게 해서 사진이 맨 위까지 이어지게 한다)
-const artistHeaderOptions = {
-  title: '',
-  headerTransparent: true,
-  headerTintColor: colors.white,
-  headerShadowVisible: false,
-  ...(Platform.OS === 'ios' ? { headerBlurEffect: 'none' as const } : { headerStyle: { backgroundColor: 'transparent' } }),
-};
+// 이만큼 내리면 헤더에 바탕이 깔려서 아이콘·상태바 글자를 어둡게 바꾼다
+const SOLID_HEADER_OFFSET = 32;
 
 const ARTIST_TYPE_LABEL: Record<string, string> = {
   solo: '솔로',
@@ -43,12 +51,15 @@ const ARTIST_TYPE_LABEL: Record<string, string> = {
 export default function ArtistScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: artist, isPending, error, refetch } = useArtist(id);
-  const headerHeight = useHeaderHeight();
-  const topPadding = Platform.OS === 'ios' ? headerHeight : 0;
+  const insets = useSafeAreaInsets();
+  const topPadding = insets.top + STICKY_HEADER_HEIGHT;
+  // 불러오는 중·실패 화면은 스크롤이 없어서 헤더가 늘 투명하다
+  const [idleScroll] = useState(() => new Animated.Value(0));
 
   if (isPending) {
     return (
       <View style={[styles.center, { paddingTop: topPadding }]}>
+        <StickyHeader title="" scrollY={idleScroll} />
         <ActivityIndicator color={colors.brand} />
       </View>
     );
@@ -57,6 +68,7 @@ export default function ArtistScreen() {
   if (error || !artist) {
     return (
       <View style={[styles.center, { paddingTop: topPadding }]}>
+        <StickyHeader title="" scrollY={idleScroll} />
         <AppText weight="bold" size={18}>
           아티스트를 찾을 수 없어요
         </AppText>
@@ -70,13 +82,13 @@ export default function ArtistScreen() {
     );
   }
 
-  return <ArtistBody artist={artist} />;
+  return <ArtistBody artist={artist} topPadding={topPadding} />;
 }
 
-function ArtistBody({ artist }: { artist: ArtistDetail }) {
+function ArtistBody({ artist, topPadding }: { artist: ArtistDetail; topPadding: number }) {
   const { width } = useWindowDimensions();
-  // 제목줄이 투명하게 사진 위에 떠 있으므로 그 높이만큼 아래에서 시작한다
-  const headerHeight = useHeaderHeight();
+  const [scrollY] = useState(() => new Animated.Value(0));
+  const [solid, setSolid] = useState(false);
   const { isLoggedIn } = useAuth();
   const { data: interests } = useInterestedArtists();
   const toggleFavorite = useToggleFavoriteArtist(artist.id);
@@ -87,7 +99,6 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
   const tags = [mainGenre, typeLabel, ...tagLabels(artist.genreTags, artist.genre)].filter(Boolean).slice(0, 5) as string[];
   const upcoming = artist.upcomingConcerts ?? [];
   const past = artist.pastConcerts ?? [];
-  const interestCount = artist.interestCount ?? 0;
   const photo = Math.min(width * 0.52, 220);
   const spotifyId = spotifyArtistId(artist.spotifyUrl);
   const links = [
@@ -111,12 +122,18 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
 
   return (
     <View style={styles.flex}>
-      <Stack.Screen options={artistHeaderOptions} />
-      {/* 맨 위가 어두운 사진 배경이라 상태바 글자는 흰색 */}
-      <StatusBar style="light" />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
-        {/* 맨 위: 프로필 사진을 크게 흐리게 깐 배경 위에 사진 카드, 이름, 태그, 공연 수, 버튼 */}
-        <View style={[styles.hero, { paddingTop: headerHeight + spacing.md }]}>
+      {/* 맨 위가 어두운 사진 배경이라 상태바 글자는 흰색, 내려서 헤더에 바탕이 깔리면 어둡게 */}
+      <StatusBar style={solid ? 'dark' : 'light'} />
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.content}
+        scrollEventThrottle={16}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: Platform.OS !== 'web',
+          listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => setSolid(event.nativeEvent.contentOffset.y > SOLID_HEADER_OFFSET),
+        })}>
+        {/* 맨 위: 프로필 사진을 크게 흐리게 깐 배경 위에 사진 카드, 이름, 태그, 바로가기 */}
+        <View style={[styles.hero, { paddingTop: topPadding + spacing.md }]}>
           {artist.profileImage ? (
             <>
               <Image source={{ uri: artist.profileImage }} style={StyleSheet.absoluteFill} contentFit="cover" blurRadius={60} />
@@ -166,40 +183,21 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
             </View>
           ) : null}
 
-          {/* 반투명 카드 두 장: 예정 공연, 지난 공연 */}
-          <View style={styles.stats}>
-            <StatCard label="예정 공연" value={upcoming.length} />
-            <StatCard label="지난 공연" value={past.length} />
-            {/* 관심 수는 0이면 숨긴다 (비어 보이지 않게) */}
-            {interestCount > 0 ? <StatCard label="관심" value={interestCount} /> : null}
-          </View>
-
-          {/* 흰 알약 버튼과 바로가기(스포티파이·인스타그램·공식 사이트) 동그라미 */}
-          <View style={styles.actions}>
-            {/* 하트 하나: 관심 아티스트 추가/해제 (눌러서 채워진 하트가 되면 관심 등록된 것) */}
-            <Pressable
-              onPress={handleFavorite}
-              style={styles.heart}
-              accessibilityRole="button"
-              accessibilityLabel={isFavorite ? '관심 아티스트 해제' : '관심 아티스트로 추가'}
-              accessibilityState={{ selected: isFavorite }}>
-              <Image
-                source={isFavorite ? require('../../../assets/images/brand/heart-filled.svg') : require('../../../assets/images/brand/heart-outline.svg')}
-                style={styles.heartIcon}
-                contentFit="contain"
-              />
-            </Pressable>
-            {links.map((link) => (
-              <Pressable
-                key={link.label}
-                onPress={() => WebBrowser.openBrowserAsync(link.url!)}
-                style={styles.linkCircle}
-                accessibilityRole="link"
-                accessibilityLabel={link.label}>
-                <Image source={link.logo} style={styles.linkLogo} contentFit="contain" />
-              </Pressable>
-            ))}
-          </View>
+          {/* 바로가기(스포티파이·인스타그램·공식 사이트) 동그라미 */}
+          {links.length > 0 ? (
+            <View style={styles.actions}>
+              {links.map((link) => (
+                <Pressable
+                  key={link.label}
+                  onPress={() => WebBrowser.openBrowserAsync(link.url!)}
+                  style={styles.linkCircle}
+                  accessibilityRole="link"
+                  accessibilityLabel={link.label}>
+                  <Image source={link.logo} style={styles.linkLogo} contentFit="contain" />
+                </Pressable>
+              ))}
+            </View>
+          ) : null}
         </View>
 
         {artist.description ? (
@@ -225,20 +223,24 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
 
         <ConcertRow title="예정된 공연" concerts={upcoming} />
         <ConcertRow title="출연했던 공연" concerts={past} />
-      </ScrollView>
-    </View>
-  );
-}
+      </Animated.ScrollView>
 
-function StatCard({ label, value }: { label: string; value: number }) {
-  return (
-    <View style={styles.stat}>
-      <AppText weight="bold" size={22} color={colors.white}>
-        {value}
-      </AppText>
-      <AppText weight="medium" size={13} color="rgba(255,255,255,0.85)">
-        {label}
-      </AppText>
+      {/* 위에 고정되는 헤더: 뒤로 가기와 찜 */}
+      <StickyHeader
+        title={artist.name}
+        scrollY={scrollY}
+        tint={solid ? colors.text : colors.white}
+        right={
+          <HeaderIcon
+            label={isFavorite ? '관심 아티스트 해제' : '관심 아티스트로 추가'}
+            icon={isFavorite ? { ios: 'heart.fill', android: 'favorite', web: 'favorite' } : { ios: 'heart', android: 'favorite_border', web: 'favorite_border' }}
+            active={isFavorite}
+            onPress={handleFavorite}
+            color={solid ? colors.text : colors.white}
+            activeColor={solid ? colors.brand : colors.white}
+          />
+        }
+      />
     </View>
   );
 }
@@ -265,7 +267,7 @@ function ConcertRow({ title, concerts }: { title: string; concerts: ArtistConcer
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.pageBg },
   content: { paddingBottom: spacing.xl },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.pageBg },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
   // 맨 위 영역: 아래 모서리를 둥글게 잘라서 뒤의 흐린 사진이 깔끔하게 끝나게 한다
@@ -298,27 +300,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.4)',
     backgroundColor: 'rgba(255,255,255,0.16)',
   },
-  stats: { flexDirection: 'row', gap: spacing.ms, alignSelf: 'stretch', marginTop: spacing.md },
-  stat: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 2,
-    paddingVertical: spacing.md,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.4)',
-    backgroundColor: 'rgba(255,255,255,0.16)',
-  },
   actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.ms, alignSelf: 'stretch', marginTop: spacing.sm },
-  heart: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.white,
-  },
-  heartIcon: { width: 28, height: 28 },
   linkLogo: { width: 24, height: 24 },
   linkCircle: {
     width: 52,
@@ -337,11 +319,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderRadius: radius.lg,
     backgroundColor: colors.white,
-    shadowColor: colors.shadowInk,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.07,
-    shadowRadius: 14,
-    elevation: 2,
+    ...cardShadow,
   },
   description: { lineHeight: 24 },
   concerts: { gap: spacing.md, marginTop: spacing.md },

@@ -131,7 +131,7 @@ export default function ProfileScreen() {
     );
 
   return (
-    <Screen topInset={false} keyboard tone="page">
+    <Screen topInset={false} keyboard>
       <View style={styles.avatar}>
         <Pressable onPress={openPhotoMenu} disabled={uploadingPhoto || updateImage.isPending} accessibilityRole="button" accessibilityLabel="프로필 사진 바꾸기">
           <Avatar uri={user.profileImage} name={user.nickname} size={88} />

@@ -1,9 +1,10 @@
 import { router } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  type FlatListInstance,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -18,6 +19,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { PosterCard } from '@/components/PosterCard';
 import { TabHero } from '@/components/TabHero';
+import { TOP_BUTTON_OFFSET, ToTopButton } from '@/components/ToTopButton';
 import {
   LIST_GENRES,
   LIST_REGIONS,
@@ -38,6 +40,8 @@ export default function PerformancesScreen() {
   const [filters, setFilters] = useState<ListFilters>(DEFAULT_FILTERS);
   // 검색어는 입력하는 동안은 입력칸에만 두고, 검색(키보드의 확인)을 눌렀을 때 목록에 적용한다
   const [searchText, setSearchText] = useState('');
+  const listRef = useRef<FlatListInstance>(null);
+  const [showTop, setShowTop] = useState(false);
   const { data, isPending, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching, error } =
     useFestivalList(filters);
 
@@ -160,7 +164,10 @@ export default function PerformancesScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <FlatList
+        ref={listRef}
         style={styles.list}
+        scrollEventThrottle={100}
+        onScroll={(event) => setShowTop(event.nativeEvent.contentOffset.y > TOP_BUTTON_OFFSET)}
         data={items}
         keyExtractor={(item) => String(item.id)}
         numColumns={COLUMNS}
@@ -192,6 +199,7 @@ export default function PerformancesScreen() {
         }
         ListFooterComponent={isFetchingNextPage ? <ActivityIndicator color={colors.brand} style={styles.footer} /> : undefined}
       />
+      {showTop ? <ToTopButton onPress={() => listRef.current?.scrollToOffset({ offset: 0, animated: true })} /> : null}
     </SafeAreaView>
   );
 }

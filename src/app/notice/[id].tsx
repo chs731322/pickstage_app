@@ -12,7 +12,7 @@ export default function NoticeDetailScreen() {
   const { data: notice, isPending, error } = useNotice(id);
 
   return (
-    <Screen topInset={false} tone="page">
+    <Screen topInset={false}>
       {isPending ? (
         <ActivityIndicator color={colors.brand} style={styles.state} />
       ) : error || !notice ? (

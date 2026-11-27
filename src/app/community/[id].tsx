@@ -333,8 +333,8 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  root: { flex: 1, backgroundColor: colors.background },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
+  root: { flex: 1, backgroundColor: colors.pageBg },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.pageBg },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
   content: { padding: spacing.md, paddingBottom: spacing.xl, gap: spacing.md },

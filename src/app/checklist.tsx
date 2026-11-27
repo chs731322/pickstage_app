@@ -56,7 +56,7 @@ export default function ChecklistScreen() {
     ]);
 
   return (
-    <Screen topInset={false} keyboard tone="page">
+    <Screen topInset={false} keyboard>
       {/* 공연 당일 날씨 (웹의 공연 준비 가이드처럼 체크리스트 위에 함께 보여준다) */}
       <WeatherCard />
 

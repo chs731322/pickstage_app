@@ -189,7 +189,9 @@ export default function CalendarScreen() {
   );
 }
 
-const CELL_HEIGHT = 62;
+// 날짜(26) + 막대 3줄 + "+N" 한 줄이 다음 주 날짜와 겹치지 않는 높이
+// 위 여백 4 + 날짜 26 + 간격 4 + 막대와 사이 21 + "+N" 16 + 아래 여백 5
+const CELL_HEIGHT = 76;
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.pageBg },
@@ -210,7 +212,7 @@ const styles = StyleSheet.create({
   dayBadgeToday: { backgroundColor: colors.brand },
   bars: { alignSelf: 'stretch', gap: 2, marginTop: spacing.xs, paddingHorizontal: spacing.xs },
   bar: { height: 5, borderRadius: 3 },
-  more: { textAlign: 'center', lineHeight: 11 },
+  more: { textAlign: 'center', lineHeight: 16 },
   loading: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
   listHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.sm },
   total: { textAlign: 'center', marginTop: spacing.sm },

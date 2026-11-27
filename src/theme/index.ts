@@ -18,7 +18,7 @@ export const brandScale = {
 
 // 회색 단계: 50 화면 바탕 / 100 옅은 칸 / 200 선 / 300 흐린 장식 / 400 꺼진 아이콘 / 500 보조 글자 / 700 본문 보조 / 900 글자
 export const greyScale = {
-  50: '#f6f6f9',
+  50: '#f8f8fa',
   100: '#f5f5f7',
   200: '#e6e6e6',
   300: '#b8b8be',
@@ -63,7 +63,7 @@ export const colors = {
   border: greyScale[200],
   surface: greyScale[100],
   background: '#ffffff',
-  // 홈 같은 목록 화면의 바탕 (흰 카드가 돋보이게 아주 옅은 회색)
+  // 모든 화면의 바탕 (흰 카드가 돋보이게 아주 옅은 회색)
   pageBg: greyScale[50],
   // 검정 히어로 위의 보조 글자색
   heroMuted: greyScale[300],
@@ -129,9 +129,9 @@ export const radius = { sm: 8, md: 12, lg: 16, pill: 999 } as const;
 // 흰 카드에 은은하게 띄우는 그림자 (홈의 카드들이 같은 느낌이 되도록 한 곳에서 정한다)
 export const cardShadow = {
   shadowColor: colors.shadowInk,
-  shadowOffset: { width: 0, height: 6 },
-  shadowOpacity: 0.07,
-  shadowRadius: 14,
-  elevation: 2,
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.04,
+  shadowRadius: 8,
+  elevation: 1,
 } as const;
 

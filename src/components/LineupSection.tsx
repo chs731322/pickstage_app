@@ -111,8 +111,9 @@ export function LineupSection({ artists, contentWidth }: { artists: Artist[]; co
                     </View>
                   )}
                   <AppText
-                    weight={artist.isHeadliner ? 'extrabold' : 'semibold'}
+                    weight={artist.isHeadliner ? 'bold' : 'medium'}
                     size={14}
+                    color={colors.textSecondary}
                     numberOfLines={2}
                     style={styles.name}>
                     {artist.name}

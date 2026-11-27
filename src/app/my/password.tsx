@@ -39,7 +39,7 @@ export default function PasswordScreen() {
   };
 
   return (
-    <Screen topInset={false} keyboard tone="page">
+    <Screen topInset={false} keyboard>
       <View style={styles.card}>
         <TextField
           label="현재 비밀번호"

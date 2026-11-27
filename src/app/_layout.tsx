@@ -60,17 +60,18 @@ function RootNavigator() {
         headerTintColor: colors.text,
         headerTitleStyle: { fontFamily: fontFamily.bold },
         headerBackButtonDisplayMode: 'minimal',
-        contentStyle: { backgroundColor: colors.background },
+        contentStyle: { backgroundColor: colors.pageBg },
         // iOS: 제목줄을 흐림 효과가 있는 반투명으로 (내용은 Screen 컴포넌트가 제목줄 높이만큼 아래에서 시작한다)
-        ...(Platform.OS === 'ios' ? { headerTransparent: true, headerBlurEffect: 'systemMaterial' as const } : {}),
+        ...(Platform.OS === 'ios' ? { headerTransparent: true, headerBlurEffect: 'systemMaterial' as const } : { headerStyle: { backgroundColor: colors.pageBg }, headerShadowVisible: false }),
       }}>
       {/* 탭 화면들 (헤더는 각 탭 화면이 직접 그린다) */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
       {/* 로그인 없이도 볼 수 있는 상세 화면 (어느 탭에서든 위에 쌓인다) */}
-      <Stack.Screen name="festival/[id]" options={{ title: '공연' }} />
+      {/* 공연 상세는 자기 헤더(StickyHeader)를 그린다 */}
+      <Stack.Screen name="festival/[id]" options={{ title: '공연', headerShown: false }} />
       <Stack.Screen name="artists" options={{ title: '아티스트 찾기' }} />
-      <Stack.Screen name="artist/[id]" options={{ title: '아티스트' }} />
+      <Stack.Screen name="artist/[id]" options={{ headerShown: false }} />
       <Stack.Screen name="venues" options={{ title: '공연장 찾기' }} />
       <Stack.Screen name="venue/[id]" options={{ title: '공연장' }} />
       <Stack.Screen name="user/[id]" options={{ title: '프로필' }} />

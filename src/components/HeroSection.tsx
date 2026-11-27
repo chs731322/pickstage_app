@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
 import { Highlight } from '@/components/Highlight';
-import { TAB_BAR_HEIGHT } from '@/components/app-tabs';
+import { TAB_BAR_HEIGHT, tabBarInset } from '@/components/app-tabs';
 import { usePopularFestivals, type FestivalSummary } from '@/features/festivals';
 import { useUnreadCount } from '@/features/notifications';
 import { formatDateRange } from '@/lib/format';
@@ -18,7 +18,12 @@ const GAP = 12;
 // 자동으로 다음 포스터로 넘어가는 간격(밀리초)
 const AUTO_MS = 4000;
 // 포스터 아래 정보(태그·제목·공연장·날짜·버튼)와 아래 여백이 차지하는 높이 (화면 높이에서 포스터가 쓸 수 있는 크기를 계산할 때 쓴다)
-const INFO_HEIGHT = 200;
+const INFO_HEIGHT = 244;
+// 제목은 두 줄 자리를 항상 비워 둔다 (한 줄짜리 제목이어도 아래 버튼이 움직이지 않게)
+const TITLE_LINE = 28;
+// 장르·지역·공연장 한 줄의 높이
+const TAG_HEIGHT = 28;
+const LINE_HEIGHT = 20;
 // 배너 위의 "이번 달 주목할 만한 공연" 문구와 그 아래 간격
 const HEADLINE_HEIGHT = 40;
 const HERO_BOTTOM = 32;
@@ -36,8 +41,10 @@ export function HeroSection() {
   const touchedAt = useRef(0);
   const focused = useRef(true);
 
+  // 글자를 키운 폰에서는 고정한 칸도 같은 비율로 키운다
+  const textScale = Math.min(Math.max(fontScale, 1), MAX_FONT_SCALE);
   // 홈을 열었을 때 버튼까지 한 화면에 보이도록, 남는 높이에 맞춰 포스터 크기를 정한다
-  const fixedHeights = insets.top + 54 + HEADLINE_HEIGHT + 32 + INFO_HEIGHT * Math.min(Math.max(fontScale, 1), MAX_FONT_SCALE) + HERO_BOTTOM + TAB_BAR_HEIGHT + insets.bottom;
+  const fixedHeights = insets.top + 54 + HEADLINE_HEIGHT + 32 + INFO_HEIGHT * textScale + HERO_BOTTOM + TAB_BAR_HEIGHT + tabBarInset(insets.bottom);
   const cardWidth = Math.round(Math.max(130, Math.min(width * 0.62, ((height - fixedHeights) * 3) / 4)));
   const cardHeight = (cardWidth * 4) / 3;
   const snap = cardWidth + GAP;
@@ -186,29 +193,30 @@ export function HeroSection() {
       {/* 지금 포스터의 정보 */}
       {current ? (
         <View style={styles.info}>
+          {/* 장르와 지역은 줄을 나눈다. 값이 없어도 자리는 남겨 둔다 */}
           <View style={styles.tags}>
-            {festivalGenreLabel(current.genre) ? (
-              <View style={styles.tag}>
-                <AppText weight="bold" size={12} color={colors.white}>
-                  {festivalGenreLabel(current.genre)}
-                </AppText>
-              </View>
-            ) : null}
-            {current.region ? (
-              <AppText weight="semibold" size={13} color={colors.textMuted}>
-                {current.region}
-              </AppText>
-            ) : null}
-          </View>
-          <AppText weight="display" size={22} color={colors.text} numberOfLines={2} style={styles.centerText}>
-            {current.title}
-          </AppText>
-          {current.venueName ? (
-            <AppText weight="medium" size={14} color={colors.textSecondary} style={styles.centerText}>
-              {current.venueName}
+            <View style={{ height: TAG_HEIGHT * textScale, justifyContent: 'center' }}>
+              {festivalGenreLabel(current.genre) ? (
+                <View style={styles.tag}>
+                  <AppText weight="bold" size={12} color={colors.white}>
+                    {festivalGenreLabel(current.genre)}
+                  </AppText>
+                </View>
+              ) : null}
+            </View>
+            <AppText weight="semibold" size={13} color={colors.textMuted} numberOfLines={1} style={{ height: LINE_HEIGHT * textScale }}>
+              {current.region ?? ''}
             </AppText>
-          ) : null}
-          <AppText size={14} color={colors.textMuted}>
+          </View>
+          <View style={[styles.titleBox, { height: TITLE_LINE * 2 * textScale }]}>
+            <AppText weight="display" size={22} color={colors.text} numberOfLines={2} style={[styles.centerText, styles.title]}>
+              {current.title}
+            </AppText>
+          </View>
+          <AppText weight="medium" size={14} color={colors.textSecondary} numberOfLines={1} style={[styles.centerText, { height: LINE_HEIGHT * textScale }]}>
+            {current.venueName ?? ''}
+          </AppText>
+          <AppText size={14} color={colors.textMuted} numberOfLines={1} style={{ height: LINE_HEIGHT * textScale }}>
             {formatDateRange(current.startDate, current.endDate)}
           </AppText>
           <Pressable style={styles.cta} onPress={() => router.push(`/festival/${current.id}`)}>
@@ -254,8 +262,10 @@ const styles = StyleSheet.create({
   counter: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: 'rgba(0,0,0,0.55)' },
   info: { alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.lg, marginTop: spacing.md },
   centerText: { textAlign: 'center' },
-  tags: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.brand },
+  tags: { alignItems: 'center', gap: spacing.xs },
+  titleBox: { alignSelf: 'stretch', justifyContent: 'center' },
+  title: { lineHeight: TITLE_LINE },
+  tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brand },
   cta: {
     marginTop: spacing.sm,
     paddingHorizontal: 30,

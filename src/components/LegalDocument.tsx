@@ -95,11 +95,11 @@ function Paragraph({ spans }: { spans: Span[] }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  screen: { flex: 1, backgroundColor: colors.background },
+  screen: { flex: 1, backgroundColor: colors.pageBg },
   content: { gap: spacing.ms, paddingHorizontal: spacing.md, paddingBottom: spacing.xl * 2 },
   heading: { marginTop: spacing.ms },
   line: { lineHeight: 22 },
   list: { gap: spacing.sm },
   item: { flexDirection: 'row', gap: spacing.sm },
-  box: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.surface },
+  box: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.white },
 });

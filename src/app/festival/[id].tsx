@@ -1,20 +1,20 @@
-import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { useHeaderHeight } from 'expo-router/react-navigation';
-import { SymbolView } from 'expo-symbols';
+import { router, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Animated,
   FlatList,
-  Linking,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   Platform,
   Pressable,
-  ScrollView,
+  type ScrollViewInstance,
   Share,
   StyleSheet,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -22,15 +22,16 @@ import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { ConcertTicket } from '@/components/ConcertTicket';
 import { LineupSection } from '@/components/LineupSection';
+import { HeaderIcon, STICKY_HEADER_HEIGHT, StickyHeader } from '@/components/StickyHeader';
 import { CustomNotificationSheet } from '@/components/CustomNotificationSheet';
 import { PosterCard } from '@/components/PosterCard';
 import { ReviewHighlightCard } from '@/components/ReviewHighlightCard';
+import { TOP_BUTTON_OFFSET, ToTopButton } from '@/components/ToTopButton';
 import { useBookmarks, useToggleBookmark } from '@/features/bookmarks';
 import { useFestival, useRelatedFestivals, type FestivalDetail } from '@/features/festivals';
 import { useAuth } from '@/lib/auth';
 import { daysUntil, festivalStatus, formatOpenAt } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
-import { heroHeaderOptions } from '@/lib/heroHeader';
 import { SITE_URL } from '@/lib/links';
 import { cardShadow, colors, radius, spacing } from '@/theme';
 
@@ -88,13 +89,15 @@ function formatPrice(price: number | null): string {
 export default function FestivalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: festival, isPending, error, refetch } = useFestival(id);
-  const headerHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
-  const topPadding = Platform.OS === 'ios' ? headerHeight : 0;
+  // 고정 헤더가 내용 위에 떠 있어서, 그 높이만큼 아래에서 시작한다
+  const topPadding = insets.top + STICKY_HEADER_HEIGHT;
+  const [idleScroll] = useState(() => new Animated.Value(0));
 
   if (isPending) {
     return (
       <View style={[styles.center, { paddingTop: topPadding }]}>
+        <StickyHeader title="" scrollY={idleScroll} />
         <ActivityIndicator color={colors.brand} />
       </View>
     );
@@ -103,6 +106,7 @@ export default function FestivalScreen() {
   if (error || !festival) {
     return (
       <View style={[styles.center, { paddingTop: topPadding }]}>
+        <StickyHeader title="" scrollY={idleScroll} />
         <AppText weight="bold" size={18}>
           공연을 찾을 수 없어요
         </AppText>
@@ -130,9 +134,12 @@ function FestivalBody({
 }) {
   const { width } = useWindowDimensions();
   const { isLoggedIn } = useAuth();
+  const [scrollY] = useState(() => new Animated.Value(0));
   const { data: bookmarks } = useBookmarks();
   const toggleBookmark = useToggleBookmark(festival.id);
   const [notifyOpen, setNotifyOpen] = useState(false);
+  const scrollRef = useRef<ScrollViewInstance>(null);
+  const [showTop, setShowTop] = useState(false);
   const { data: related } = useRelatedFestivals(festival);
 
   const isBookmarked = Boolean(bookmarks?.some((b) => b.id === festival.id));
@@ -144,13 +151,6 @@ function FestivalBody({
   const action = bookAction(festival, options.length > 0, isEnded);
   const lineup = festival.artists ?? [];
   const tickets = festival.tickets ?? [];
-  const venue = festival.venue;
-  const directions =
-    venue?.latitude && venue?.longitude
-      ? `https://www.google.com/maps/dir/?api=1&destination=${venue.latitude},${venue.longitude}`
-      : venue?.address
-        ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venue.address)}`
-        : null;
 
   const handleBook = () => {
     if (action.kind === 'external') {
@@ -214,47 +214,31 @@ function FestivalBody({
     });
 
   return (
-    <View style={styles.flex}>
-      <Stack.Screen options={heroHeaderOptions} />
-      <ScrollView
+    <View style={styles.root}>
+      <Animated.ScrollView
+        ref={scrollRef}
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: Platform.OS !== 'web',
+          listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => setShowTop(event.nativeEvent.contentOffset.y > TOP_BUTTON_OFFSET),
+        })}
         contentContainerStyle={{ paddingBottom: BOTTOM_BAR_HEIGHT + bottomInset + spacing.lg }}>
         {/* 맨 위: 세로 티켓 (포스터, 점선, 제목과 날짜·지역·장소·티켓 오픈) */}
         <View style={[styles.hero, { paddingTop: topPadding + spacing.md }]}>
           <ConcertTicket festival={festival} status={status} genre={genre} width={width - spacing.md * 2} />
         </View>
 
-        {/* 찜·공유·알림 */}
-        <View style={styles.titleBlock}>
-          <View style={styles.actions}>
-            <ActionButton
-              label={isBookmarked ? '찜 취소' : '찜하기'}
-              icon={isBookmarked ? { ios: 'heart.fill', android: 'favorite', web: 'favorite' } : { ios: 'heart', android: 'favorite_border', web: 'favorite_border' }}
-              active={isBookmarked}
-              onPress={handleBookmark}
-            />
-            <ActionButton
-              label="공유"
-              icon={{ ios: 'square.and.arrow.up', android: 'share', web: 'share' }}
-              onPress={handleShare}
-            />
-            {!isEnded ? (
-              <ActionButton label="알림" icon={{ ios: 'bell', android: 'notifications', web: 'notifications' }} onPress={handleNotify} />
-            ) : null}
-            {festival.externalUrl ? (
-              <ActionButton
-                label="공식 사이트"
-                icon={{ ios: 'safari', android: 'public', web: 'public' }}
-                onPress={() => openLink(festival.externalUrl!)}
-              />
-            ) : null}
-          </View>
-          <AppText size={13} color={colors.textMuted}>
-            {festival.bookmarkCount > 0 ? `찜 ${festival.bookmarkCount} · ` : ''}조회 {festival.viewCount}
-          </AppText>
-        </View>
-
         <View style={styles.sections}>
+          {/* 공연 소개 */}
+          {festival.description ? (
+            <Card title="공연 소개">
+              <AppText size={16} color={colors.textSecondary} style={styles.description}>
+                {festival.description}
+              </AppText>
+            </Card>
+          ) : null}
+
           {/* 예매 정보 */}
           {tickets.length > 0 || festival.ticketOpenAt ? (
             <Card title="예매 정보">
@@ -271,41 +255,6 @@ function FestivalBody({
           {lineup.length > 0 ? (
             <Card title={`라인업 ${lineup.length}`}>
               <LineupSection artists={lineup} contentWidth={width - (spacing.md) * 2 - spacing.md * 2} />
-            </Card>
-          ) : null}
-
-          {/* 공연 소개 */}
-          {festival.description ? (
-            <Card title="공연 소개">
-              <AppText size={16} color={colors.textSecondary} style={styles.description}>
-                {festival.description}
-              </AppText>
-            </Card>
-          ) : null}
-
-          {/* 장소 */}
-          {venue ? (
-            <Card title="장소 정보">
-              <AppText weight="bold" size={16}>{venue.name}</AppText>
-              {venue.address ? (
-                <AppText size={14} color={colors.textSecondary}>
-                  {venue.address}
-                </AppText>
-              ) : null}
-              <View style={styles.venueActions}>
-                <Pressable onPress={() => router.push(`/venue/${venue.id}`)} hitSlop={6}>
-                  <AppText weight="bold" size={14} color={colors.brand}>
-                    공연장 정보 보기 ›
-                  </AppText>
-                </Pressable>
-                {directions ? (
-                  <Pressable onPress={() => Linking.openURL(directions)} hitSlop={6}>
-                    <AppText weight="bold" size={14} color={colors.brand}>
-                      길찾기 ›
-                    </AppText>
-                  </Pressable>
-                ) : null}
-              </View>
             </Card>
           ) : null}
 
@@ -329,7 +278,38 @@ function FestivalBody({
             />
           </View>
         ) : null}
-      </ScrollView>
+      </Animated.ScrollView>
+
+      {/* 위에 고정되는 헤더: 뒤로 가기와 찜·공유·알림 */}
+      <StickyHeader
+        title={festival.title}
+        scrollY={scrollY}
+        right={
+          <>
+          <HeaderIcon
+            label={isBookmarked ? '찜 취소' : '찜하기'}
+            icon={isBookmarked ? { ios: 'heart.fill', android: 'favorite', web: 'favorite' } : { ios: 'heart', android: 'favorite_border', web: 'favorite_border' }}
+            active={isBookmarked}
+            onPress={handleBookmark}
+          />
+          <HeaderIcon label="공유" icon={{ ios: 'square.and.arrow.up', android: 'share', web: 'share' }} onPress={handleShare} />
+          {!isEnded ? (
+            <HeaderIcon label="알림 설정" icon={{ ios: 'bell', android: 'notifications', web: 'notifications' }} onPress={handleNotify} />
+          ) : null}
+          {festival.externalUrl ? (
+            <HeaderIcon label="공식 사이트" icon={{ ios: 'safari', android: 'public', web: 'public' }} onPress={() => openLink(festival.externalUrl!)} />
+          ) : null}
+          </>
+        }
+      />
+
+      {/* 맨 위로: 한참 내렸을 때만 */}
+      {showTop ? (
+        <ToTopButton
+          onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}
+          bottom={BOTTOM_BAR_HEIGHT + bottomInset + spacing.md}
+        />
+      ) : null}
 
       {/* 아래에 고정된 예매 버튼 */}
       <View style={[styles.bottomBar, { paddingBottom: bottomInset + spacing.sm }]}>
@@ -347,29 +327,6 @@ function FestivalBody({
         onClose={() => setNotifyOpen(false)}
       />
     </View>
-  );
-}
-
-type SymbolName = { ios: string; android: string; web: string };
-
-function ActionButton({
-  label,
-  icon,
-  onPress,
-  active = false,
-}: {
-  label: string;
-  icon: SymbolName;
-  onPress: () => void;
-  active?: boolean;
-}) {
-  return (
-    <Pressable onPress={onPress} style={styles.action} accessibilityRole="button">
-      <SymbolView name={icon as never} tintColor={active ? colors.brand : colors.textSecondary} size={24} />
-      <AppText size={13} weight="medium" color={active ? colors.brand : colors.textSecondary}>
-        {label}
-      </AppText>
-    </Pressable>
   );
 }
 
@@ -426,22 +383,20 @@ function TicketRow({ ticket }: { ticket: Ticket }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.background },
+  root: { flex: 1, backgroundColor: colors.pageBg },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg, backgroundColor: colors.pageBg },
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
   hero: { paddingHorizontal: spacing.md, paddingBottom: spacing.md },
   poster: { borderRadius: radius.lg, backgroundColor: colors.surface, ...cardShadow },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
-  titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brand },
   tagEnded: { backgroundColor: colors.textMuted },
   tagLive: { backgroundColor: colors.text },
   tagOutline: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
   title: { lineHeight: 30 },
-  actions: { flexDirection: 'row', gap: spacing.lg, paddingVertical: spacing.sm },
-  action: { alignItems: 'center', gap: spacing.xs, minWidth: 48 },
-  sections: { gap: spacing.md, padding: spacing.md, paddingTop: 0, backgroundColor: colors.pageBg },
+  sections: { gap: spacing.md, padding: spacing.md, paddingTop: 0 },
   card: {
     gap: spacing.md,
     padding: spacing.md,
@@ -456,8 +411,7 @@ const styles = StyleSheet.create({
   avatar: { width: 68, height: 68, borderRadius: 34, backgroundColor: colors.surface },
   artistName: { textAlign: 'center' },
   description: { lineHeight: 24 },
-  venueActions: { flexDirection: 'row', gap: spacing.lg, marginTop: spacing.xs },
-  related: { gap: spacing.md, paddingBottom: spacing.md, backgroundColor: colors.pageBg },
+  related: { gap: spacing.md, paddingBottom: spacing.md },
   relatedTitle: { paddingHorizontal: spacing.md },
   relatedList: { gap: spacing.md, paddingHorizontal: spacing.md },
   bottomBar: {

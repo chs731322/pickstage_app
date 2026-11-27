@@ -53,7 +53,7 @@ export function ReviewHighlightCard({ target, id, onWrite }: Props) {
           </AppText>
           {onWrite ? (
             <Pressable onPress={onWrite} style={({ pressed }) => [styles.write, pressed && styles.writePressed]} accessibilityRole="button">
-              <AppText weight="bold" size={14} color={colors.white}>
+              <AppText weight="bold" size={14} color={colors.textSecondary}>
                 공연 후기 남기기
               </AppText>
             </Pressable>
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
   },
   positive: { borderColor: colors.brand, backgroundColor: colors.brandSoft },
   negative: { borderColor: colors.text, backgroundColor: colors.white },
-  write: { alignSelf: 'flex-start', paddingHorizontal: spacing.md, paddingVertical: spacing.ms, borderRadius: radius.pill, backgroundColor: colors.brand },
-  writePressed: { backgroundColor: colors.brandStrong },
+  // 티켓 '더보기'와 같은 회색 버튼
+  write: { alignItems: 'center', justifyContent: 'center', minHeight: 46, borderRadius: radius.pill, backgroundColor: colors.surface },
+  writePressed: { opacity: 0.6 },
 });

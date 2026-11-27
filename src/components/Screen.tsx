@@ -13,29 +13,26 @@ type Props = {
   topInset?: boolean;
   // 입력칸이 있는 화면: 키보드가 올라와도 가려지지 않게 하고, 키보드 바깥을 눌러도 버튼이 눌리게 한다
   keyboard?: boolean;
-  // 흰 카드를 올리는 화면은 연회색 바탕(page)으로
-  tone?: 'default' | 'page';
 };
 
 // 모든 화면의 바탕. 화면의 종류에 따라 위쪽을 피하는 방법이 다르다.
 export function Screen({ topInset = true, ...props }: Props) {
-  const background = props.tone === 'page' ? { backgroundColor: colors.pageBg } : null;
   return topInset ? (
-    <SafeAreaView style={[styles.safe, background]} edges={['top']}>
+    <SafeAreaView style={styles.safe} edges={['top']}>
       <Body {...props} topPadding={0} />
     </SafeAreaView>
   ) : (
-    <HeaderScreen {...props} background={background} />
+    <HeaderScreen {...props} />
   );
 }
 
 // 제목줄(헤더)이 있는 화면. iOS의 제목줄은 반투명이라 내용 위에 "떠" 있고 내용을 자동으로 비켜주지 않는다.
 // 그래서 제목줄 높이만큼 위쪽 여백을 직접 줘서, 화면 맨 위 글자가 제목줄 뒤에 가려지지 않게 한다.
 // (src/app/_layout.tsx 에서 iOS만 headerTransparent로 설정했다. 안드로이드·웹은 제목줄이 내용을 밀어내므로 여백이 필요 없다.)
-function HeaderScreen({ background, ...props }: Omit<Props, 'topInset'> & { background: object | null }) {
+function HeaderScreen(props: Omit<Props, 'topInset'>) {
   const headerHeight = useHeaderHeight();
   return (
-    <View style={[styles.safe, background]}>
+    <View style={styles.safe}>
       <Body {...props} topPadding={Platform.OS === 'ios' ? headerHeight : 0} />
     </View>
   );
@@ -70,7 +67,7 @@ function Body({
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1, backgroundColor: colors.pageBg },
   flex: { flex: 1 },
   content: { padding: spacing.md, gap: spacing.md },
 });

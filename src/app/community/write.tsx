@@ -89,7 +89,7 @@ function WriteForm({
   };
 
   return (
-    <Screen topInset={false} keyboard tone="page">
+    <Screen topInset={false} keyboard>
       <View style={styles.pills}>
         {Object.entries(POST_CATEGORY_LABEL).map(([value, label]) => (
           <FilterPill key={value} label={label} active={category === value} onPress={() => setCategory(value)} />

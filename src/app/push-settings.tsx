@@ -46,7 +46,7 @@ export default function PushSettingsScreen() {
   const denied = permission === 'denied';
 
   return (
-    <Screen topInset={false} tone="page">
+    <Screen topInset={false}>
       <View style={styles.card}>
         <View style={styles.switchRow}>
           <View style={styles.flex}>

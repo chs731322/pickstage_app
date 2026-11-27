@@ -34,7 +34,7 @@ export default function UserProfileScreen() {
 
   if (!isLoggedIn) {
     return (
-      <Screen topInset={false} tone="page">
+      <Screen topInset={false}>
         <View style={styles.notice}>
           <AppText weight="bold" size={18}>
             로그인하면 프로필을 볼 수 있어요
@@ -47,7 +47,7 @@ export default function UserProfileScreen() {
 
   if (isPending) {
     return (
-      <Screen topInset={false} tone="page">
+      <Screen topInset={false}>
         <ActivityIndicator color={colors.brand} style={styles.state} />
       </Screen>
     );
@@ -56,7 +56,7 @@ export default function UserProfileScreen() {
   if (error || !user) {
     const message = errorMessage(error, '존재하지 않는 회원이에요.');
     return (
-      <Screen topInset={false} tone="page">
+      <Screen topInset={false}>
         <View style={styles.notice}>
           <AppText weight="bold" size={18} style={styles.center}>
             {message}
@@ -90,7 +90,7 @@ function ProfileBody({ user }: { user: UserProfile }) {
   const joined = user.createdAt ? `${user.createdAt.slice(0, 4)}.${user.createdAt.slice(5, 7)} 가입` : '';
 
   return (
-    <Screen topInset={false} tone="page">
+    <Screen topInset={false}>
       {/* 프로필 머리 */}
       <View style={styles.head}>
         <Avatar uri={user.profileImage} name={user.nickname} size={84} />
