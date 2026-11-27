@@ -62,15 +62,22 @@ export const fontFamily = {
   semibold: 'Pretendard-SemiBold',
   bold: 'Pretendard-Bold',
   extrabold: 'Pretendard-ExtraBold',
-  // 섹션 제목·탭 제목·홈 배너 제목처럼 눈에 띄어야 하는 곳에만 쓴다 (본문에는 쓰지 않는다)
+  // 장식 글꼴은 홈(메인) 화면의 배너·섹션 제목에만 쓴다. 다른 화면은 모두 Pretendard
   display: 'Wavve-PADO',
 } as const;
 
 // 주 버튼의 그라데이션 (밝은 핑크 → 브랜드 핑크, 왼쪽에서 오른쪽)
 export const buttonGradient = ['#ff5cc6', '#f000b0'] as const;
 
-export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 } as const;
-export const radius = { sm: 8, md: 16, pill: 999 } as const;
+// ───── 화면 규격 ─────
+// 새 화면을 만들 때도 아래 값 안에서만 고른다. 중간값(10, 14, 18 같은)을 만들지 않는다.
+
+// 글자 크기 6단계: 12 보조 라벨 / 13 시간·개수 같은 부가 정보 / 14 본문 / 16 목록 제목·버튼 / 18 섹션 제목 / 22 화면 제목
+export type TextSize = 12 | 13 | 14 | 16 | 18 | 22;
+// 여백: 같은 묶음 안은 좁게(xs·sm), 항목 사이는 ms, 카드 안쪽·화면 좌우는 md, 서로 다른 묶음 사이는 lg·xl
+export const spacing = { xs: 4, sm: 8, ms: 12, md: 16, lg: 24, xl: 32 } as const;
+// 모서리: sm 작은 칩·체크칸 / md 사진·입력칸 / lg 카드 / pill 알약 버튼
+export const radius = { sm: 8, md: 12, lg: 16, pill: 999 } as const;
 
 // 흰 카드에 은은하게 띄우는 그림자 (홈의 카드들이 같은 느낌이 되도록 한 곳에서 정한다)
 export const cardShadow = {

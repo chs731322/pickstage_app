@@ -7,7 +7,7 @@ import { CalendarEventRow } from '@/components/CalendarEventRow';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useCalendarFestivals } from '@/features/calendar';
 import { buildLayout, toDateStr, type CalendarFestival } from '@/lib/calendar';
-import { cardShadow, colors, spacing } from '@/theme';
+import { cardShadow, colors, radius, spacing } from '@/theme';
 
 const WEEKDAYS = ['월', '화', '수', '목', '금', '토', '일'];
 const MAX_EVENTS = 3;
@@ -72,7 +72,7 @@ export function WeeklyCalendarSection() {
       <View style={styles.card}>
         <View style={styles.weekRow}>
           <Pressable onPress={() => moveWeek(-1)} hitSlop={12} accessibilityLabel="이전 주">
-            <AppText size={24} weight="bold">
+            <AppText size={22} weight="bold">
               ‹
             </AppText>
           </Pressable>
@@ -80,7 +80,7 @@ export function WeeklyCalendarSection() {
             {weekLabel}
           </AppText>
           <Pressable onPress={() => moveWeek(1)} hitSlop={12} accessibilityLabel="다음 주">
-            <AppText size={24} weight="bold">
+            <AppText size={22} weight="bold">
               ›
             </AppText>
           </Pressable>
@@ -103,7 +103,7 @@ export function WeeklyCalendarSection() {
                   {WEEKDAYS[i]}
                 </AppText>
                 <View style={[styles.num, isSelected && styles.numSelected, !isSelected && isToday && styles.numToday]}>
-                  <AppText weight="bold" size={15} color={isSelected ? colors.white : isToday ? colors.brand : colors.text}>
+                  <AppText weight="bold" size={14} color={isSelected ? colors.white : isToday ? colors.brand : colors.text}>
                     {d.num}
                   </AppText>
                 </View>
@@ -116,7 +116,7 @@ export function WeeklyCalendarSection() {
 
       <View style={styles.events}>
         {loading ? null : events.length === 0 ? (
-          <AppText color={colors.textMuted} size={15} style={styles.empty}>
+          <AppText color={colors.textMuted} size={14} style={styles.empty}>
             이 날에는 아직 등록된 공연이 없어요. 다른 날도 확인해보세요.
           </AppText>
         ) : (
@@ -140,10 +140,10 @@ export function WeeklyCalendarSection() {
 
 const styles = StyleSheet.create({
   section: { gap: spacing.md },
-  card: { marginHorizontal: spacing.md, padding: spacing.md, borderRadius: 22, backgroundColor: colors.white, gap: spacing.sm, ...cardShadow },
+  card: { marginHorizontal: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, gap: spacing.sm, ...cardShadow },
   weekRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.sm },
   days: { flexDirection: 'row' },
-  day: { flex: 1, alignItems: 'center', gap: 4, paddingVertical: 4 },
+  day: { flex: 1, alignItems: 'center', gap: spacing.xs, paddingVertical: spacing.xs },
   num: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center' },
   numSelected: { backgroundColor: colors.brand },
   numToday: { borderWidth: 1.5, borderColor: colors.brand },
@@ -151,5 +151,5 @@ const styles = StyleSheet.create({
   dotOn: { backgroundColor: colors.brand },
   events: { gap: spacing.sm, paddingHorizontal: spacing.md },
   empty: { paddingVertical: spacing.sm },
-  more: { alignItems: 'center', paddingVertical: 12, borderRadius: 14, backgroundColor: colors.surface },
+  more: { alignItems: 'center', paddingVertical: spacing.ms, borderRadius: radius.md, backgroundColor: colors.surface },
 });

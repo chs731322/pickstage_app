@@ -39,7 +39,7 @@ export default function ForgotPasswordScreen() {
   if (sentTo) {
     return (
       <AuthLayout title="메일을 보냈어요" subtitle={`${sentTo}\n으로 비밀번호 재설정 링크를 보냈어요.`}>
-        <AppText size={15} color={colors.textSecondary} style={styles.center}>
+        <AppText size={14} color={colors.textSecondary} style={styles.center}>
           메일함(스팸함 포함)을 확인하고 링크를 눌러주세요. 새 비밀번호를 정한 뒤 앱에서 다시 로그인하면 돼요.
         </AppText>
         <Button title="로그인으로 돌아가기" onPress={() => router.back()} />

@@ -270,7 +270,7 @@ function FestivalBody({
           {/* 라인업 */}
           {lineup.length > 0 ? (
             <Card title={`라인업 ${lineup.length}`}>
-              <LineupSection artists={lineup} contentWidth={width - (spacing.md + 2) * 2 - spacing.md * 2} />
+              <LineupSection artists={lineup} contentWidth={width - (spacing.md) * 2 - spacing.md * 2} />
             </Card>
           ) : null}
 
@@ -286,21 +286,21 @@ function FestivalBody({
           {/* 장소 */}
           {venue ? (
             <Card title="장소 정보">
-              <AppText weight="bold" size={17}>{venue.name}</AppText>
+              <AppText weight="bold" size={16}>{venue.name}</AppText>
               {venue.address ? (
-                <AppText size={15} color={colors.textSecondary}>
+                <AppText size={14} color={colors.textSecondary}>
                   {venue.address}
                 </AppText>
               ) : null}
               <View style={styles.venueActions}>
                 <Pressable onPress={() => router.push(`/venue/${venue.id}`)} hitSlop={6}>
-                  <AppText weight="bold" size={15} color={colors.brand}>
+                  <AppText weight="bold" size={14} color={colors.brand}>
                     공연장 정보 보기 ›
                   </AppText>
                 </Pressable>
                 {directions ? (
                   <Pressable onPress={() => Linking.openURL(directions)} hitSlop={6}>
-                    <AppText weight="bold" size={15} color={colors.brand}>
+                    <AppText weight="bold" size={14} color={colors.brand}>
                       길찾기 ›
                     </AppText>
                   </Pressable>
@@ -316,7 +316,7 @@ function FestivalBody({
         {/* 함께 볼만한 공연 */}
         {related && related.length > 0 ? (
           <View style={styles.related}>
-            <AppText weight="extrabold" size={22} style={styles.relatedTitle}>
+            <AppText weight="bold" size={18} style={styles.relatedTitle}>
               함께 볼만한 공연
             </AppText>
             <FlatList
@@ -376,7 +376,7 @@ function ActionButton({
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <View style={styles.card}>
-      <AppText weight="extrabold" size={21}>
+      <AppText weight="bold" size={18}>
         {title}
       </AppText>
       {children}
@@ -397,7 +397,7 @@ function TicketList({ tickets }: { tickets: Ticket[] }) {
       ))}
       {canExpand ? (
         <Pressable onPress={() => setExpanded((v) => !v)} style={styles.ticketMore} accessibilityRole="button">
-          <AppText weight="bold" size={15} color={colors.textSecondary}>
+          <AppText weight="bold" size={14} color={colors.textSecondary}>
             {expanded ? '접기' : `더보기 (${tickets.length - TICKET_PREVIEW_COUNT}개)`}
           </AppText>
         </Pressable>
@@ -417,7 +417,7 @@ function TicketRow({ ticket }: { ticket: Ticket }) {
           {[ticket.vendorName, ticket.openAt ? `${formatOpenAt(ticket.openAt)} 오픈` : null].filter(Boolean).join(' · ')}
         </AppText>
       </View>
-      <AppText weight="extrabold" size={16}>
+      <AppText weight="bold" size={16}>
         {formatPrice(ticket.price)}
       </AppText>
     </View>
@@ -430,32 +430,32 @@ const styles = StyleSheet.create({
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
   hero: { paddingHorizontal: spacing.md, paddingBottom: spacing.md },
-  poster: { borderRadius: 18, backgroundColor: colors.surface, ...cardShadow },
+  poster: { borderRadius: radius.lg, backgroundColor: colors.surface, ...cardShadow },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  tag: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, backgroundColor: colors.brand },
+  tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brand },
   tagEnded: { backgroundColor: colors.textMuted },
   tagLive: { backgroundColor: colors.text },
-  tagOutline: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
-  title: { lineHeight: 35 },
+  tagOutline: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  title: { lineHeight: 30 },
   actions: { flexDirection: 'row', gap: spacing.lg, paddingVertical: spacing.sm },
-  action: { alignItems: 'center', gap: 4, minWidth: 48 },
+  action: { alignItems: 'center', gap: spacing.xs, minWidth: 48 },
   sections: { gap: spacing.md, padding: spacing.md, paddingTop: 0, backgroundColor: colors.pageBg },
   card: {
     gap: spacing.md,
-    padding: spacing.md + 2,
-    borderRadius: 22,
+    padding: spacing.md,
+    borderRadius: radius.lg,
     backgroundColor: colors.white,
     ...cardShadow,
   },
   ticketRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  ticketMore: { alignItems: 'center', justifyContent: 'center', height: 46, borderRadius: 999, backgroundColor: colors.surface },
-  lineup: { gap: spacing.md, paddingVertical: 4 },
-  artist: { width: 76, alignItems: 'center', gap: 6 },
+  ticketMore: { alignItems: 'center', justifyContent: 'center', height: 46, borderRadius: radius.pill, backgroundColor: colors.surface },
+  lineup: { gap: spacing.md, paddingVertical: spacing.xs },
+  artist: { width: 76, alignItems: 'center', gap: spacing.sm },
   avatar: { width: 68, height: 68, borderRadius: 34, backgroundColor: colors.surface },
   artistName: { textAlign: 'center' },
-  description: { lineHeight: 26 },
+  description: { lineHeight: 24 },
   venueActions: { flexDirection: 'row', gap: spacing.lg, marginTop: spacing.xs },
   related: { gap: spacing.md, paddingBottom: spacing.md, backgroundColor: colors.pageBg },
   relatedTitle: { paddingHorizontal: spacing.md },

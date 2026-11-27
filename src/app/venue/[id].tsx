@@ -54,7 +54,7 @@ export default function VenueScreen() {
   if (error || !venue) {
     return (
       <View style={[styles.center, { paddingTop: topPadding }]}>
-        <AppText weight="bold" size={20}>
+        <AppText weight="bold" size={18}>
           공연장을 찾을 수 없어요
         </AppText>
         <AppText color={colors.textMuted} size={16} style={styles.centerText}>
@@ -162,7 +162,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
               </AppText>
             </View>
           ) : null}
-          <AppText weight="extrabold" size={27} style={styles.name}>
+          <AppText weight="bold" size={22} style={styles.name}>
             {venue.name}
           </AppText>
           {venue.address ? (
@@ -189,7 +189,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
         <View style={styles.sections}>
           {facts.length > 0 || venue.facilities ? (
             <View style={styles.card}>
-              <AppText weight="extrabold" size={21}>
+              <AppText weight="bold" size={18}>
                 공연장 정보
               </AppText>
               {facts.map((fact) => (
@@ -265,13 +265,13 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
           <View style={styles.card}>
             <View style={styles.reviewHead}>
               <View style={styles.flex}>
-                <AppText weight="extrabold" size={21}>
+                <AppText weight="bold" size={18}>
                   공연장 후기 {reviews.length}
                 </AppText>
                 {average !== null ? (
                   <View style={styles.average}>
                     <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={16} />
-                    <AppText weight="bold" size={15}>
+                    <AppText weight="bold" size={14}>
                       {average.toFixed(1)}
                     </AppText>
                   </View>
@@ -284,7 +284,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
               </Pressable>
             </View>
             {reviews.length === 0 ? (
-              <AppText size={15} color={colors.textMuted}>
+              <AppText size={14} color={colors.textMuted}>
                 아직 등록된 후기가 없어요. 첫 후기를 남겨보세요.
               </AppText>
             ) : (
@@ -302,7 +302,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
         {/* 이 공연장에서 하는 공연 */}
         {concerts.length > 0 ? (
           <View style={styles.concerts}>
-            <AppText weight="extrabold" size={22} style={styles.concertsTitle}>
+            <AppText weight="bold" size={18} style={styles.concertsTitle}>
               이 공연장에서 하는 공연
             </AppText>
             <FlatList
@@ -347,11 +347,11 @@ function ReviewItem({ review, onBlocked }: { review: VenueReview; onBlocked: (us
     <View style={styles.review}>
       <View style={styles.reviewTop}>
         <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={15} />
-        <AppText weight="bold" size={15}>
+        <AppText weight="bold" size={14}>
           {review.rating.toFixed(1)}
         </AppText>
         <Pressable disabled={review.authorId == null} onPress={() => router.push(`/user/${review.authorId}`)} style={styles.flex} hitSlop={4}>
-          <AppText weight="semibold" size={15} numberOfLines={1}>
+          <AppText weight="semibold" size={14} numberOfLines={1}>
             {review.nickname}
           </AppText>
         </Pressable>
@@ -414,22 +414,22 @@ const styles = StyleSheet.create({
   centerText: { textAlign: 'center' },
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
   hero: { backgroundColor: colors.pageBg, paddingBottom: spacing.lg },
-  photo: { borderRadius: 18, backgroundColor: colors.surface, ...cardShadow },
+  photo: { borderRadius: radius.lg, backgroundColor: colors.surface, ...cardShadow },
   noPhoto: { alignSelf: 'center', alignItems: 'center', justifyContent: 'center' },
-  dots: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginTop: spacing.md },
+  dots: { flexDirection: 'row', justifyContent: 'center', gap: spacing.sm, marginTop: spacing.md },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.white },
   dotActive: { width: 18, backgroundColor: colors.brand },
   credit: { textAlign: 'center', marginTop: spacing.sm, paddingHorizontal: spacing.md },
   titleBlock: { gap: spacing.sm, padding: spacing.md, backgroundColor: colors.pageBg },
-  tag: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 4, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
-  name: { lineHeight: 35 },
+  tag: { alignSelf: 'flex-start', paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  name: { lineHeight: 30 },
   actions: { flexDirection: 'row', gap: spacing.lg, paddingVertical: spacing.sm },
-  action: { alignItems: 'center', gap: 4, minWidth: 48 },
+  action: { alignItems: 'center', gap: spacing.xs, minWidth: 48 },
   sections: { gap: spacing.md, padding: spacing.md, paddingTop: 0 },
   card: {
     gap: spacing.md,
-    padding: spacing.md + 2,
-    borderRadius: 22,
+    padding: spacing.md,
+    borderRadius: radius.lg,
     backgroundColor: colors.white,
     shadowColor: '#1a1a2e',
     shadowOffset: { width: 0, height: 6 },
@@ -437,19 +437,19 @@ const styles = StyleSheet.create({
     shadowRadius: 14,
     elevation: 2,
   },
-  fact: { gap: 4 },
-  pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: 4 },
-  pill: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.surface },
+  fact: { gap: spacing.xs },
+  pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },
+  pill: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.surface },
   factValue: { lineHeight: 24 },
   reviewHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  average: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
+  average: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: spacing.xs },
   writePressed: { backgroundColor: colors.brandStrong },
-  writeButton: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.pill, backgroundColor: colors.brand },
+  writeButton: { paddingHorizontal: spacing.md, paddingVertical: spacing.ms, borderRadius: radius.pill, backgroundColor: colors.brand },
   review: { gap: spacing.sm, paddingTop: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  reviewTop: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  reviewTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   reviewContent: { lineHeight: 24 },
   reviewPhotos: { gap: spacing.sm },
-  reviewPhoto: { width: 96, height: 96, borderRadius: 12, backgroundColor: colors.surface },
+  reviewPhoto: { width: 96, height: 96, borderRadius: radius.md, backgroundColor: colors.surface },
   concerts: { gap: spacing.md, marginTop: spacing.sm },
   concertsTitle: { paddingHorizontal: spacing.md },
   concertsList: { gap: spacing.md, paddingHorizontal: spacing.md },

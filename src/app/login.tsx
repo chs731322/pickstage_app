@@ -128,7 +128,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   errorBox: {
     padding: spacing.md,
-    borderRadius: radius.sm + 4,
+    borderRadius: radius.md,
     backgroundColor: '#fff2f2',
   },
   divider: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },

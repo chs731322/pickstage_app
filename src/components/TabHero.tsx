@@ -13,12 +13,12 @@ type Props = {
   children?: ReactNode;
 };
 
-// 탭 화면 맨 위의 제목 영역: 제목(장식 글꼴)과 소개 글, 그 아래에 검색창 같은 것을 놓는다
+// 탭 화면 맨 위의 제목 영역: 제목과 소개 글, 그 아래에 검색창 같은 것을 놓는다
 export function TabHero({ title, subtitle, action, children }: Props) {
   return (
     <View style={styles.wrap}>
       <View style={styles.titleRow}>
-        <AppText weight="display" size={30}>
+        <AppText weight="bold" size={22}>
           {title}
         </AppText>
         {action}
@@ -34,6 +34,6 @@ export function TabHero({ title, subtitle, action, children }: Props) {
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: 8, paddingTop: spacing.md, paddingBottom: spacing.xs },
+  wrap: { gap: spacing.sm, paddingTop: spacing.md, paddingBottom: spacing.xs },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
 });

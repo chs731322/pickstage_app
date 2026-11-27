@@ -11,7 +11,7 @@ export function Avatar({ uri, name, size }: { uri: string | null | undefined; na
     <Image source={{ uri }} style={[styles.base, shape]} contentFit="cover" />
   ) : (
     <View style={[styles.base, styles.empty, shape]}>
-      <AppText weight="bold" size={size * 0.4} color={colors.textMuted}>
+      <AppText weight="bold" color={colors.textMuted} style={{ fontSize: size * 0.4 }}>
         {name.slice(0, 1)}
       </AppText>
     </View>

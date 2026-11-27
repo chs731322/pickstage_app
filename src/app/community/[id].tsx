@@ -54,7 +54,7 @@ export default function PostScreen() {
   if (error || !post) {
     return (
       <View style={[styles.center, { paddingTop: topPadding }]}>
-        <AppText weight="bold" size={20}>
+        <AppText weight="bold" size={18}>
           글을 찾을 수 없어요
         </AppText>
         <AppText color={colors.textMuted} size={16} style={styles.centerText}>
@@ -189,7 +189,7 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
             </Pressable>
           ) : null}
         </View>
-        <AppText weight="extrabold" size={24} style={styles.title}>
+        <AppText weight="bold" size={22} style={styles.title}>
           {post.title}
         </AppText>
 
@@ -248,7 +248,7 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
 
         {/* 댓글 */}
         <View style={styles.commentsHeader}>
-          <AppText weight="extrabold" size={20}>
+          <AppText weight="bold" size={18}>
             댓글
           </AppText>
           <AppText weight="bold" size={18} color={colors.brand}>
@@ -256,7 +256,7 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
           </AppText>
         </View>
         {topLevel.length === 0 ? (
-          <AppText size={15} color={colors.textMuted} style={styles.noComments}>
+          <AppText size={14} color={colors.textMuted} style={styles.noComments}>
             아직 댓글이 없어요. 첫 댓글을 남겨보세요.
           </AppText>
         ) : (
@@ -321,7 +321,7 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
             style={({ pressed }) => [styles.send, pressed && styles.sendPressed, (!draft.trim() || create.isPending) && styles.sendDisabled]}
             accessibilityRole="button"
             accessibilityLabel="댓글 등록">
-            <AppText weight="bold" size={15} color={colors.white}>
+            <AppText weight="bold" size={14} color={colors.white}>
               {create.isPending ? '...' : '등록'}
             </AppText>
           </Pressable>
@@ -339,18 +339,18 @@ const styles = StyleSheet.create({
   retry: { marginTop: spacing.md, alignSelf: 'stretch' },
   content: { padding: spacing.md, paddingBottom: spacing.xl, gap: spacing.md },
   tags: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  tag: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
-  festivalTag: { flexShrink: 1, paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border },
-  title: { lineHeight: 33 },
-  author: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm + 2 },
-  authorMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm + 2 },
+  tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
+  festivalTag: { flexShrink: 1, paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border },
+  title: { lineHeight: 30 },
+  author: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms },
+  authorMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.ms },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
   reactions: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.sm },
   likeButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 20,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
     height: 46,
     borderRadius: radius.pill,
     borderWidth: 1.5,
@@ -361,23 +361,23 @@ const styles = StyleSheet.create({
   shareButton: { width: 46, height: 46, borderRadius: 23, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' },
   commentsHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.lg },
   noComments: { paddingVertical: spacing.md },
-  composer: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, backgroundColor: colors.white, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border, gap: 6 },
-  replyBanner: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingHorizontal: 4 },
+  composer: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, backgroundColor: colors.white, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border, gap: spacing.sm },
+  replyBanner: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.xs },
   composerRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
   composerInput: {
     flex: 1,
     minHeight: 44,
     maxHeight: 120,
     paddingHorizontal: spacing.md,
-    paddingTop: 12,
-    paddingBottom: 12,
-    borderRadius: 22,
+    paddingTop: spacing.ms,
+    paddingBottom: spacing.ms,
+    borderRadius: radius.lg,
     backgroundColor: colors.surface,
     fontFamily: fontFamily.regular,
     fontSize: 16,
     color: colors.text,
   },
   sendPressed: { backgroundColor: colors.brandStrong },
-  send: { height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
+  send: { height: 44, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
   sendDisabled: { opacity: 0.4 },
 });

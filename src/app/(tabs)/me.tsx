@@ -11,7 +11,7 @@ import { useInterestedArtists } from '@/features/artists';
 import { useBookmarks } from '@/features/bookmarks';
 import { useAuth } from '@/lib/auth';
 import { openSitePage } from '@/lib/links';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 export default function MyScreen() {
   const { user, isLoggedIn, signOut } = useAuth();
@@ -35,14 +35,14 @@ export default function MyScreen() {
             <Pressable style={styles.profile} onPress={() => router.push(`/user/${user.id}`)} accessibilityRole="button">
               <Avatar uri={user.profileImage} name={user.nickname} size={64} />
               <View style={styles.profileText}>
-                <AppText weight="extrabold" size={20}>
+                <AppText weight="bold" size={18}>
                   {user.nickname}
                 </AppText>
                 <AppText size={14} color={colors.textSecondary}>
                   {user.email}
                 </AppText>
               </View>
-              <AppText size={20} color={colors.textMuted}>
+              <AppText size={18} color={colors.textMuted}>
                 ›
               </AppText>
             </Pressable>
@@ -94,19 +94,19 @@ export default function MyScreen() {
           </>
         ) : (
           <View style={styles.guest}>
-            <AppText weight="extrabold" size={20}>
+            <AppText weight="bold" size={18}>
               로그인하고 더 편하게 이용해보세요
             </AppText>
-            <AppText size={15} color={colors.textSecondary}>
+            <AppText size={14} color={colors.textSecondary}>
               찜, 알림, 내 취향 공연 추천은 로그인이 필요해요.
             </AppText>
             <View style={styles.guestButton}>
               <Button title="로그인" onPress={() => router.push('/login')} />
             </View>
             <Pressable style={styles.signupLink} onPress={() => router.push('/signup')} hitSlop={8}>
-              <AppText color={colors.textSecondary} size={15}>
+              <AppText color={colors.textSecondary} size={14}>
                 아직 회원이 아니신가요?{' '}
-                <AppText weight="bold" color={colors.brand} size={15}>
+                <AppText weight="bold" color={colors.brand} size={14}>
                   회원가입
                 </AppText>
               </AppText>
@@ -158,12 +158,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
-    padding: spacing.md + 2,
-    borderRadius: 22,
+    padding: spacing.md,
+    borderRadius: radius.lg,
     backgroundColor: colors.white,
   },
   profileText: { flex: 1, gap: 2 },
-  guest: { gap: spacing.sm, padding: spacing.lg, borderRadius: 22, backgroundColor: colors.white },
+  guest: { gap: spacing.sm, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.white },
   guestButton: { marginTop: spacing.sm },
   signupLink: { alignItems: 'center', paddingTop: spacing.sm },
   signOut: { alignItems: 'center', paddingVertical: spacing.md },

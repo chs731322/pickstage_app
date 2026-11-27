@@ -38,7 +38,7 @@ export default function MyArtistsScreen() {
       renderItem={({ item }) => (
         <Pressable onPress={() => router.push(`/artist/${item.id}`)} style={{ width: itemWidth }} accessibilityRole="button">
           <Avatar uri={item.profileImage} name={item.name} size={itemWidth} />
-          <AppText weight="semibold" size={15} numberOfLines={2} style={styles.name}>
+          <AppText weight="semibold" size={14} numberOfLines={2} style={styles.name}>
             {item.name}
           </AppText>
         </Pressable>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   column: { gap: GAP, marginBottom: spacing.lg },
   count: { marginBottom: spacing.md },
-  name: { textAlign: 'center', marginTop: 8, lineHeight: 20 },
+  name: { textAlign: 'center', marginTop: spacing.sm, lineHeight: 20 },
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center', lineHeight: 24 },
 });

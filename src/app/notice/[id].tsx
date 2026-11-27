@@ -23,12 +23,12 @@ export default function NoticeDetailScreen() {
         <View style={styles.card}>
           {isPinnedNotice(notice) ? (
             <View style={styles.pin}>
-              <AppText weight="extrabold" size={12} color={colors.brand}>
+              <AppText weight="bold" size={12} color={colors.brand}>
                 고정
               </AppText>
             </View>
           ) : null}
-          <AppText weight="extrabold" size={22} style={styles.title}>
+          <AppText weight="bold" size={18} style={styles.title}>
             {notice.title}
           </AppText>
           <AppText size={14} color={colors.textMuted}>
@@ -45,11 +45,11 @@ export default function NoticeDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  card: { gap: spacing.sm, padding: spacing.lg, borderRadius: 22, backgroundColor: colors.white, ...cardShadow },
-  pin: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
+  card: { gap: spacing.sm, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
+  pin: { alignSelf: 'flex-start', paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
   title: { lineHeight: 30 },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: spacing.sm },
-  content: { lineHeight: 26 },
+  content: { lineHeight: 24 },
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center' },
 });

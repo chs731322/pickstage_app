@@ -18,7 +18,7 @@ import {
   type MyReview,
 } from '@/features/me';
 import { errorMessage } from '@/lib/api';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const REVIEW_FILTER = 'venue_review';
 const FILTERS = [
@@ -155,7 +155,7 @@ function PostCard({ post }: { post: MyPost }) {
           </AppText>
         ) : null}
       </View>
-      <AppText weight="bold" size={17} numberOfLines={2} style={styles.title}>
+      <AppText weight="bold" size={16} numberOfLines={2} style={styles.title}>
         {post.title}
       </AppText>
       <AppText size={13} color={colors.textMuted}>
@@ -174,7 +174,7 @@ function ReviewCard({ review, onEdit, onDelete }: { review: MyReview; onEdit: ()
           {review.venueName}
         </AppText>
         <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={15} />
-        <AppText weight="bold" size={15}>
+        <AppText weight="bold" size={14}>
           {review.rating.toFixed(1)}
         </AppText>
         <AppText size={13} color={colors.textMuted}>
@@ -213,9 +213,9 @@ const styles = StyleSheet.create({
   // 알약 줄은 화면 양끝까지 스크롤되도록 안쪽 여백만큼 바깥으로 넓힌다
   pillsScroll: { marginHorizontal: -spacing.md, flexGrow: 0 },
   pills: { gap: spacing.sm, paddingHorizontal: spacing.md },
-  card: { gap: spacing.sm, padding: spacing.md + 2, borderRadius: 18, backgroundColor: colors.white },
-  cardHead: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  tag: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, backgroundColor: colors.brandSoft },
+  card: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  cardHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
   title: { lineHeight: 24 },
   reviewContent: { lineHeight: 24 },
   actions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.lg, paddingTop: spacing.xs },

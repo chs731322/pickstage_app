@@ -6,7 +6,7 @@ import { AppText } from '@/components/AppText';
 import { Avatar } from '@/components/Avatar';
 import { POST_CATEGORY_LABEL, type PostListItem } from '@/features/community';
 import { timeAgo } from '@/lib/postContent';
-import { cardShadow, colors, spacing } from '@/theme';
+import { cardShadow, colors, radius, spacing } from '@/theme';
 
 // 커뮤니티 목록의 글 한 장: 카테고리·공연, 제목, 본문 앞부분, 작성자와 반응 수
 export function PostCard({ post }: { post: PostListItem }) {
@@ -28,11 +28,11 @@ export function PostCard({ post }: { post: PostListItem }) {
           </AppText>
         ) : null}
       </View>
-      <AppText weight="bold" size={17} numberOfLines={2} style={styles.title}>
+      <AppText weight="bold" size={16} numberOfLines={2} style={styles.title}>
         {post.title}
       </AppText>
       {post.preview ? (
-        <AppText size={15} color={colors.textSecondary} numberOfLines={2} style={styles.preview}>
+        <AppText size={14} color={colors.textSecondary} numberOfLines={2} style={styles.preview}>
           {post.preview}
         </AppText>
       ) : null}
@@ -61,13 +61,13 @@ function Stat({ icon, value }: { icon: { ios: string; android: string; web: stri
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  card: { gap: spacing.sm, padding: spacing.md + 2, borderRadius: 18, backgroundColor: colors.white, ...cardShadow },
+  card: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
   pressed: { opacity: 0.85 },
   tags: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  tag: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, backgroundColor: colors.brandSoft },
+  tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
   title: { lineHeight: 24 },
   preview: { lineHeight: 22 },
-  footer: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 },
+  footer: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: 2 },
   author: { flex: 1 },
-  stat: { flexDirection: 'row', alignItems: 'center', gap: 3, marginLeft: spacing.sm },
+  stat: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginLeft: spacing.sm },
 });

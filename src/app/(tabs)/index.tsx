@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   body: { gap: spacing.xl, paddingTop: spacing.xl },
   section: { gap: spacing.md },
   padded: { paddingHorizontal: spacing.md },
-  hList: { gap: spacing.md, paddingHorizontal: spacing.md, paddingVertical: 4 },
+  hList: { gap: spacing.md, paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
   loading: { marginVertical: spacing.xl },
   empty: { paddingHorizontal: spacing.md, paddingVertical: spacing.lg },
 });

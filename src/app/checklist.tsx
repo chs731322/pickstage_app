@@ -63,10 +63,10 @@ export default function ChecklistScreen() {
       {/* 진행 상황 */}
       <View style={styles.progressCard}>
         <View style={styles.progressTop}>
-          <AppText weight="extrabold" size={20}>
+          <AppText weight="bold" size={18}>
             준비 완료율
           </AppText>
-          <AppText weight="extrabold" size={28} color={colors.brand}>
+          <AppText weight="bold" size={22} color={colors.brand}>
             {percent}%
           </AppText>
         </View>
@@ -91,7 +91,7 @@ export default function ChecklistScreen() {
           style={styles.addInput}
         />
         <Pressable onPress={handleAdd} disabled={!newText.trim() || add.isPending} style={({ pressed }) => [styles.addButton, pressed && styles.addPressed, !newText.trim() && styles.disabled]} accessibilityRole="button">
-          <AppText weight="bold" size={15} color={colors.white}>
+          <AppText weight="bold" size={14} color={colors.white}>
             담기
           </AppText>
         </Pressable>
@@ -127,7 +127,7 @@ export default function ChecklistScreen() {
                   style={styles.editInput}
                 />
               ) : (
-                <AppText size={17} style={[styles.label, item.isChecked && styles.doneText]} color={item.isChecked ? colors.textMuted : colors.text}>
+                <AppText size={16} style={[styles.label, item.isChecked && styles.doneText]} color={item.isChecked ? colors.textMuted : colors.text}>
                   {item.content}
                 </AppText>
               )}
@@ -146,20 +146,20 @@ export default function ChecklistScreen() {
 }
 
 const styles = StyleSheet.create({
-  progressCard: { gap: spacing.sm + 2, padding: spacing.md + 2, borderRadius: 22, backgroundColor: colors.white },
+  progressCard: { gap: spacing.ms, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
   progressTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  track: { height: 10, borderRadius: 5, backgroundColor: colors.surface, overflow: 'hidden' },
+  track: { height: 10, borderRadius: radius.pill, backgroundColor: colors.surface, overflow: 'hidden' },
   fill: { height: '100%', borderRadius: 5, backgroundColor: colors.brand },
   addRow: { flexDirection: 'row', gap: spacing.sm },
-  addInput: { flex: 1, height: 50, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
-  addButton: { height: 50, paddingHorizontal: 22, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
+  addInput: { flex: 1, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
+  addButton: { height: 48, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
   addPressed: { backgroundColor: colors.brandStrong },
   disabled: { opacity: 0.4 },
-  list: { borderRadius: 22, backgroundColor: colors.white, paddingHorizontal: spacing.md },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: 15, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
+  list: { borderRadius: radius.lg, backgroundColor: colors.white, paddingHorizontal: spacing.md },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   label: { flex: 1, lineHeight: 24 },
   doneText: { textDecorationLine: 'line-through' },
-  editInput: { flex: 1, paddingVertical: 4, borderBottomWidth: 1.5, borderBottomColor: colors.brand, fontFamily: fontFamily.regular, fontSize: 17, color: colors.text },
+  editInput: { flex: 1, paddingVertical: spacing.xs, borderBottomWidth: 1.5, borderBottomColor: colors.brand, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
   state: { marginTop: spacing.lg },
   center: { textAlign: 'center' },
 });

@@ -77,7 +77,7 @@ export default function CommunityScreen() {
       <View style={styles.sorts}>
         {POST_SORTS.map((s) => (
           <Pressable key={s.id} onPress={() => setSort(s.id)} hitSlop={6}>
-            <AppText weight={sort === s.id ? 'bold' : 'medium'} size={15} color={sort === s.id ? colors.text : colors.textMuted}>
+            <AppText weight={sort === s.id ? 'bold' : 'medium'} size={14} color={sort === s.id ? colors.text : colors.textMuted}>
               {s.label}
             </AppText>
           </Pressable>
@@ -140,12 +140,12 @@ export default function CommunityScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.pageBg },
   list: { backgroundColor: colors.pageBg },
-  content: { gap: spacing.sm + 2, paddingHorizontal: spacing.md, paddingBottom: 100 },
+  content: { gap: spacing.ms, paddingHorizontal: spacing.md, paddingBottom: 100 },
   header: { gap: spacing.md, paddingBottom: spacing.sm },
   // 알약 줄은 화면 양끝까지 스크롤되도록 안쪽 여백만큼 바깥으로 넓힌다
   pillsScroll: { marginHorizontal: -spacing.md, flexGrow: 0 },
   pills: { gap: spacing.sm, paddingHorizontal: spacing.md },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 52, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   sorts: { flexDirection: 'row', gap: spacing.md },
   state: { marginTop: spacing.xl },
@@ -158,10 +158,10 @@ const styles = StyleSheet.create({
     bottom: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderRadius: 999,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.ms,
+    borderRadius: radius.pill,
     backgroundColor: colors.brand,
     shadowColor: colors.brand,
     shadowOffset: { width: 0, height: 6 },

@@ -26,7 +26,7 @@ function icon(ios: { off: string; on: string }, material: string) {
 function label(title: string) {
   return function TabLabel({ focused, color }: TabIconProps) {
     return (
-      <AppText weight={focused ? 'bold' : 'medium'} size={11} color={color}>
+      <AppText weight={focused ? 'bold' : 'medium'} size={12} color={color}>
         {title}
       </AppText>
     );

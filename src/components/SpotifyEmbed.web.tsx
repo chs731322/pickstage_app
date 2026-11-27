@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { colors } from '@/theme';
+import { colors, radius } from '@/theme';
 import { SPOTIFY_EMBED_HEIGHT, spotifyEmbedUrl } from '@/lib/spotify';
 
 // 웹 미리보기용: react-native-webview 는 웹에서 동작하지 않아서 iframe 으로 같은 임베드를 보여준다.
@@ -23,5 +23,5 @@ export function SpotifyEmbed({ artistId }: { artistId: string; openUrl?: string 
 }
 
 const styles = StyleSheet.create({
-  box: { height: SPOTIFY_EMBED_HEIGHT, borderRadius: 18, overflow: 'hidden', backgroundColor: colors.surface },
+  box: { height: SPOTIFY_EMBED_HEIGHT, borderRadius: radius.lg, overflow: 'hidden', backgroundColor: colors.surface },
 });

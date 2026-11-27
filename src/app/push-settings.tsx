@@ -8,7 +8,7 @@ import { Screen } from '@/components/Screen';
 import { errorMessage } from '@/lib/api';
 import { isPushSupported, PushError, sendTestPush } from '@/lib/push';
 import { usePushSettings } from '@/lib/usePushSettings';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const KINDS = [
   { icon: { ios: 'ticket', android: 'confirmation_number', web: 'confirmation_number' }, title: '티켓 오픈', desc: '찜한 공연의 티켓이 열릴 때 알려드려요. (공연 상세에서 찜할 때 "티켓 오픈 알림"을 켠 공연)' },
@@ -50,7 +50,7 @@ export default function PushSettingsScreen() {
       <View style={styles.card}>
         <View style={styles.switchRow}>
           <View style={styles.flex}>
-            <AppText weight="extrabold" size={19}>
+            <AppText weight="bold" size={18}>
               이 기기로 푸시 알림 받기
             </AppText>
             <AppText size={14} color={colors.textSecondary} style={styles.desc}>
@@ -84,7 +84,7 @@ export default function PushSettingsScreen() {
 
       {/* 알림 종류 */}
       <View style={styles.card}>
-        <AppText weight="extrabold" size={19}>
+        <AppText weight="bold" size={18}>
           받는 알림
         </AppText>
         {KINDS.map((kind) => (
@@ -110,7 +110,7 @@ export default function PushSettingsScreen() {
       {/* 테스트 */}
       {isPushSupported && registered && enabled && permission === 'granted' ? (
         <View style={styles.card}>
-          <AppText weight="extrabold" size={19}>
+          <AppText weight="bold" size={18}>
             테스트 알림
           </AppText>
           <AppText size={14} color={colors.textSecondary} style={styles.desc}>
@@ -125,7 +125,7 @@ export default function PushSettingsScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  card: { gap: spacing.md, padding: spacing.md + 2, borderRadius: 22, backgroundColor: colors.white },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   desc: { lineHeight: 21, marginTop: 2 },
   warn: { gap: spacing.sm },

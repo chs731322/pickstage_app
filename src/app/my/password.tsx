@@ -8,7 +8,7 @@ import { TextField } from '@/components/TextField';
 import { useChangePassword } from '@/features/me';
 import { errorMessage } from '@/lib/api';
 import { isValidPassword, PASSWORD_RULE } from '@/lib/validation';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 // 비밀번호 변경: 현재 비밀번호와 새 비밀번호를 받는다 (카카오·구글 같은 소셜 가입 계정은 서버가 거절한다)
 export default function PasswordScreen() {
@@ -76,5 +76,5 @@ export default function PasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  card: { gap: spacing.md, padding: spacing.md + 2, borderRadius: 22, backgroundColor: colors.white },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
 });

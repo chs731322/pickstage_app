@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const ART = {
   empty: require('../../assets/images/empty/ticket-empty.svg'),
@@ -24,17 +24,17 @@ export function EmptyState({ variant = 'empty', title, description, actionLabel,
   return (
     <View style={styles.wrap}>
       <Image source={ART[variant]} style={styles.art} contentFit="contain" accessibilityLabel="" />
-      <AppText weight="extrabold" size={19} style={styles.center}>
+      <AppText weight="bold" size={18} style={styles.center}>
         {title}
       </AppText>
       {description ? (
-        <AppText size={15} color={colors.textSecondary} style={[styles.center, styles.description]}>
+        <AppText size={14} color={colors.textSecondary} style={[styles.center, styles.description]}>
           {description}
         </AppText>
       ) : null}
       {actionLabel && onAction ? (
         <Pressable onPress={onAction} style={({ pressed }) => [styles.action, pressed && styles.pressed]} accessibilityRole="button">
-          <AppText weight="bold" size={15} color={colors.brandStrong}>
+          <AppText weight="bold" size={14} color={colors.brandStrong}>
             {actionLabel}
           </AppText>
         </Pressable>
@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
   art: { width: 200, height: 158 },
   center: { textAlign: 'center' },
   description: { lineHeight: 22 },
-  action: { marginTop: spacing.sm, paddingHorizontal: 20, paddingVertical: 11, borderRadius: 999, backgroundColor: colors.brandTint },
+  action: { marginTop: spacing.sm, paddingHorizontal: spacing.md, paddingVertical: spacing.ms, borderRadius: radius.pill, backgroundColor: colors.brandTint },
   pressed: { opacity: 0.7 },
 });

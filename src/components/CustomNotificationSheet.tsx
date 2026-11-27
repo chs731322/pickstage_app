@@ -61,7 +61,7 @@ export function CustomNotificationSheet({ festivalId, startDate, visible, onClos
         <Pressable style={styles.backdrop} onPress={onClose} />
         <View style={styles.sheet}>
           <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} contentContainerStyle={styles.body}>
-            <AppText weight="extrabold" size={20}>
+            <AppText weight="bold" size={18}>
               알림 예약
             </AppText>
             <AppText size={14} color={colors.textSecondary}>
@@ -148,10 +148,10 @@ const styles = StyleSheet.create({
   overlay: { flex: 1, justifyContent: 'flex-end' },
   backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)' },
   sheet: { maxHeight: '88%', borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: colors.white },
-  body: { gap: spacing.sm + 2, padding: spacing.lg, paddingBottom: spacing.xl },
+  body: { gap: spacing.ms, padding: spacing.lg, paddingBottom: spacing.xl },
   group: { gap: spacing.sm },
   item: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.brandSoft },
-  input: { minHeight: 50, paddingHorizontal: spacing.md, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
+  input: { minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
   preset: { gap: 2, padding: spacing.md, borderRadius: radius.md, borderWidth: 1.5, borderColor: colors.brand },
   presetTaken: { borderColor: colors.border },
 });

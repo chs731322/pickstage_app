@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ComponentRef, type Ref } from 'react'
 import { Pressable, StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors, fontFamily, spacing } from '@/theme';
+import { colors, fontFamily, radius, spacing } from '@/theme';
 
 type Props = TextInputProps & {
   label: string;
@@ -131,13 +131,13 @@ export function TextField({
 }
 
 const styles = StyleSheet.create({
-  wrapper: { gap: spacing.xs + 2 },
+  wrapper: { gap: spacing.sm },
   box: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    paddingHorizontal: spacing.md + 2,
-    borderRadius: 16,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.softBorder,
     backgroundColor: colors.background,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   boxDisabled: { backgroundColor: colors.surface },
   input: {
     flex: 1,
-    paddingVertical: 15,
+    paddingVertical: spacing.ms,
     fontFamily: fontFamily.regular,
     fontSize: 16,
     color: colors.text,

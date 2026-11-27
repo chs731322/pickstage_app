@@ -61,6 +61,6 @@ export function SocialLoginButtons({ onError }: { onError: (message: string) => 
 
 const styles = StyleSheet.create({
   wrap: { gap: spacing.sm },
-  button: { height: 52, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  button: { height: 48, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
   dim: { opacity: 0.6 },
 });

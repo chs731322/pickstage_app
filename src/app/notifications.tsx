@@ -15,7 +15,7 @@ import {
   type NotificationItem,
 } from '@/features/notifications';
 import { timeAgo } from '@/lib/postContent';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const ICONS: Record<string, { ios: string; android: string; web: string }> = {
   ticket_open: { ios: 'ticket', android: 'confirmation_number', web: 'confirmation_number' },
@@ -134,16 +134,16 @@ const styles = StyleSheet.create({
   header: { gap: spacing.sm, paddingBottom: spacing.sm },
   pills: { flexDirection: 'row', gap: spacing.sm },
   actions: { flexDirection: 'row', justifyContent: 'space-between' },
-  row: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: 18, backgroundColor: colors.white },
+  row: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
   rowUnread: { backgroundColor: '#fff7fc' },
   pressed: { opacity: 0.85 },
   iconWrap: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
   iconWrapUnread: { backgroundColor: colors.brandSoft },
-  body: { flex: 1, gap: 3 },
+  body: { flex: 1, gap: spacing.xs },
   top: { flexDirection: 'row', gap: spacing.sm, alignItems: 'center' },
   title: { lineHeight: 22 },
   message: { lineHeight: 20 },
-  dot: { width: 9, height: 9, borderRadius: 5, backgroundColor: colors.brand, marginTop: 6 },
+  dot: { width: 9, height: 9, borderRadius: 5, backgroundColor: colors.brand, marginTop: spacing.sm },
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center', lineHeight: 24 },
   footer: { marginVertical: spacing.lg },

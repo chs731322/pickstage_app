@@ -67,7 +67,7 @@ export default function ArtistsScreen() {
       ListHeaderComponent={header}
       renderSectionHeader={({ section }) => (
         <View style={styles.sectionHeader}>
-          <AppText weight="extrabold" size={15} color={colors.brand}>
+          <AppText weight="bold" size={14} color={colors.brand}>
             {section.title}
           </AppText>
         </View>
@@ -102,7 +102,7 @@ function ArtistRow({ artist }: { artist: ArtistListItem }) {
       accessibilityLabel={`${artist.name} 아티스트 보기`}>
       <Avatar uri={artist.profileImage} name={artist.name} size={56} />
       <View style={styles.info}>
-        <AppText weight="bold" size={17} numberOfLines={1}>
+        <AppText weight="bold" size={16} numberOfLines={1}>
           {artist.name}
         </AppText>
         {artist.englishName && artist.englishName !== artist.name ? (
@@ -124,13 +124,13 @@ const styles = StyleSheet.create({
   list: { flex: 1, backgroundColor: colors.pageBg },
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   header: { gap: spacing.md, paddingBottom: spacing.sm },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 52, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
-  sectionHeader: { paddingVertical: 8, backgroundColor: colors.pageBg },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.sm + 4, marginBottom: spacing.sm, borderRadius: 18, backgroundColor: colors.white },
+  sectionHeader: { paddingVertical: spacing.sm, backgroundColor: colors.pageBg },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.ms, marginBottom: spacing.sm, borderRadius: radius.lg, backgroundColor: colors.white },
   pressed: { opacity: 0.85 },
   info: { flex: 1, gap: 2 },
-  count: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
+  count: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center', lineHeight: 24 },
 });

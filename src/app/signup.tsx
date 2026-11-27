@@ -378,8 +378,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     backgroundColor: colors.surface,
   },
-  divider: { height: 1, marginVertical: 6, backgroundColor: colors.border },
-  errorBox: { padding: spacing.md, borderRadius: radius.sm + 4, backgroundColor: '#fff2f2' },
+  divider: { height: 1, marginVertical: spacing.sm, backgroundColor: colors.border },
+  errorBox: { padding: spacing.md, borderRadius: radius.md, backgroundColor: '#fff2f2' },
   center: { textAlign: 'center' },
   footer: {
     flexDirection: 'row',

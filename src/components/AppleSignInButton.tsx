@@ -55,5 +55,5 @@ export function AppleSignInButton({ onError }: Props) {
 
 const styles = StyleSheet.create({
   wrap: { alignSelf: 'stretch' },
-  button: { height: 52, width: '100%' },
+  button: { height: 48, width: '100%' },
 });

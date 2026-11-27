@@ -32,7 +32,7 @@ export function AuthLayout({ title, subtitle, children }: Props) {
           <View style={{ height: headerHeight + ART_VISIBLE }} />
           <View style={styles.sheet}>
             <View style={styles.intro}>
-              <AppText weight="extrabold" size={26} style={styles.center}>
+              <AppText weight="bold" size={22} style={styles.center}>
                 {title}
               </AppText>
               {subtitle ? (

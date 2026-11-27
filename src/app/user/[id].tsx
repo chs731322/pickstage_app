@@ -15,7 +15,7 @@ import type { Privacy, MyReview } from '@/features/me';
 import { useUserArtists, useUserBookmarks, useUserPosts, useUserProfile, useUserReviews, type UserProfile } from '@/features/profile';
 import { errorMessage } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 type TabKey = 'bookmarks' | 'artists' | 'posts' | 'reviews';
 
@@ -36,7 +36,7 @@ export default function UserProfileScreen() {
     return (
       <Screen topInset={false} tone="page">
         <View style={styles.notice}>
-          <AppText weight="extrabold" size={20}>
+          <AppText weight="bold" size={18}>
             로그인하면 프로필을 볼 수 있어요
           </AppText>
           <Button title="로그인" onPress={() => router.push('/login')} />
@@ -95,7 +95,7 @@ function ProfileBody({ user }: { user: UserProfile }) {
       <View style={styles.head}>
         <Avatar uri={user.profileImage} name={user.nickname} size={84} />
         <View style={styles.headText}>
-          <AppText weight="extrabold" size={22}>
+          <AppText weight="bold" size={18}>
             {user.nickname}
           </AppText>
           {joined ? (
@@ -126,7 +126,7 @@ function ProfileBody({ user }: { user: UserProfile }) {
       {!canSee ? (
         <View style={styles.lock}>
           <SymbolView name={{ ios: 'lock', android: 'lock', web: 'lock' }} tintColor={colors.textMuted} size={22} />
-          <AppText color={colors.textMuted} size={15} style={styles.center}>
+          <AppText color={colors.textMuted} size={14} style={styles.center}>
             {user.nickname}님이 비공개로 설정한 항목이에요.
           </AppText>
         </View>
@@ -183,14 +183,14 @@ function Section({ state, emptyText, children }: { state: { isPending: boolean; 
   if (state.isPending) return <ActivityIndicator color={colors.brand} style={styles.state} />;
   if (state.error) {
     return (
-      <AppText color={colors.textMuted} size={15} style={styles.center}>
+      <AppText color={colors.textMuted} size={14} style={styles.center}>
         불러오지 못했어요. 잠시 후 다시 시도해주세요.
       </AppText>
     );
   }
   if (!state.data || state.data.length === 0) {
     return (
-      <AppText color={colors.textMuted} size={15} style={[styles.state, styles.center]}>
+      <AppText color={colors.textMuted} size={14} style={[styles.state, styles.center]}>
         {emptyText}
       </AppText>
     );
@@ -214,7 +214,7 @@ function ReviewCard({ review }: { review: MyReview }) {
           {review.venueName}
         </AppText>
         <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={15} />
-        <AppText weight="bold" size={15}>
+        <AppText weight="bold" size={14}>
           {review.rating.toFixed(1)}
         </AppText>
         <AppText size={13} color={colors.textMuted}>
@@ -235,18 +235,18 @@ function ReviewCard({ review }: { review: MyReview }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  notice: { gap: spacing.md, padding: spacing.lg, borderRadius: 22, backgroundColor: colors.white },
+  notice: { gap: spacing.md, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.white },
   state: { marginTop: spacing.lg },
   center: { textAlign: 'center' },
-  head: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md + 2, borderRadius: 22, backgroundColor: colors.white },
+  head: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
   headText: { flex: 1, gap: 2 },
   tabs: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  lock: { alignItems: 'center', gap: spacing.sm, padding: spacing.lg, borderRadius: 22, backgroundColor: colors.white },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
-  artistGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingHorizontal: spacing.md },
-  artistName: { textAlign: 'center', marginTop: 6, lineHeight: 19 },
-  list: { gap: spacing.sm + 2 },
-  review: { gap: spacing.sm, padding: spacing.md + 2, borderRadius: 18, backgroundColor: colors.white },
-  reviewTop: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  lock: { alignItems: 'center', gap: spacing.sm, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.white },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.ms },
+  artistGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.ms, paddingHorizontal: spacing.md },
+  artistName: { textAlign: 'center', marginTop: spacing.sm, lineHeight: 19 },
+  list: { gap: spacing.ms },
+  review: { gap: spacing.sm, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
+  reviewTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   reviewContent: { lineHeight: 24 },
 });

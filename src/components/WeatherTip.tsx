@@ -7,7 +7,7 @@ import { AppText } from '@/components/AppText';
 import { useAddChecklistItem, useChecklist } from '@/features/checklist';
 import { errorMessage } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 import type { WeatherSummary } from '@/types/api';
 
 // match: 이 글자가 이미 내 체크리스트에 있으면 다시 추가하지 않는다
@@ -116,10 +116,10 @@ export function WeatherTip({ weather }: { weather: WeatherSummary }) {
 }
 
 const styles = StyleSheet.create({
-  box: { gap: spacing.sm + 2, padding: spacing.md - 2, borderRadius: 14, backgroundColor: colors.brandSoft },
+  box: { gap: spacing.ms, padding: spacing.ms, borderRadius: radius.md, backgroundColor: colors.brandSoft },
   head: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
   message: { flex: 1, lineHeight: 20 },
-  button: { alignItems: 'center', paddingVertical: 11, borderRadius: 999, backgroundColor: colors.brand },
+  button: { alignItems: 'center', paddingVertical: spacing.ms, borderRadius: radius.pill, backgroundColor: colors.brand },
   pressed: { backgroundColor: colors.brandStrong },
   adding: { opacity: 0.7 },
 });

@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import type { FestivalSummary } from '@/features/festivals';
 import { festivalStatus, formatDateRange } from '@/lib/format';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 // 카드에 필요한 값만 (공연 목록, 아티스트·공연장의 공연 목록에서 같이 쓴다)
 export type PosterCardFestival = Pick<FestivalSummary, 'id' | 'title' | 'posterImage' | 'startDate' | 'endDate'>;
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.85 },
   posterWrap: {
     aspectRatio: 3 / 4,
-    borderRadius: 18,
+    borderRadius: radius.lg,
     overflow: 'hidden',
     backgroundColor: colors.surface,
     marginBottom: spacing.sm,
@@ -69,14 +69,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
+    paddingHorizontal: spacing.ms,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.pill,
     backgroundColor: colors.brand,
   },
   badgeLive: { backgroundColor: colors.text },
   badgeEnded: { backgroundColor: colors.textMuted },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
-  date: { marginBottom: 4 },
+  date: { marginBottom: spacing.xs },
   title: { lineHeight: 22 },
 });

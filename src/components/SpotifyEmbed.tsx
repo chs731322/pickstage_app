@@ -79,7 +79,7 @@ export function SpotifyEmbed({ artistId, openUrl }: { artistId: string; openUrl:
             onPress={() => WebBrowser.openBrowserAsync(openUrl)}
             style={({ pressed }) => [styles.button, pressed && styles.pressed]}
             accessibilityRole="link">
-            <AppText weight="bold" size={15} color={colors.white}>
+            <AppText weight="bold" size={14} color={colors.white}>
               스포티파이에서 열기
             </AppText>
           </Pressable>
@@ -91,11 +91,11 @@ export function SpotifyEmbed({ artistId, openUrl }: { artistId: string; openUrl:
 
 const styles = StyleSheet.create({
   wrap: { gap: spacing.sm },
-  box: { height: SPOTIFY_EMBED_HEIGHT, borderRadius: 18, overflow: 'hidden', backgroundColor: colors.surface },
+  box: { height: SPOTIFY_EMBED_HEIGHT, borderRadius: radius.lg, overflow: 'hidden', backgroundColor: colors.surface },
   web: { flex: 1, backgroundColor: 'transparent' },
   loading: { alignItems: 'center', justifyContent: 'center' },
   fallback: { alignItems: 'center', gap: spacing.sm },
   fallbackText: { textAlign: 'center' },
-  button: { paddingHorizontal: 20, paddingVertical: 11, borderRadius: radius.pill, backgroundColor: colors.brand },
+  button: { paddingHorizontal: spacing.md, paddingVertical: spacing.ms, borderRadius: radius.pill, backgroundColor: colors.brand },
   pressed: { backgroundColor: colors.brandStrong },
 });

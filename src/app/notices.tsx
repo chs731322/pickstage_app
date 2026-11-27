@@ -92,7 +92,7 @@ function NoticeRow({ notice }: { notice: NoticeListItem }) {
         <View style={styles.meta}>
           {pinned ? (
             <View style={styles.pin}>
-              <AppText weight="extrabold" size={12} color={colors.brand}>
+              <AppText weight="bold" size={12} color={colors.brand}>
                 고정
               </AppText>
             </View>
@@ -101,11 +101,11 @@ function NoticeRow({ notice }: { notice: NoticeListItem }) {
             {notice.createdAt?.slice(0, 10)}
           </AppText>
         </View>
-        <AppText weight="bold" size={17} numberOfLines={2} style={styles.title}>
+        <AppText weight="bold" size={16} numberOfLines={2} style={styles.title}>
           {notice.title}
         </AppText>
       </View>
-      <AppText size={20} color={colors.textMuted}>
+      <AppText size={18} color={colors.textMuted}>
         ›
       </AppText>
     </Pressable>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    height: 52,
+    height: 48,
     paddingHorizontal: spacing.md,
     marginBottom: spacing.md,
     borderRadius: radius.pill,
@@ -132,14 +132,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.sm,
     padding: spacing.md,
-    borderRadius: 18,
+    borderRadius: radius.lg,
     backgroundColor: colors.white,
     ...cardShadow,
   },
   pressed: { opacity: 0.7 },
-  info: { flex: 1, gap: 6 },
+  info: { flex: 1, gap: spacing.sm },
   meta: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  pin: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
+  pin: { paddingHorizontal: spacing.sm, paddingVertical: 2, borderRadius: radius.pill, backgroundColor: colors.brandSoft },
   title: { lineHeight: 24 },
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center' },

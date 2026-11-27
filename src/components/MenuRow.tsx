@@ -2,7 +2,7 @@ import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 type Props = {
   label: string;
@@ -18,15 +18,15 @@ export function MenuRow({ label, icon, onPress, value, danger = false }: Props) 
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.row, pressed && styles.pressed]} accessibilityRole="button">
       <SymbolView name={icon as never} tintColor={danger ? colors.danger : colors.text} size={22} />
-      <AppText weight="medium" size={17} color={danger ? colors.danger : colors.text} style={styles.label}>
+      <AppText weight="medium" size={16} color={danger ? colors.danger : colors.text} style={styles.label}>
         {label}
       </AppText>
       {value ? (
-        <AppText size={15} color={colors.textMuted}>
+        <AppText size={14} color={colors.textMuted}>
           {value}
         </AppText>
       ) : null}
-      <AppText size={20} color={colors.textMuted}>
+      <AppText size={18} color={colors.textMuted}>
         ›
       </AppText>
     </Pressable>
@@ -39,8 +39,8 @@ export function MenuCard({ children }: { children: React.ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: 16, paddingHorizontal: spacing.md },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, paddingHorizontal: spacing.md },
   pressed: { backgroundColor: colors.surface },
   label: { flex: 1 },
-  card: { borderRadius: 22, backgroundColor: colors.white, overflow: 'hidden' },
+  card: { borderRadius: radius.lg, backgroundColor: colors.white, overflow: 'hidden' },
 });

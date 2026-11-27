@@ -30,12 +30,12 @@ export function CommunitySection() {
   return (
     <View style={styles.section}>
       <SectionHeader title="동행 구하기" eyebrow="TOGETHER" highlight="동행" onPressMore={() => router.push('/community')} />
-      <AppText size={15} color={colors.textSecondary} style={styles.desc}>
+      <AppText size={14} color={colors.textSecondary} style={styles.desc}>
         같은 공연 가는 사람을 찾아보세요.
       </AppText>
       <View style={styles.list}>
         {posts.length === 0 ? (
-          <AppText color={colors.textMuted} size={15}>
+          <AppText color={colors.textMuted} size={14}>
             아직 동행 글이 없어요. 첫 글을 남겨보세요.
           </AppText>
         ) : (
@@ -57,5 +57,5 @@ const styles = StyleSheet.create({
   list: { gap: spacing.md, paddingHorizontal: spacing.md, marginTop: spacing.xs },
   writePressed: { backgroundColor: colors.brandStrong },
   // 작은 알약 버튼 (화면 가운데)
-  write: { alignSelf: 'center', height: 40, paddingHorizontal: 22, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center', marginTop: spacing.xs },
+  write: { alignSelf: 'center', height: 40, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center', marginTop: spacing.xs },
 });

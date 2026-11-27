@@ -78,7 +78,7 @@ export default function FaqScreen() {
               accessibilityRole="button"
               accessibilityState={{ expanded: open }}>
               <View style={styles.question}>
-                <AppText weight="extrabold" size={17} color={colors.brand}>
+                <AppText weight="bold" size={16} color={colors.brand}>
                   Q
                 </AppText>
                 <View style={styles.flex}>
@@ -98,7 +98,7 @@ export default function FaqScreen() {
                 />
               </View>
               {open ? (
-                <AppText size={15} color={colors.textSecondary} style={styles.answer}>
+                <AppText size={14} color={colors.textSecondary} style={styles.answer}>
                   {faq.answer ?? '답변을 불러오지 못했어요. 아래로 당겨서 다시 시도해보세요.'}
                 </AppText>
               ) : null}
@@ -113,12 +113,12 @@ export default function FaqScreen() {
 const styles = StyleSheet.create({
   flex: { flex: 1, gap: 2 },
   list: { flex: 1, backgroundColor: colors.pageBg },
-  content: { gap: 10, paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 52, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  content: { gap: spacing.sm, paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.xs },
   state: { marginTop: spacing.xl },
-  card: { gap: spacing.md, padding: spacing.md, borderRadius: 18, backgroundColor: colors.white, ...cardShadow },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
   question: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   line: { lineHeight: 23 },
   answer: { lineHeight: 24, paddingTop: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },

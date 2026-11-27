@@ -6,7 +6,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { FilterPill } from '@/components/FilterPill';
 import type { FestivalDetail } from '@/features/festivals';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 type Artist = NonNullable<FestivalDetail['artists']>[number];
 type Group = { key: string; label: string | null; artists: Artist[] };
@@ -85,7 +85,7 @@ export function LineupSection({ artists, contentWidth }: { artists: Artist[]; co
         return (
           <View key={group.key} style={styles.group}>
             {group.label && activeDay === 'all' ? (
-              <AppText weight="bold" size={15} color={colors.textSecondary}>
+              <AppText weight="bold" size={14} color={colors.textSecondary}>
                 {group.label}
               </AppText>
             ) : null}
@@ -105,14 +105,14 @@ export function LineupSection({ artists, contentWidth }: { artists: Artist[]; co
                     />
                   ) : (
                     <View style={[styles.avatar, styles.noImage, { width: itemWidth, height: itemWidth, borderRadius: itemWidth / 2 }]}>
-                      <AppText weight="bold" size={28} color={colors.textMuted}>
+                      <AppText weight="bold" size={22} color={colors.textMuted}>
                         {artist.name.slice(0, 1)}
                       </AppText>
                     </View>
                   )}
                   <AppText
                     weight={artist.isHeadliner ? 'extrabold' : 'semibold'}
-                    size={15}
+                    size={14}
                     numberOfLines={2}
                     style={styles.name}>
                     {artist.name}
@@ -126,7 +126,7 @@ export function LineupSection({ artists, contentWidth }: { artists: Artist[]; co
 
       {canExpand ? (
         <Pressable onPress={() => setExpanded((v) => !v)} style={styles.more} accessibilityRole="button">
-          <AppText weight="bold" size={15} color={colors.textSecondary}>
+          <AppText weight="bold" size={14} color={colors.textSecondary}>
             {expanded ? '접기' : `더보기 (${totalCount - PREVIEW_COUNT}팀)`}
           </AppText>
         </Pressable>
@@ -138,18 +138,18 @@ export function LineupSection({ artists, contentWidth }: { artists: Artist[]; co
 const styles = StyleSheet.create({
   wrap: { gap: spacing.md },
   // 카드 안쪽 여백만큼 바깥으로 넓혀서 탭이 카드 끝까지 스크롤되게 한다
-  tabsScroll: { marginHorizontal: -(spacing.md + 2), flexGrow: 0 },
-  tabs: { gap: spacing.sm, paddingHorizontal: spacing.md + 2 },
+  tabsScroll: { marginHorizontal: -(spacing.md), flexGrow: 0 },
+  tabs: { gap: spacing.sm, paddingHorizontal: spacing.md },
   group: { gap: spacing.sm },
   grid: { flexDirection: 'row', flexWrap: 'wrap', columnGap: GAP, rowGap: spacing.md },
   avatar: { backgroundColor: colors.surface },
   noImage: { alignItems: 'center', justifyContent: 'center' },
-  name: { textAlign: 'center', marginTop: 8, lineHeight: 20 },
+  name: { textAlign: 'center', marginTop: spacing.sm, lineHeight: 20 },
   more: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 46,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     backgroundColor: colors.surface,
   },
 });

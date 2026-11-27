@@ -155,7 +155,7 @@ function ReportSheet({
       <KeyboardAvoidingView style={styles.overlay} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Pressable style={styles.backdrop} onPress={close} />
         <View style={styles.sheet}>
-          <AppText weight="extrabold" size={20}>
+          <AppText weight="bold" size={18}>
             {REPORT_TARGET_LABEL[targetType]} 신고
           </AppText>
           <AppText size={14} color={colors.textSecondary}>
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   reasons: { gap: spacing.sm, marginTop: spacing.sm },
   reason: {
     paddingHorizontal: spacing.md,
-    paddingVertical: 14,
+    paddingVertical: spacing.ms,
     borderRadius: radius.md,
     borderWidth: 1,
     borderColor: colors.border,

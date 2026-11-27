@@ -92,7 +92,7 @@ export function HeroSection() {
             />
             {unreadCount ? (
               <View style={styles.badge}>
-                <AppText weight="bold" size={10} color={colors.white}>
+                <AppText weight="bold" size={12} color={colors.white}>
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </AppText>
               </View>
@@ -103,7 +103,7 @@ export function HeroSection() {
 
       {/* 배너 위 문구 */}
       <View style={styles.headline}>
-        <AppText weight="display" size={22} style={styles.centerText}>
+        <AppText weight="display" size={18} style={styles.centerText}>
           이번 달 <Highlight>주목할 만한</Highlight> 공연
         </AppText>
       </View>
@@ -200,11 +200,11 @@ export function HeroSection() {
               </AppText>
             ) : null}
           </View>
-          <AppText weight="display" size={24} color={colors.text} numberOfLines={2} style={styles.centerText}>
+          <AppText weight="display" size={22} color={colors.text} numberOfLines={2} style={styles.centerText}>
             {current.title}
           </AppText>
           {current.venueName ? (
-            <AppText weight="medium" size={15} color={colors.textSecondary} style={styles.centerText}>
+            <AppText weight="medium" size={14} color={colors.textSecondary} style={styles.centerText}>
               {current.venueName}
             </AppText>
           ) : null}
@@ -212,7 +212,7 @@ export function HeroSection() {
             {formatDateRange(current.startDate, current.endDate)}
           </AppText>
           <Pressable style={styles.cta} onPress={() => router.push(`/festival/${current.id}`)}>
-            <AppText weight="bold" size={15} color={colors.white}>
+            <AppText weight="bold" size={14} color={colors.white}>
               공연 보러가기
             </AppText>
           </Pressable>
@@ -238,28 +238,28 @@ const styles = StyleSheet.create({
     right: -8,
     minWidth: 17,
     height: 17,
-    paddingHorizontal: 4,
-    borderRadius: 9,
+    paddingHorizontal: spacing.xs,
+    borderRadius: radius.sm,
     backgroundColor: colors.brand,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  topIcons: { flexDirection: 'row', alignItems: 'center', gap: 22 },
+  topIcons: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
   headline: { alignItems: 'center', marginTop: spacing.lg },
   banner: { marginTop: spacing.md },
-  carousel: { flexGrow: 0, paddingVertical: 8 },
-  poster: { borderRadius: 18, overflow: 'hidden', backgroundColor: colors.surface },
+  carousel: { flexGrow: 0, paddingVertical: spacing.sm },
+  poster: { borderRadius: radius.lg, overflow: 'hidden', backgroundColor: colors.surface },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
-  counterWrap: { position: 'absolute', bottom: 18, alignItems: 'flex-end', paddingRight: 10 },
-  counter: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.pill, backgroundColor: 'rgba(0,0,0,0.55)' },
-  info: { alignItems: 'center', gap: 6, paddingHorizontal: spacing.lg, marginTop: spacing.md },
+  counterWrap: { position: 'absolute', bottom: 18, alignItems: 'flex-end', paddingRight: spacing.ms },
+  counter: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: 'rgba(0,0,0,0.55)' },
+  info: { alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.lg, marginTop: spacing.md },
   centerText: { textAlign: 'center' },
   tags: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  tag: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.brand },
+  tag: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.brand },
   cta: {
     marginTop: spacing.sm,
     paddingHorizontal: 30,
-    paddingVertical: 13,
+    paddingVertical: spacing.ms,
     borderRadius: radius.pill,
     backgroundColor: colors.brand,
   },

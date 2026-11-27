@@ -132,7 +132,7 @@ export default function PerformancesScreen() {
             <Pressable key={sort.id} onPress={() => update({ sort: sort.id })} hitSlop={6}>
               <AppText
                 weight={filters.sort === sort.id ? 'bold' : 'medium'}
-                size={15}
+                size={14}
                 color={filters.sort === sort.id ? colors.text : colors.textMuted}>
                 {sort.label}
               </AppText>
@@ -202,13 +202,13 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   column: { gap: GAP, marginBottom: spacing.lg },
   links: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
-  venueLink: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.pill, backgroundColor: colors.white },
-  header: { gap: 14, paddingBottom: spacing.md },
+  venueLink: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.white },
+  header: { gap: spacing.ms, paddingBottom: spacing.md },
   search: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    height: 52,
+    height: 48,
     paddingHorizontal: spacing.md,
     borderRadius: radius.pill,
     backgroundColor: colors.white,

@@ -91,7 +91,7 @@ export function ReviewFormSheet({ title, visible, onClose, initial, onSubmit, su
         <Pressable style={styles.backdrop} onPress={close} />
         <View style={styles.sheet}>
           <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} contentContainerStyle={styles.body}>
-            <AppText weight="extrabold" size={20}>
+            <AppText weight="bold" size={18}>
               {title}
             </AppText>
 
@@ -169,9 +169,9 @@ const styles = StyleSheet.create({
   body: { gap: spacing.sm, padding: spacing.lg, paddingBottom: spacing.xl },
   stars: { flexDirection: 'row', gap: spacing.sm, paddingVertical: spacing.sm },
   input: {
-    minHeight: 50,
+    minHeight: 48,
     paddingHorizontal: spacing.md,
-    paddingVertical: 12,
+    paddingVertical: spacing.ms,
     borderRadius: radius.md,
     borderWidth: 1,
     borderColor: colors.border,

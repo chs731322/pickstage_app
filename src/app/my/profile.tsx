@@ -22,7 +22,7 @@ import { errorMessage } from '@/lib/api';
 import { checkNicknameAvailable } from '@/lib/authApi';
 import { useAuth } from '@/lib/auth';
 import { isValidNickname } from '@/lib/validation';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const PRIVACY_ITEMS: { key: keyof Privacy; label: string }[] = [
   { key: 'showBookmarks', label: '찜한 공연' },
@@ -185,7 +185,7 @@ export default function ProfileScreen() {
 
       {/* 프로필 공개 설정 */}
       <View style={styles.card}>
-        <AppText weight="extrabold" size={19}>
+        <AppText weight="bold" size={18}>
           프로필 공개 설정
         </AppText>
         <AppText size={14} color={colors.textSecondary} style={styles.desc}>
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   avatar: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.sm },
   camera: { position: 'absolute', right: -2, bottom: -2, width: 30, height: 30, borderRadius: 15, backgroundColor: colors.brand, borderWidth: 2, borderColor: colors.white, alignItems: 'center', justifyContent: 'center' },
-  card: { gap: spacing.md, padding: spacing.md + 2, borderRadius: 22, backgroundColor: colors.white },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
   row: { flexDirection: 'row', gap: spacing.sm },
   desc: { lineHeight: 21 },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },

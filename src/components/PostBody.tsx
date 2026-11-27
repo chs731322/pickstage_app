@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { parseContent } from '@/lib/postContent';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 // 글 본문: 글 덩어리와 사진 덩어리를 순서대로 그린다 (사진을 누르면 크게 열린다)
 export function PostBody({ content }: { content: string }) {
@@ -15,7 +15,7 @@ export function PostBody({ content }: { content: string }) {
       {blocks.map((block, index) =>
         block.type === 'text' ? (
           block.text.trim() ? (
-            <AppText key={index} size={17} style={styles.text} selectable>
+            <AppText key={index} size={16} style={styles.text} selectable>
               {block.text}
             </AppText>
           ) : null
@@ -48,6 +48,6 @@ function PostImage({ src, alt }: { src: string; alt: string }) {
 
 const styles = StyleSheet.create({
   body: { gap: spacing.md },
-  text: { lineHeight: 27 },
-  image: { width: '100%', borderRadius: 14, backgroundColor: colors.surface },
+  text: { lineHeight: 24 },
+  image: { width: '100%', borderRadius: radius.md, backgroundColor: colors.surface },
 });

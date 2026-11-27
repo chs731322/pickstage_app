@@ -57,7 +57,7 @@ export default function ArtistScreen() {
   if (error || !artist) {
     return (
       <View style={[styles.center, { paddingTop: topPadding }]}>
-        <AppText weight="bold" size={20}>
+        <AppText weight="bold" size={18}>
           아티스트를 찾을 수 없어요
         </AppText>
         <AppText color={colors.textMuted} size={16} style={styles.centerText}>
@@ -139,17 +139,17 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
             />
           ) : (
             <View style={[styles.photo, styles.noImage, { width: photo, height: photo }]}>
-              <AppText weight="display" size={64} color={colors.brand}>
+              <AppText weight="bold" color={colors.brand} style={{ fontSize: 64 }}>
                 {artist.name.slice(0, 1)}
               </AppText>
             </View>
           )}
 
-          <AppText weight="display" size={30} color={colors.white} style={styles.name}>
+          <AppText weight="bold" size={22} color={colors.white} style={styles.name}>
             {artist.name}
           </AppText>
           {artist.englishName ? (
-            <AppText size={15} color="rgba(255,255,255,0.8)">
+            <AppText size={14} color="rgba(255,255,255,0.8)">
               {artist.englishName}
             </AppText>
           ) : null}
@@ -204,7 +204,7 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
 
         {artist.description ? (
           <View style={styles.card}>
-            <AppText weight="extrabold" size={21}>
+            <AppText weight="bold" size={18}>
               소개
             </AppText>
             <AppText size={16} color={colors.textSecondary} style={styles.description}>
@@ -216,7 +216,7 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
         {/* 스포티파이 공식 플레이어: 인기곡 목록과 미리듣기 (스포티파이 링크가 있는 아티스트만) */}
         {spotifyId ? (
           <View style={styles.card}>
-            <AppText weight="extrabold" size={21}>
+            <AppText weight="bold" size={18}>
               인기곡 듣기
             </AppText>
             <SpotifyEmbed artistId={spotifyId} openUrl={artist.spotifyUrl!} />
@@ -233,7 +233,7 @@ function ArtistBody({ artist }: { artist: ArtistDetail }) {
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
     <View style={styles.stat}>
-      <AppText weight="display" size={30} color={colors.white}>
+      <AppText weight="bold" size={22} color={colors.white}>
         {value}
       </AppText>
       <AppText weight="medium" size={13} color="rgba(255,255,255,0.85)">
@@ -247,7 +247,7 @@ function ConcertRow({ title, concerts }: { title: string; concerts: ArtistConcer
   if (concerts.length === 0) return null;
   return (
     <View style={styles.concerts}>
-      <AppText weight="extrabold" size={22} style={styles.concertsTitle}>
+      <AppText weight="bold" size={18} style={styles.concertsTitle}>
         {title} <AppText weight="bold" size={18} color={colors.brand}>{concerts.length}</AppText>
       </AppText>
       <FlatList
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
   },
   heroShade: { backgroundColor: 'rgba(20,0,30,0.4)' },
   photo: {
-    borderRadius: 28,
+    borderRadius: radius.lg,
     borderWidth: 3,
     borderColor: 'rgba(255,255,255,0.9)',
     backgroundColor: colors.surface,
@@ -289,27 +289,27 @@ const styles = StyleSheet.create({
   },
   noImage: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.brandSoft },
   name: { textAlign: 'center' },
-  tags: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm, marginTop: 4 },
+  tags: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm, marginTop: spacing.xs },
   tag: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingHorizontal: spacing.ms,
+    paddingVertical: spacing.xs,
     borderRadius: radius.pill,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.4)',
     backgroundColor: 'rgba(255,255,255,0.16)',
   },
-  stats: { flexDirection: 'row', gap: spacing.sm + 4, alignSelf: 'stretch', marginTop: spacing.md },
+  stats: { flexDirection: 'row', gap: spacing.ms, alignSelf: 'stretch', marginTop: spacing.md },
   stat: {
     flex: 1,
     alignItems: 'center',
     gap: 2,
     paddingVertical: spacing.md,
-    borderRadius: 22,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.4)',
     backgroundColor: 'rgba(255,255,255,0.16)',
   },
-  actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm + 4, alignSelf: 'stretch', marginTop: spacing.sm },
+  actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.ms, alignSelf: 'stretch', marginTop: spacing.sm },
   heart: {
     width: 52,
     height: 52,
@@ -334,8 +334,8 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     marginHorizontal: spacing.md,
     marginBottom: spacing.md,
-    padding: spacing.md + 2,
-    borderRadius: 22,
+    padding: spacing.md,
+    borderRadius: radius.lg,
     backgroundColor: colors.white,
     shadowColor: '#1a1a2e',
     shadowOffset: { width: 0, height: 6 },
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     shadowRadius: 14,
     elevation: 2,
   },
-  description: { lineHeight: 26 },
+  description: { lineHeight: 24 },
   concerts: { gap: spacing.md, marginTop: spacing.md },
   concertsTitle: { paddingHorizontal: spacing.md },
   concertsList: { gap: spacing.md, paddingHorizontal: spacing.md },

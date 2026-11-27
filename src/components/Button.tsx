@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   base: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 54,
+    minHeight: 48,
     borderRadius: radius.pill,
     overflow: 'hidden',
   },
@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
   shadow: {
     borderRadius: radius.pill,
     shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35,
-    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
     elevation: 5,
   },
   inactive: { opacity: 0.5 },

@@ -71,7 +71,7 @@ export default function VenuesScreen() {
       ListHeaderComponent={header}
       renderSectionHeader={({ section }) => (
         <View style={styles.sectionHeader}>
-          <AppText weight="extrabold" size={15} color={colors.brand}>
+          <AppText weight="bold" size={14} color={colors.brand}>
             {section.title}
           </AppText>
         </View>
@@ -112,7 +112,7 @@ function VenueRow({ venue }: { venue: VenueListItem }) {
         </View>
       )}
       <View style={styles.info}>
-        <AppText weight="bold" size={17} numberOfLines={1}>
+        <AppText weight="bold" size={16} numberOfLines={1}>
           {venue.name}
         </AppText>
         {venue.address ? (
@@ -128,7 +128,7 @@ function VenueRow({ venue }: { venue: VenueListItem }) {
           </View>
         ) : null}
       </View>
-      <AppText size={20} color={colors.textMuted}>
+      <AppText size={18} color={colors.textMuted}>
         ›
       </AppText>
     </Pressable>
@@ -139,17 +139,17 @@ const styles = StyleSheet.create({
   list: { flex: 1, backgroundColor: colors.pageBg },
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   header: { gap: spacing.md, paddingBottom: spacing.sm },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 52, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  sectionHeader: { paddingVertical: 8, backgroundColor: colors.pageBg },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.sm + 2, marginBottom: spacing.sm, borderRadius: 18, backgroundColor: colors.white },
+  sectionHeader: { paddingVertical: spacing.sm, backgroundColor: colors.pageBg },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.ms, marginBottom: spacing.sm, borderRadius: radius.lg, backgroundColor: colors.white },
   pressed: { opacity: 0.85 },
-  thumb: { width: 76, height: 76, borderRadius: 14, backgroundColor: colors.surface },
+  thumb: { width: 76, height: 76, borderRadius: radius.md, backgroundColor: colors.surface },
   noThumb: { alignItems: 'center', justifyContent: 'center' },
-  info: { flex: 1, gap: 3 },
+  info: { flex: 1, gap: spacing.xs },
   address: { lineHeight: 19 },
-  tag: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.pill, backgroundColor: colors.surface, marginTop: 2 },
+  tag: { alignSelf: 'flex-start', paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.surface, marginTop: 2 },
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center', lineHeight: 24 },
 });

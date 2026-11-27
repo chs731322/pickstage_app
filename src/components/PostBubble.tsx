@@ -5,7 +5,7 @@ import { AppText } from '@/components/AppText';
 import { Avatar } from '@/components/Avatar';
 import { type PostListItem } from '@/features/community';
 import { timeAgo } from '@/lib/postContent';
-import { brandScale, cardShadow, colors, spacing } from '@/theme';
+import { brandScale, cardShadow, colors, radius, spacing } from '@/theme';
 
 // 홈의 동행 글을 말풍선으로 보여준다: 글쓴이 사진이 한쪽에 있고 말풍선이 그 옆에 붙는다. flip이면 좌우를 바꿔서 대화처럼 번갈아 놓는다.
 export function PostBubble({ post, flip }: { post: PostListItem; flip?: boolean }) {
@@ -19,7 +19,7 @@ export function PostBubble({ post, flip }: { post: PostListItem; flip?: boolean 
         <Avatar uri={post.authorProfileImage} name={post.authorNickname ?? '탈'} size={44} />
       </View>
       <View style={[styles.bubble, flip ? styles.bubbleFlip : styles.bubbleNormal]}>
-        <AppText weight="extrabold" size={22} color={brandScale[300]} style={styles.quote}>
+        <AppText weight="bold" size={18} color={brandScale[300]} style={styles.quote}>
           “
         </AppText>
         <AppText weight="bold" size={16} numberOfLines={2} style={styles.title}>
@@ -43,9 +43,9 @@ const styles = StyleSheet.create({
   rowFlip: { flexDirection: 'row-reverse' },
   pressed: { opacity: 0.85 },
   // 연회색 바탕에서도 아바타가 보이게 흰 원과 그림자를 깐다
-  avatar: { borderRadius: 22, backgroundColor: colors.white, ...cardShadow },
+  avatar: { borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
   // 말풍선: 아바타 쪽 아래 모서리만 각지게 해서 말하는 사람을 가리킨다
-  bubble: { flex: 1, gap: 4, padding: spacing.md, borderRadius: 22, backgroundColor: colors.white, ...cardShadow },
+  bubble: { flex: 1, gap: spacing.xs, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
   bubbleNormal: { borderBottomLeftRadius: 6 },
   bubbleFlip: { borderBottomRightRadius: 6 },
   quote: { lineHeight: 22, height: 18 },

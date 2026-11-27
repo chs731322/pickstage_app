@@ -27,11 +27,11 @@ export function SectionHeader({ title, eyebrow, highlight, highlightColor, icon,
         {icon ? <Image source={icon} style={styles.icon} contentFit="contain" /> : null}
         <View style={styles.titleText}>
           {eyebrow ? (
-            <AppText weight="extrabold" size={11} color={colors.brandStrong} style={styles.eyebrow}>
+            <AppText weight="bold" size={12} color={colors.brandStrong} style={styles.eyebrow}>
               {eyebrow}
             </AppText>
           ) : null}
-          <AppText weight="display" size={23}>
+          <AppText weight="display" size={18}>
             {renderTitle(title, highlight, highlightColor)}
           </AppText>
         </View>

@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import type { FestivalDetail } from '@/features/festivals';
 import { formatDateRange, formatOpenAt } from '@/lib/format';
-import { brandScale, cardShadow, colors, spacing } from '@/theme';
+import { brandScale, cardShadow, colors, radius, spacing } from '@/theme';
 
 type Props = {
   festival: FestivalDetail;
@@ -71,7 +71,7 @@ export function ConcertTicket({ festival, status, genre, width }: Props) {
           <View style={[StyleSheet.absoluteFill, festival.posterImage ? styles.shade : styles.shadeNoPoster]} />
           {isEnded ? <View style={[StyleSheet.absoluteFill, styles.endedShade]} /> : null}
 
-          <AppText weight="display" size={24} color={colors.white} style={styles.title} numberOfLines={3}>
+          <AppText weight="bold" size={22} color={colors.white} style={styles.title} numberOfLines={3}>
             {festival.title}
           </AppText>
           {subtitle ? (
@@ -94,7 +94,7 @@ export function ConcertTicket({ festival, status, genre, width }: Props) {
             <Field label="TICKET OPEN" value={festival.ticketOpenAt ? formatOpenAt(festival.ticketOpenAt) : '미정'} flex={1} />
           </View>
 
-          <AppText weight="medium" size={11} color="rgba(255,255,255,0.6)" style={styles.number}>
+          <AppText weight="medium" size={12} color="rgba(255,255,255,0.6)" style={styles.number}>
             No. {String(festival.id).padStart(8, '0')}
           </AppText>
         </View>
@@ -115,10 +115,10 @@ export function ConcertTicket({ festival, status, genre, width }: Props) {
 function Field({ label, value, flex, onPress }: { label: string; value: string; flex: number; onPress?: () => void }) {
   const content = (
     <>
-      <AppText weight="semibold" size={11} color="rgba(255,255,255,0.65)" style={styles.label}>
+      <AppText weight="semibold" size={12} color="rgba(255,255,255,0.65)" style={styles.label}>
         {label}
       </AppText>
-      <AppText weight="bold" size={15} color={colors.white} numberOfLines={2} style={onPress && styles.link}>
+      <AppText weight="bold" size={14} color={colors.white} numberOfLines={2} style={onPress && styles.link}>
         {value}
         {onPress ? ' ›' : ''}
       </AppText>
@@ -134,21 +134,21 @@ function Field({ label, value, flex, onPress }: { label: string; value: string; 
 }
 
 const styles = StyleSheet.create({
-  shadow: { alignSelf: 'center', borderRadius: 28, backgroundColor: colors.white, ...cardShadow },
-  ticket: { borderRadius: 28, overflow: 'hidden' },
+  shadow: { alignSelf: 'center', borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
+  ticket: { borderRadius: radius.lg, overflow: 'hidden' },
   noPoster: { alignItems: 'center', justifyContent: 'center' },
-  status: { position: 'absolute', top: 14, left: 14, paddingHorizontal: 12, paddingVertical: 5, borderRadius: 999, backgroundColor: colors.brand },
+  status: { position: 'absolute', top: 14, left: 14, paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brand },
   statusEnded: { backgroundColor: colors.textMuted },
   statusLive: { backgroundColor: colors.text },
-  panel: { gap: spacing.sm + 2, paddingHorizontal: spacing.lg - 4, paddingTop: spacing.lg, paddingBottom: spacing.md + 2, backgroundColor: brandScale[700], overflow: 'hidden' },
+  panel: { gap: spacing.ms, paddingHorizontal: spacing.lg - 4, paddingTop: spacing.lg, paddingBottom: spacing.md, backgroundColor: brandScale[700], overflow: 'hidden' },
   shade: { backgroundColor: 'rgba(15,0,25,0.45)' },
   shadeNoPoster: { backgroundColor: 'rgba(15,0,25,0.1)' },
   endedShade: { backgroundColor: 'rgba(60,60,70,0.55)' },
   link: { textDecorationLine: 'underline' },
-  title: { textAlign: 'center', lineHeight: 32 },
+  title: { textAlign: 'center', lineHeight: 30 },
   center: { textAlign: 'center' },
   grid: { flexDirection: 'row', gap: spacing.md, marginTop: spacing.xs },
-  field: { gap: 3 },
+  field: { gap: spacing.xs },
   label: { letterSpacing: 1.2 },
   number: { textAlign: 'center', letterSpacing: 2, marginTop: spacing.xs },
   dots: { position: 'absolute', left: NOTCH, right: NOTCH, height: 4, flexDirection: 'row', justifyContent: 'space-between' },

@@ -29,7 +29,7 @@ export function ReviewHighlightCard({ target, id, onWrite }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.head}>
-        <AppText weight="extrabold" size={21}>
+        <AppText weight="bold" size={18}>
           후기 하이라이트
         </AppText>
         <View style={styles.badge}>
@@ -48,7 +48,7 @@ export function ReviewHighlightCard({ target, id, onWrite }: Props) {
         </View>
       ) : keywords.length === 0 ? (
         <>
-          <AppText size={15} color={colors.textMuted}>
+          <AppText size={14} color={colors.textMuted}>
             {data?.message || EMPTY_MESSAGE}
           </AppText>
           {onWrite ? (
@@ -68,7 +68,7 @@ export function ReviewHighlightCard({ target, id, onWrite }: Props) {
                 <View
                   key={item.keyword}
                   style={[styles.chip, sentiment === 'positive' && styles.positive, sentiment === 'negative' && styles.negative]}>
-                  <AppText weight="bold" size={15}>
+                  <AppText weight="bold" size={14}>
                     {item.keyword}
                   </AppText>
                   <AppText size={13} color={colors.textSecondary}>
@@ -92,17 +92,17 @@ export function ReviewHighlightCard({ target, id, onWrite }: Props) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  card: { gap: spacing.md, padding: spacing.md + 2, borderRadius: 22, backgroundColor: colors.white, ...cardShadow },
+  card: { gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white, ...cardShadow },
   head: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.pill, backgroundColor: colors.brandTint },
+  badge: { paddingHorizontal: spacing.ms, paddingVertical: spacing.xs, borderRadius: radius.pill, backgroundColor: colors.brandTint },
   loading: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.ms,
+    paddingVertical: spacing.sm,
     borderRadius: radius.pill,
     borderWidth: 1,
     borderColor: colors.border,
@@ -110,6 +110,6 @@ const styles = StyleSheet.create({
   },
   positive: { borderColor: colors.brand, backgroundColor: colors.brandSoft },
   negative: { borderColor: colors.text, backgroundColor: colors.white },
-  write: { alignSelf: 'flex-start', paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.pill, backgroundColor: colors.brand },
+  write: { alignSelf: 'flex-start', paddingHorizontal: spacing.md, paddingVertical: spacing.ms, borderRadius: radius.pill, backgroundColor: colors.brand },
   writePressed: { backgroundColor: colors.brandStrong },
 });

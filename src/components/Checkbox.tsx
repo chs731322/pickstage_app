@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 type Props = {
   checked: boolean;
@@ -25,7 +25,7 @@ export function Checkbox({ checked, onChange, children, trailing, strong = false
         accessibilityState={{ checked }}>
         <View style={[styles.box, checked && styles.boxChecked]}>
           {checked && (
-            <AppText weight="extrabold" size={14} color={colors.white} style={styles.mark}>
+            <AppText weight="bold" size={14} color={colors.white} style={styles.mark}>
               ✓
             </AppText>
           )}
@@ -40,14 +40,14 @@ export function Checkbox({ checked, onChange, children, trailing, strong = false
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  main: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 6 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  main: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.sm },
   box: {
     alignItems: 'center',
     justifyContent: 'center',
     width: 24,
     height: 24,
-    borderRadius: 6,
+    borderRadius: radius.sm,
     borderWidth: 1.5,
     borderColor: colors.border,
     backgroundColor: colors.background,

@@ -81,11 +81,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.md,
     padding: spacing.md,
-    borderRadius: 18,
+    borderRadius: radius.lg,
     backgroundColor: colors.white,
   },
   info: { flex: 1, gap: 2 },
-  button: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border },
+  button: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border },
   state: { marginTop: spacing.xl },
   center: { textAlign: 'center' },
 });

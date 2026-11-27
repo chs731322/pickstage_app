@@ -48,7 +48,7 @@ export function CommentItem({ comment, isMine, isReply = false, onReply, onSaveE
       <View style={styles.main}>
         <View style={styles.head}>
           <Pressable disabled={comment.authorId === null} onPress={() => router.push(`/user/${comment.authorId}`)} style={styles.name} hitSlop={4}>
-            <AppText weight="bold" size={15} numberOfLines={1}>
+            <AppText weight="bold" size={14} numberOfLines={1}>
               {comment.authorNickname ?? '탈퇴한 회원'}
             </AppText>
           </Pressable>
@@ -127,9 +127,9 @@ export function CommentItem({ comment, isMine, isReply = false, onReply, onSaveE
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', gap: spacing.sm + 2, paddingVertical: spacing.sm + 2 },
+  row: { flexDirection: 'row', gap: spacing.ms, paddingVertical: spacing.ms },
   reply: { marginLeft: 40 },
-  main: { flex: 1, gap: 4 },
+  main: { flex: 1, gap: spacing.xs },
   head: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   name: { flexShrink: 1, marginRight: 2, flex: 1 },
   content: { lineHeight: 23 },
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   edit: { gap: spacing.sm },
   input: {
     minHeight: 64,
-    padding: spacing.sm + 2,
+    padding: spacing.ms,
     borderRadius: radius.md,
     borderWidth: 1,
     borderColor: colors.border,

@@ -80,15 +80,15 @@ export default function CalendarScreen() {
         {/* 달 이동 */}
         <View style={styles.monthRow}>
           <Pressable onPress={() => goToMonth(-1)} hitSlop={12} accessibilityLabel="이전 달" style={styles.arrow}>
-            <AppText size={24} weight="bold">
+            <AppText size={22} weight="bold">
               ‹
             </AppText>
           </Pressable>
-          <AppText weight="extrabold" size={22}>
+          <AppText weight="bold" size={18}>
             {cursor.year}년 {cursor.month + 1}월
           </AppText>
           <Pressable onPress={() => goToMonth(1)} hitSlop={12} accessibilityLabel="다음 달" style={styles.arrow}>
-            <AppText size={24} weight="bold">
+            <AppText size={22} weight="bold">
               ›
             </AppText>
           </Pressable>
@@ -139,7 +139,7 @@ export default function CalendarScreen() {
                         <View key={f.id} style={[styles.bar, { backgroundColor: colorById[f.id][0] }]} />
                       ))}
                       {hidden > 0 ? (
-                        <AppText size={10} weight="bold" color={colors.textMuted} style={styles.more}>
+                        <AppText size={12} weight="bold" color={colors.textMuted} style={styles.more}>
                           +{hidden}
                         </AppText>
                       ) : null}
@@ -154,7 +154,7 @@ export default function CalendarScreen() {
 
         {/* 고른 날의 공연 */}
         <View style={styles.listHeader}>
-          <AppText weight="extrabold" size={20}>
+          <AppText weight="bold" size={18}>
             {selectedDate ? `${selectedDate.getMonth() + 1}월 ${selectedDate.getDate()}일 (${WEEKDAY_NAMES[selectedDate.getDay()]})` : ''}
           </AppText>
           {!isPending && !error ? (
@@ -193,20 +193,20 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.pageBg },
   scroll: { backgroundColor: colors.pageBg },
   content: { gap: spacing.md, padding: GRID_PADDING, paddingTop: 0, paddingBottom: spacing.xl },
-  todayButton: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.white },
+  todayButton: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.white },
   // 알약 줄은 화면 양끝까지 스크롤되도록 안쪽 여백만큼 바깥으로 넓힌다
   pillsScroll: { marginHorizontal: -GRID_PADDING, flexGrow: 0 },
   pills: { gap: spacing.sm, paddingHorizontal: GRID_PADDING },
   monthRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.sm },
   arrow: { paddingHorizontal: spacing.md },
-  calendar: { borderRadius: 22, backgroundColor: colors.white, paddingVertical: spacing.sm },
+  calendar: { borderRadius: radius.lg, backgroundColor: colors.white, paddingVertical: spacing.sm },
   weekRow: { flexDirection: 'row' },
-  center: { textAlign: 'center', paddingVertical: 6 },
-  cell: { height: CELL_HEIGHT, alignItems: 'center', paddingTop: 4, borderRadius: 12 },
+  center: { textAlign: 'center', paddingVertical: spacing.sm },
+  cell: { height: CELL_HEIGHT, alignItems: 'center', paddingTop: spacing.xs, borderRadius: radius.md },
   cellSelected: { backgroundColor: colors.brandSoft },
   dayBadge: { width: 26, height: 26, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
   dayBadgeToday: { backgroundColor: colors.brand },
-  bars: { alignSelf: 'stretch', gap: 2, marginTop: 4, paddingHorizontal: 3 },
+  bars: { alignSelf: 'stretch', gap: 2, marginTop: spacing.xs, paddingHorizontal: spacing.xs },
   bar: { height: 5, borderRadius: 3 },
   more: { textAlign: 'center', lineHeight: 11 },
   loading: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },

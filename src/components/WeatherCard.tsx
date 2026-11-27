@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { WeatherTip } from '@/components/WeatherTip';
 import { api, errorMessage } from '@/lib/api';
-import { cardShadow, colors, spacing } from '@/theme';
+import { cardShadow, colors, radius, spacing } from '@/theme';
 import type { ApiResponse, WeatherDay, WeatherSummary } from '@/types/api';
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
@@ -33,7 +33,7 @@ export function WeatherCard() {
 
   return (
     <View style={styles.card}>
-      <AppText weight="extrabold" size={19}>
+      <AppText weight="bold" size={18}>
         날씨 · 서울
       </AppText>
 
@@ -48,11 +48,11 @@ export function WeatherCard() {
                 {data.source === 'short' ? '오늘 ' : ''}
                 {formatDay(data.date)}
               </AppText>
-              <AppText weight="extrabold" size={26}>
+              <AppText weight="bold" size={22}>
                 {data.sky ?? '날씨 정보 없음'}
               </AppText>
             </View>
-            <AppText weight="extrabold" size={24} color={colors.brand}>
+            <AppText weight="bold" size={22} color={colors.brand}>
               {temps(data)}
             </AppText>
           </View>
@@ -74,9 +74,9 @@ export function WeatherCard() {
 
 const styles = StyleSheet.create({
   card: {
-    gap: spacing.sm + 2,
-    padding: spacing.md + 2,
-    borderRadius: 22,
+    gap: spacing.ms,
+    padding: spacing.md,
+    borderRadius: radius.lg,
     backgroundColor: colors.white,
     ...cardShadow,
   },
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 12,
+    paddingVertical: spacing.ms,
     paddingHorizontal: spacing.md,
-    borderRadius: 14,
+    borderRadius: radius.md,
     backgroundColor: colors.surface,
   },
 });

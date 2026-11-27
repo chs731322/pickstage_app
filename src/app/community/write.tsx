@@ -110,7 +110,7 @@ function WriteForm({
       <TextInput value={title} onChangeText={setTitle} placeholder="제목" placeholderTextColor={colors.textMuted} maxLength={TITLE_MAX_LENGTH} style={styles.title} />
       <TextInput value={content} onChangeText={setContent} placeholder="내용을 입력해주세요" placeholderTextColor={colors.textMuted} multiline style={styles.content} />
       <Pressable onPress={addPhotos} disabled={uploading} style={styles.photo} accessibilityRole="button">
-        <AppText weight="semibold" size={15} color={colors.textSecondary}>
+        <AppText weight="semibold" size={14} color={colors.textSecondary}>
           {uploading ? '사진 올리는 중...' : `사진 추가 (${extractImageUrls(content).length}/${POST_IMAGES_MAX_COUNT})`}
         </AppText>
       </Pressable>
@@ -128,5 +128,5 @@ const styles = StyleSheet.create({
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   title: { padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.white, fontFamily: fontFamily.bold, fontSize: 18, color: colors.text },
   content: { minHeight: 240, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, textAlignVertical: 'top' },
-  photo: { alignItems: 'center', paddingVertical: 14, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  photo: { alignItems: 'center', paddingVertical: spacing.ms, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
 });
