@@ -16,7 +16,7 @@ import {
   type ChecklistItem,
 } from '@/features/checklist';
 import { errorMessage } from '@/lib/api';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 // 준비 체크리스트: 공연 가기 전에 챙길 것을 체크하고, 내 준비물을 추가·수정·삭제한다
 export default function ChecklistScreen() {
@@ -80,7 +80,7 @@ export default function ChecklistScreen() {
 
       {/* 준비물 추가 */}
       <View style={styles.addRow}>
-        <TextInput
+        <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
           value={newText}
           onChangeText={setNewText}
           placeholder="준비물 추가 (예: 우비, 응원봉)"
@@ -116,7 +116,7 @@ export default function ChecklistScreen() {
             <View key={item.id} style={styles.row}>
               <ChecklistCheck checked={item.isChecked} label={`${item.content} 완료 표시`} onPress={() => toggle.mutate({ id: item.id, isChecked: !item.isChecked })} />
               {editingId === item.id ? (
-                <TextInput
+                <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
                   value={editText}
                   onChangeText={setEditText}
                   autoFocus
@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
   track: { height: 10, borderRadius: radius.pill, backgroundColor: colors.surface, overflow: 'hidden' },
   fill: { height: '100%', borderRadius: 5, backgroundColor: colors.brand },
   addRow: { flexDirection: 'row', gap: spacing.sm },
-  addInput: { flex: 1, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
-  addButton: { height: 48, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
+  addInput: { flex: 1, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text },
+  addButton: { minHeight: 48, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
   addPressed: { backgroundColor: colors.brandStrong },
   disabled: { opacity: 0.4 },
   list: { borderRadius: radius.lg, backgroundColor: colors.white, paddingHorizontal: spacing.md },

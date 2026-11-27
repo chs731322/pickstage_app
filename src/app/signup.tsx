@@ -1,16 +1,15 @@
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { Checkbox } from '@/components/Checkbox';
-import { AuthLayout } from '@/components/AuthLayout';
+import { AuthCollageLayout } from '@/components/AuthCollageLayout';
 import { TextField } from '@/components/TextField';
 import { errorMessage } from '@/lib/api';
 import { checkEmailAvailable, checkNicknameAvailable, sendEmailCode, signUp, verifyEmailCode } from '@/lib/authApi';
 import { useAuth } from '@/lib/auth';
-import { openSitePage } from '@/lib/links';
 import {
   PASSWORD_RULE,
   emailError as checkEmailFormat,
@@ -179,7 +178,7 @@ export default function SignupScreen() {
   const allAgreed = agreeTerms && agreePrivacy;
 
   return (
-    <AuthLayout title="회원가입" subtitle="이메일 인증을 하고 PICKSTAGE를 시작해보세요.">
+    <AuthCollageLayout compact title={['처음이라', '더 반가워요']} subtitle="이메일 인증을 하고 PICKSTAGE를 시작해보세요.">
       {/* 1. 이메일 인증 */}
       <View style={styles.section}>
         <AppText weight="bold" size={18}>
@@ -314,13 +313,13 @@ export default function SignupScreen() {
               <Checkbox
                 checked={agreeTerms}
                 onChange={setAgreeTerms}
-                trailing={<ViewLink label="보기" onPress={() => openSitePage('/terms')} />}>
+                trailing={<ViewLink label="보기" onPress={() => router.push('/terms')} />}>
                 (필수) 이용약관 및 커뮤니티 이용 규칙에 동의합니다
               </Checkbox>
               <Checkbox
                 checked={agreePrivacy}
                 onChange={setAgreePrivacy}
-                trailing={<ViewLink label="보기" onPress={() => openSitePage('/privacy')} />}>
+                trailing={<ViewLink label="보기" onPress={() => router.push('/privacy')} />}>
                 (필수) 개인정보 수집·이용에 동의합니다
               </Checkbox>
             </View>
@@ -353,7 +352,7 @@ export default function SignupScreen() {
           </AppText>
         </Link>
       </View>
-    </AuthLayout>
+    </AuthCollageLayout>
   );
 }
 
@@ -376,10 +375,10 @@ const styles = StyleSheet.create({
     gap: 2,
     padding: spacing.md,
     borderRadius: radius.md,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.white,
   },
   divider: { height: 1, marginVertical: spacing.sm, backgroundColor: colors.border },
-  errorBox: { padding: spacing.md, borderRadius: radius.md, backgroundColor: '#fff2f2' },
+  errorBox: { padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.dangerSoft },
   center: { textAlign: 'center' },
   footer: {
     flexDirection: 'row',

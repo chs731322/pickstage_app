@@ -365,7 +365,7 @@ function ActionButton({
 }) {
   return (
     <Pressable onPress={onPress} style={styles.action} accessibilityRole="button">
-      <SymbolView name={icon as never} tintColor={active ? colors.brand : colors.text} size={24} />
+      <SymbolView name={icon as never} tintColor={active ? colors.brand : colors.textSecondary} size={24} />
       <AppText size={13} weight="medium" color={active ? colors.brand : colors.textSecondary}>
         {label}
       </AppText>
@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
     ...cardShadow,
   },
   ticketRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  ticketMore: { alignItems: 'center', justifyContent: 'center', height: 46, borderRadius: radius.pill, backgroundColor: colors.surface },
+  ticketMore: { alignItems: 'center', justifyContent: 'center', minHeight: 46, borderRadius: radius.pill, backgroundColor: colors.surface },
   lineup: { gap: spacing.md, paddingVertical: spacing.xs },
   artist: { width: 76, alignItems: 'center', gap: spacing.sm },
   avatar: { width: 68, height: 68, borderRadius: 34, backgroundColor: colors.surface },

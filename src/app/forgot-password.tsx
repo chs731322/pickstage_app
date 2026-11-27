@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { AuthLayout } from '@/components/AuthLayout';
+import { AuthCollageLayout } from '@/components/AuthCollageLayout';
 import { Button } from '@/components/Button';
 import { TextField } from '@/components/TextField';
 import { errorMessage } from '@/lib/api';
@@ -38,7 +38,7 @@ export default function ForgotPasswordScreen() {
 
   if (sentTo) {
     return (
-      <AuthLayout title="메일을 보냈어요" subtitle={`${sentTo}\n으로 비밀번호 재설정 링크를 보냈어요.`}>
+      <AuthCollageLayout compact title={['메일을', '보냈어요']} subtitle={`${sentTo}\n으로 비밀번호 재설정 링크를 보냈어요.`}>
         <AppText size={14} color={colors.textSecondary} style={styles.center}>
           메일함(스팸함 포함)을 확인하고 링크를 눌러주세요. 새 비밀번호를 정한 뒤 앱에서 다시 로그인하면 돼요.
         </AppText>
@@ -48,12 +48,12 @@ export default function ForgotPasswordScreen() {
             다른 이메일로 다시 받기
           </AppText>
         </Pressable>
-      </AuthLayout>
+      </AuthCollageLayout>
     );
   }
 
   return (
-    <AuthLayout title="비밀번호 찾기" subtitle={'가입한 이메일을 입력하면\n비밀번호를 다시 설정할 수 있는 링크를 보내드려요.'}>
+    <AuthCollageLayout compact title={['비밀번호를', '잊으셨나요?']} subtitle={'가입한 이메일을 입력하면\n비밀번호를 다시 설정할 수 있는 링크를 보내드려요.'}>
       <TextField
         label="이메일"
         value={email}
@@ -78,12 +78,12 @@ export default function ForgotPasswordScreen() {
       <AppText size={13} color={colors.textMuted} style={styles.center}>
         카카오·구글·Apple로 가입한 계정은 비밀번호가 없어서 이 방법을 쓸 수 없어요.
       </AppText>
-    </AuthLayout>
+    </AuthCollageLayout>
   );
 }
 
 const styles = StyleSheet.create({
   center: { textAlign: 'center', lineHeight: 21 },
   link: { alignSelf: 'center' },
-  errorBox: { padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.surface },
+  errorBox: { padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.dangerSoft },
 });

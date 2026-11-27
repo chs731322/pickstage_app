@@ -10,7 +10,6 @@ import { TabHero } from '@/components/TabHero';
 import { useInterestedArtists } from '@/features/artists';
 import { useBookmarks } from '@/features/bookmarks';
 import { useAuth } from '@/lib/auth';
-import { openSitePage } from '@/lib/links';
 import { colors, radius, spacing } from '@/theme';
 
 export default function MyScreen() {
@@ -124,15 +123,15 @@ export default function MyScreen() {
           <MenuRow
             label="이용약관"
             icon={{ ios: 'doc.text', android: 'description', web: 'description' }}
-            onPress={() => openSitePage('/terms')}
+            onPress={() => router.push('/terms')}
           />
           <MenuRow
             label="개인정보처리방침"
             icon={{ ios: 'lock', android: 'lock', web: 'lock' }}
-            onPress={() => openSitePage('/privacy')}
+            onPress={() => router.push('/privacy')}
           />
           <MenuRow
-            label="고객센터"
+            label="자주 묻는 질문"
             icon={{ ios: 'questionmark.circle', android: 'help_outline', web: 'help_outline' }}
             onPress={() => router.push('/faq')}
           />

@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderRadius: radius.lg,
     backgroundColor: colors.white,
-    shadowColor: '#1a1a2e',
+    shadowColor: colors.shadowInk,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.07,
     shadowRadius: 14,

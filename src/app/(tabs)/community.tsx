@@ -11,7 +11,7 @@ import { TabHero } from '@/components/TabHero';
 import { PostCard } from '@/components/PostCard';
 import { POST_CATEGORY_LABEL, POST_SORTS, usePosts, type PostSort } from '@/features/community';
 import { useAuth } from '@/lib/auth';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 const CATEGORIES = [{ value: '', label: '전체' }, ...Object.entries(POST_CATEGORY_LABEL).map(([value, label]) => ({ value, label }))];
 
@@ -53,7 +53,7 @@ export default function CommunityScreen() {
       />
       <View style={styles.search}>
         <SymbolView name={{ ios: 'magnifyingglass', android: 'search', web: 'search' }} tintColor={colors.textMuted} size={20} />
-        <TextInput
+        <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
           value={searchText}
           onChangeText={setSearchText}
           onSubmitEditing={() => applySearch(searchText)}
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   // 알약 줄은 화면 양끝까지 스크롤되도록 안쪽 여백만큼 바깥으로 넓힌다
   pillsScroll: { marginHorizontal: -spacing.md, flexGrow: 0 },
   pills: { gap: spacing.sm, paddingHorizontal: spacing.md },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   sorts: { flexDirection: 'row', gap: spacing.md },
   state: { marginTop: spacing.xl },

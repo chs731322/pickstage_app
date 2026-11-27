@@ -12,7 +12,7 @@ import { usePopularFestivals, type FestivalSummary } from '@/features/festivals'
 import { useUnreadCount } from '@/features/notifications';
 import { formatDateRange } from '@/lib/format';
 import { festivalGenreLabel } from '@/lib/genreLabel';
-import { cardShadow, colors, radius, spacing } from '@/theme';
+import { cardShadow, colors, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 const GAP = 12;
 // 자동으로 다음 포스터로 넘어가는 간격(밀리초)
@@ -27,7 +27,7 @@ const HERO_BOTTOM = 32;
 // 지금 포스터는 가운데에 크게, 양옆 포스터는 살짝 보이고, 옆으로 밀거나 4초마다 자동으로 넘어간다 (예스24 앱 메인 배너와 같은 방식).
 export function HeroSection() {
   const insets = useSafeAreaInsets();
-  const { width, height } = useWindowDimensions();
+  const { width, height, fontScale } = useWindowDimensions();
   const { data } = usePopularFestivals(5);
   const { data: unreadCount } = useUnreadCount();
   const [index, setIndex] = useState(0);
@@ -37,7 +37,7 @@ export function HeroSection() {
   const focused = useRef(true);
 
   // 홈을 열었을 때 버튼까지 한 화면에 보이도록, 남는 높이에 맞춰 포스터 크기를 정한다
-  const fixedHeights = insets.top + 54 + HEADLINE_HEIGHT + 32 + INFO_HEIGHT + HERO_BOTTOM + TAB_BAR_HEIGHT + insets.bottom;
+  const fixedHeights = insets.top + 54 + HEADLINE_HEIGHT + 32 + INFO_HEIGHT * Math.min(Math.max(fontScale, 1), MAX_FONT_SCALE) + HERO_BOTTOM + TAB_BAR_HEIGHT + insets.bottom;
   const cardWidth = Math.round(Math.max(130, Math.min(width * 0.62, ((height - fixedHeights) * 3) / 4)));
   const cardHeight = (cardWidth * 4) / 3;
   const snap = cardWidth + GAP;
@@ -164,7 +164,7 @@ export function HeroSection() {
                 )}
                 <Animated.View
                   pointerEvents="none"
-                  style={[StyleSheet.absoluteFill, { backgroundColor: '#000000', opacity: dim }]}
+                  style={[StyleSheet.absoluteFill, { backgroundColor: colors.black, opacity: dim }]}
                 />
               </Pressable>
             );
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     top: -6,
     right: -8,
     minWidth: 17,
-    height: 17,
+    minHeight: 17,
     paddingHorizontal: spacing.xs,
     borderRadius: radius.sm,
     backgroundColor: colors.brand,

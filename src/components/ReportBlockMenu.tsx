@@ -24,7 +24,7 @@ import {
 } from '@/features/moderation';
 import { errorMessage } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 const DETAIL_MAX = 200;
 
@@ -179,7 +179,7 @@ function ReportSheet({
             })}
           </View>
           {needsDetail ? (
-            <TextInput
+            <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
               value={detail}
               onChangeText={setDetail}
               maxLength={DETAIL_MAX}

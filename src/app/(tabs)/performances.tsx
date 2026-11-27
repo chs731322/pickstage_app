@@ -26,7 +26,7 @@ import {
   type ListFilters,
 } from '@/features/festivals';
 import { festivalGenreLabel } from '@/lib/genreLabel';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 const COLUMNS = 2;
 const GAP = 14;
@@ -81,7 +81,7 @@ export default function PerformancesScreen() {
           tintColor={colors.textMuted}
           size={20}
         />
-        <TextInput
+        <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
           value={searchText}
           onChangeText={setSearchText}
           onSubmitEditing={() => update({ keyword: searchText })}
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    height: 48,
+    minHeight: 48,
     paddingHorizontal: spacing.md,
     borderRadius: radius.pill,
     backgroundColor: colors.white,

@@ -7,7 +7,7 @@ import { Avatar } from '@/components/Avatar';
 import { ReportBlockMenu } from '@/components/ReportBlockMenu';
 import type { Comment } from '@/features/community';
 import { timeAgo } from '@/lib/postContent';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 type Props = {
   comment: Comment;
@@ -68,7 +68,7 @@ export function CommentItem({ comment, isMine, isReply = false, onReply, onSaveE
 
         {editing ? (
           <View style={styles.edit}>
-            <TextInput
+            <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
               value={draft}
               onChangeText={setDraft}
               multiline

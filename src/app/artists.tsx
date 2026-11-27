@@ -9,7 +9,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { Avatar } from '@/components/Avatar';
 import { useArtistList, type ArtistListItem } from '@/features/artists';
 import { nameGroupOf } from '@/lib/koreanGroup';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 // 아티스트 찾기: 예정된 공연에 출연하는 아티스트를 가나다순으로 보고, 이름으로 검색한다
 export default function ArtistsScreen() {
@@ -34,7 +34,7 @@ export default function ArtistsScreen() {
     <View style={styles.header}>
       <View style={styles.search}>
         <SymbolView name={{ ios: 'magnifyingglass', android: 'search', web: 'search' }} tintColor={colors.textMuted} size={20} />
-        <TextInput
+        <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
           value={query}
           onChangeText={setQuery}
           placeholder="아티스트 이름으로 찾기"
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   list: { flex: 1, backgroundColor: colors.pageBg },
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   header: { gap: spacing.md, paddingBottom: spacing.sm },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   sectionHeader: { paddingVertical: spacing.sm, backgroundColor: colors.pageBg },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.ms, marginBottom: spacing.sm, borderRadius: radius.lg, backgroundColor: colors.white },

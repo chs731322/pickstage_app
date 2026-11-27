@@ -10,7 +10,7 @@ import {
   useDeleteCustomNotification,
 } from '@/features/notifications';
 import { errorMessage } from '@/lib/api';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 const MEMO_MAX = 50;
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -101,7 +101,7 @@ export function CustomNotificationSheet({ festivalId, startDate, visible, onClos
             )}
 
             {/* 새로 예약 */}
-            <TextInput
+            <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
               value={memo}
               onChangeText={setMemo}
               maxLength={MEMO_MAX}

@@ -16,7 +16,7 @@ import {
   textLength,
   TITLE_MAX_LENGTH,
 } from '@/lib/postContent';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 // 글쓰기·글 수정 (id가 있으면 수정). 사진은 본문에 `![사진](주소)` 줄로 들어간다.
 // 공연 상세에서 들어오면 festivalId·festivalTitle을 받아 그 공연에 연결한 글을 쓴다.
@@ -97,18 +97,18 @@ function WriteForm({
       </View>
       {festival ? (
         <View style={styles.festival}>
-          <AppText size={14} color={colors.textSecondary} numberOfLines={1} style={styles.flex}>
+          <AppText size={14} color={colors.onBrandSoft} numberOfLines={1} style={styles.flex}>
             연결한 공연 <AppText weight="bold" size={14}>{festival.title}</AppText>
           </AppText>
           <Pressable onPress={() => setFestival(null)} hitSlop={10} accessibilityRole="button" accessibilityLabel="공연 연결 해제">
-            <AppText weight="bold" size={14} color={colors.textMuted}>
+            <AppText weight="bold" size={14} color={colors.onBrandSoft}>
               해제
             </AppText>
           </Pressable>
         </View>
       ) : null}
-      <TextInput value={title} onChangeText={setTitle} placeholder="제목" placeholderTextColor={colors.textMuted} maxLength={TITLE_MAX_LENGTH} style={styles.title} />
-      <TextInput value={content} onChangeText={setContent} placeholder="내용을 입력해주세요" placeholderTextColor={colors.textMuted} multiline style={styles.content} />
+      <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE} value={title} onChangeText={setTitle} placeholder="제목" placeholderTextColor={colors.textMuted} maxLength={TITLE_MAX_LENGTH} style={styles.title} />
+      <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE} value={content} onChangeText={setContent} placeholder="내용을 입력해주세요" placeholderTextColor={colors.textMuted} multiline style={styles.content} />
       <Pressable onPress={addPhotos} disabled={uploading} style={styles.photo} accessibilityRole="button">
         <AppText weight="semibold" size={14} color={colors.textSecondary}>
           {uploading ? '사진 올리는 중...' : `사진 추가 (${extractImageUrls(content).length}/${POST_IMAGES_MAX_COUNT})`}

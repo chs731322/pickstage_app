@@ -1,15 +1,14 @@
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useRef, useState, type ComponentRef } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
 import { AppText } from '@/components/AppText';
 import { SocialLoginButtons } from '@/components/SocialLoginButtons';
 import { Button } from '@/components/Button';
-import { AuthLayout } from '@/components/AuthLayout';
+import { AuthCollageLayout } from '@/components/AuthCollageLayout';
 import { TextField } from '@/components/TextField';
 import { errorMessage } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
-import { openSitePage } from '@/lib/links';
 import { emailError } from '@/lib/validation';
 import { colors, radius, spacing } from '@/theme';
 
@@ -45,13 +44,14 @@ export default function LoginScreen() {
   }
 
   return (
-    <AuthLayout title="다시 만나서 반가워요" subtitle={'로그인하고 내 취향 공연을 놓치지 마세요.'}>
+    <AuthCollageLayout title={['다시 만나서', '반가워요']} collapseOnKeyboard>
       <TextField
         label="이메일"
+        hideLabel
         value={email}
         onChangeText={setEmail}
         error={emailProblem}
-        placeholder="이메일을 입력해주세요"
+        placeholder="이메일"
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
@@ -64,10 +64,11 @@ export default function LoginScreen() {
       <TextField
         ref={passwordRef}
         label="비밀번호"
+        hideLabel
         value={password}
         onChangeText={setPassword}
         error={passwordProblem}
-        placeholder="비밀번호를 입력해주세요"
+        placeholder="비밀번호"
         password
         autoCapitalize="none"
         autoCorrect={false}
@@ -87,41 +88,34 @@ export default function LoginScreen() {
 
       <Button title="로그인" onPress={handleSubmit} loading={isSubmitting} />
 
-      {/* 소셜 로그인: 카카오, 구글, (아이폰에서만) Apple */}
-      <View style={styles.divider}>
-        <View style={styles.dividerLine} />
-        <AppText color={colors.textMuted} size={13}>
-          또는
-        </AppText>
-        <View style={styles.dividerLine} />
-      </View>
-      <SocialLoginButtons onError={setServerError} />
-      <AppText color={colors.textMuted} size={12} style={styles.terms}>
-        소셜 로그인으로 계속하면{' '}
-        <AppText color={colors.textSecondary} size={12} style={styles.underline} onPress={() => openSitePage('/terms')}>
-          이용약관
-        </AppText>
-        과{' '}
-        <AppText color={colors.textSecondary} size={12} style={styles.underline} onPress={() => openSitePage('/privacy')}>
-          개인정보처리방침
-        </AppText>
-        에 동의한 것으로 봐요.
-      </AppText>
-
       <View style={styles.links}>
         <Link href="/forgot-password">
-          <AppText color={colors.textSecondary} size={14}>
-            비밀번호를 잊으셨나요?
+          <AppText color={colors.textSecondary} size={13}>
+            비밀번호 찾기
           </AppText>
         </Link>
         <AppText color={colors.border}>|</AppText>
         <Link href="/signup">
-          <AppText weight="bold" color={colors.brand} size={14}>
+          <AppText weight="bold" color={colors.brand} size={13}>
             회원가입
           </AppText>
         </Link>
       </View>
-    </AuthLayout>
+
+      {/* 소셜 로그인: 카카오, 구글, (아이폰에서만) Apple */}
+      <SocialLoginButtons onError={setServerError} />
+      <AppText color={colors.textMuted} size={12} style={styles.terms}>
+        계속하면{' '}
+        <AppText color={colors.textSecondary} size={12} style={styles.underline} onPress={() => router.push('/terms')}>
+          이용약관
+        </AppText>
+        과{' '}
+        <AppText color={colors.textSecondary} size={12} style={styles.underline} onPress={() => router.push('/privacy')}>
+          개인정보처리방침
+        </AppText>
+        에 동의한 것으로 봐요.
+      </AppText>
+    </AuthCollageLayout>
   );
 }
 
@@ -129,17 +123,9 @@ const styles = StyleSheet.create({
   errorBox: {
     padding: spacing.md,
     borderRadius: radius.md,
-    backgroundColor: '#fff2f2',
+    backgroundColor: colors.dangerSoft,
   },
-  divider: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  dividerLine: { flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
   terms: { textAlign: 'center', lineHeight: 18 },
   underline: { textDecorationLine: 'underline' },
-  links: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.md,
-    paddingTop: spacing.sm,
-  },
+  links: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.md, paddingVertical: spacing.xs },
 });

@@ -7,7 +7,7 @@ import { ActivityIndicator, FlatList, Platform, Pressable, StyleSheet, TextInput
 import { AppText } from '@/components/AppText';
 import { EmptyState } from '@/components/EmptyState';
 import { isPinnedNotice, useNotices, type NoticeListItem } from '@/features/notices';
-import { cardShadow, colors, fontFamily, radius, spacing } from '@/theme';
+import { cardShadow, colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 // 공지사항: 제목·내용으로 검색하고, 고정된 공지는 맨 위에 보인다. 누르면 상세로 간다.
 export default function NoticesScreen() {
@@ -22,7 +22,7 @@ export default function NoticesScreen() {
   const header = (
     <View style={styles.search}>
       <SymbolView name={{ ios: 'magnifyingglass', android: 'search', web: 'search' }} tintColor={colors.textMuted} size={20} />
-      <TextInput
+      <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
         value={text}
         onChangeText={setText}
         onSubmitEditing={() => setKeyword(text)}
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    height: 48,
+    minHeight: 48,
     paddingHorizontal: spacing.md,
     marginBottom: spacing.md,
     borderRadius: radius.pill,

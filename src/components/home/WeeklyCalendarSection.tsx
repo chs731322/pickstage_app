@@ -99,7 +99,7 @@ export function WeeklyCalendarSection() {
                 accessibilityRole="button"
                 accessibilityState={{ selected: isSelected }}
                 accessibilityLabel={`${d.date.getMonth() + 1}월 ${d.num}일, 공연 ${count}개`}>
-                <AppText size={12} weight="medium" color={i === 6 ? colors.danger : i === 5 ? '#3b6fd4' : colors.textMuted}>
+                <AppText size={12} weight="medium" color={i === 6 ? colors.danger : i === 5 ? colors.saturday : colors.textMuted}>
                   {WEEKDAYS[i]}
                 </AppText>
                 <View style={[styles.num, isSelected && styles.numSelected, !isSelected && isToday && styles.numToday]}>

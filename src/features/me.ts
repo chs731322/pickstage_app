@@ -159,7 +159,7 @@ export function useMyReviews(enabled: boolean) {
 export function useUpdateMyReview() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...values }: { id: number; rating: number; content: string; seatSection?: string; viewInfo?: string; standingTip?: string }) => {
+    mutationFn: async ({ id, ...values }: { id: number; rating: number; content: string; seatSection?: string; viewInfo?: string; standingTip?: string; images?: string[] }) => {
       await api.patch(`/api/reviews/${id}`, values);
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['my', 'reviews'] }),

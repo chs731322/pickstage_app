@@ -9,7 +9,7 @@ import { AppText } from '@/components/AppText';
 import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { useVenueList, venueGroupOf, VENUE_REGIONS, type VenueListItem } from '@/features/venues';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 // 공연장 찾기: 지역으로 거르고 이름으로 검색해서, 가나다순 목록에서 고른다
 export default function VenuesScreen() {
@@ -33,7 +33,7 @@ export default function VenuesScreen() {
     <View style={styles.header}>
       <View style={styles.search}>
         <SymbolView name={{ ios: 'magnifyingglass', android: 'search', web: 'search' }} tintColor={colors.textMuted} size={20} />
-        <TextInput
+        <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
           value={query}
           onChangeText={setQuery}
           placeholder="공연장 이름이나 주소로 찾기"
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   list: { flex: 1, backgroundColor: colors.pageBg },
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   header: { gap: spacing.md, paddingBottom: spacing.sm },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   sectionHeader: { paddingVertical: spacing.sm, backgroundColor: colors.pageBg },

@@ -17,7 +17,7 @@ type Props = {
 export function MenuRow({ label, icon, onPress, value, danger = false }: Props) {
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.row, pressed && styles.pressed]} accessibilityRole="button">
-      <SymbolView name={icon as never} tintColor={danger ? colors.danger : colors.text} size={22} />
+      <SymbolView name={icon as never} tintColor={danger ? colors.danger : colors.textMuted} size={22} />
       <AppText weight="medium" size={16} color={danger ? colors.danger : colors.text} style={styles.label}>
         {label}
       </AppText>

@@ -105,7 +105,7 @@ function Row({ item, onPress }: { item: NotificationItem; onPress: () => void })
           <AppText weight="bold" size={12} color={item.isRead ? colors.textMuted : colors.brand}>
             {NOTIFICATION_TYPE_LABEL[item.type] ?? '알림'}
           </AppText>
-          <AppText size={12} color={colors.textMuted}>
+          <AppText size={12} color={item.isRead ? colors.textMuted : colors.onBrandSoft}>
             {timeAgo(item.sentAt)}
           </AppText>
         </View>
@@ -113,12 +113,12 @@ function Row({ item, onPress }: { item: NotificationItem; onPress: () => void })
           {item.title}
         </AppText>
         {item.message ? (
-          <AppText size={14} color={colors.textSecondary} numberOfLines={3} style={styles.message}>
+          <AppText size={14} color={item.isRead ? colors.textSecondary : colors.onBrandSoft} numberOfLines={3} style={styles.message}>
             {item.message}
           </AppText>
         ) : null}
         {item.festivalTitle ? (
-          <AppText size={13} color={colors.textMuted} numberOfLines={1}>
+          <AppText size={13} color={item.isRead ? colors.textMuted : colors.onBrandSoft} numberOfLines={1}>
             {item.festivalTitle}
           </AppText>
         ) : null}
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   pills: { flexDirection: 'row', gap: spacing.sm },
   actions: { flexDirection: 'row', justifyContent: 'space-between' },
   row: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.white },
-  rowUnread: { backgroundColor: '#fff7fc' },
+  rowUnread: { backgroundColor: colors.brandSoft },
   pressed: { opacity: 0.85 },
   iconWrap: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
   iconWrapUnread: { backgroundColor: colors.brandSoft },

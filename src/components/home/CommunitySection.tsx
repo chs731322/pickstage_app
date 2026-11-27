@@ -57,5 +57,5 @@ const styles = StyleSheet.create({
   list: { gap: spacing.md, paddingHorizontal: spacing.md, marginTop: spacing.xs },
   writePressed: { backgroundColor: colors.brandStrong },
   // 작은 알약 버튼 (화면 가운데)
-  write: { alignSelf: 'center', height: 40, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center', marginTop: spacing.xs },
+  write: { alignSelf: 'center', minHeight: 40, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center', marginTop: spacing.xs },
 });

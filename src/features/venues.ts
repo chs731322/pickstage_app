@@ -65,9 +65,10 @@ export type ReviewInput = {
   viewInfo?: string;
   standingTip?: string;
   seatSection?: string;
+  images?: string[];
 };
 
-// 공연장 후기 작성 (사진은 아직 지원하지 않는다)
+// 공연장 후기 작성
 export function useCreateReview(venueId: number) {
   const queryClient = useQueryClient();
   return useMutation({

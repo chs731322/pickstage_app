@@ -1,10 +1,10 @@
 import { Tabs } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
-import { StyleSheet, type ColorValue } from 'react-native';
+import { StyleSheet, useWindowDimensions, type ColorValue } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/AppText';
-import { colors } from '@/theme';
+import { colors, MAX_FONT_SCALE } from '@/theme';
 
 type TabIconProps = { focused: boolean; color: ColorValue };
 
@@ -41,6 +41,9 @@ export const TAB_BAR_HEIGHT = 58;
 export default function AppTabs() {
   // 높이를 직접 정하면 아이폰의 아래쪽 막대(홈 인디케이터) 영역은 자동으로 더해지지 않아서, 직접 더한다
   const { bottom } = useSafeAreaInsets();
+  // 글자를 키운 폰에서는 탭 이름이 잘리지 않게 늘어난 만큼 높인다
+  const { fontScale } = useWindowDimensions();
+  const grow = Math.round(16 * (Math.min(Math.max(fontScale, 1), MAX_FONT_SCALE) - 1));
 
   return (
     <Tabs
@@ -48,7 +51,7 @@ export default function AppTabs() {
         headerShown: false,
         tabBarActiveTintColor: colors.brand,
         tabBarInactiveTintColor: colors.tabInactive,
-        tabBarStyle: [styles.bar, { height: TAB_BAR_HEIGHT + bottom, paddingBottom: bottom }],
+        tabBarStyle: [styles.bar, { height: TAB_BAR_HEIGHT + grow + bottom, paddingBottom: bottom }],
       }}>
       <Tabs.Screen
         name="index"

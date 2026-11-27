@@ -213,7 +213,7 @@ function ReviewCard({ review }: { review: MyReview }) {
         <AppText weight="bold" size={16} numberOfLines={1} style={styles.flex}>
           {review.venueName}
         </AppText>
-        <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={15} />
+        <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor={colors.star} size={15} />
         <AppText weight="bold" size={14}>
           {review.rating.toFixed(1)}
         </AppText>

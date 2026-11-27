@@ -2,10 +2,12 @@ import { useEffect, useRef, useState, type ComponentRef, type Ref } from 'react'
 import { Pressable, StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 
 import { AppText } from '@/components/AppText';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 type Props = TextInputProps & {
   label: string;
+  // 이름표를 화면에 보이지 않게 한다 (placeholder 가 대신하는 화면). 화면 읽기에는 그대로 읽어준다
+  hideLabel?: boolean;
   // 입력이 잘못됐을 때 칸 아래에 보여줄 문구 (빨간색)
   error?: string | null;
   // 입력이 맞을 때 칸 아래에 보여줄 문구 (초록색, 예: "사용 가능한 닉네임입니다.")
@@ -23,6 +25,7 @@ type Props = TextInputProps & {
 // 이름표가 붙은 입력칸. 로그인, 회원가입 같은 모든 입력 화면이 함께 쓴다.
 export function TextField({
   label,
+  hideLabel = false,
   error,
   success,
   hint,
@@ -61,9 +64,11 @@ export function TextField({
 
   return (
     <View style={styles.wrapper}>
-      <AppText weight="medium" size={13} color={colors.textSecondary}>
-        {label}
-      </AppText>
+      {hideLabel ? null : (
+        <AppText weight="medium" size={13} color={colors.textSecondary}>
+          {label}
+        </AppText>
+      )}
       <View
         style={[
           styles.box,
@@ -71,8 +76,9 @@ export function TextField({
           error ? styles.boxError : null,
           inputProps.editable === false && styles.boxDisabled,
         ]}>
-        <TextInput
+        <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
           ref={setRefs}
+          accessibilityLabel={label}
           {...inputProps}
           secureTextEntry={password && !visible}
           onFocus={(event) => {

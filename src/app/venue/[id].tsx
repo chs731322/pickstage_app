@@ -92,10 +92,11 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
         ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venue.address)}`
         : null;
   const facilities = parseFacilities(venue.facilities);
+  // 값만 봐도 알 수 있으면 라벨을 붙이지 않는다 (수용 인원은 "○명 수용"으로 한 줄에)
   const facts = [
-    venue.capacity ? { label: '수용 인원', value: `${venue.capacity.toLocaleString('ko-KR')}명` } : null,
-    venue.transportInfo ? { label: '교통', value: venue.transportInfo } : null,
-  ].filter((fact): fact is { label: string; value: string } => fact !== null);
+    venue.capacity ? { key: 'capacity', label: null, value: `${venue.capacity.toLocaleString('ko-KR')}명 수용` } : null,
+    venue.transportInfo ? { key: 'transport', label: '교통', value: venue.transportInfo } : null,
+  ].filter((fact): fact is { key: string; label: string | null; value: string } => fact !== null);
 
   const handleWrite = () => {
     if (!isLoggedIn) {
@@ -193,10 +194,12 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
                 공연장 정보
               </AppText>
               {facts.map((fact) => (
-                <View key={fact.label} style={styles.fact}>
-                  <AppText weight="bold" size={14} color={colors.textMuted}>
-                    {fact.label}
-                  </AppText>
+                <View key={fact.key} style={styles.fact}>
+                  {fact.label ? (
+                    <AppText weight="medium" size={13} color={colors.textMuted}>
+                      {fact.label}
+                    </AppText>
+                  ) : null}
                   <AppText size={16} style={styles.factValue}>
                     {fact.value}
                   </AppText>
@@ -206,9 +209,6 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
                 <>
                   {facilities.phone ? (
                     <View style={styles.fact}>
-                      <AppText weight="bold" size={14} color={colors.textMuted}>
-                        전화
-                      </AppText>
                       <Pressable onPress={() => Linking.openURL(`tel:${facilities.phone}`)} hitSlop={6}>
                         <AppText size={16} color={colors.brand} weight="semibold">
                           {facilities.phone}
@@ -218,9 +218,6 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
                   ) : null}
                   {facilities.homepage ? (
                     <View style={styles.fact}>
-                      <AppText weight="bold" size={14} color={colors.textMuted}>
-                        홈페이지
-                      </AppText>
                       <Pressable onPress={() => WebBrowser.openBrowserAsync(facilities.homepage!)} hitSlop={6}>
                         <AppText size={16} color={colors.brand} weight="semibold">
                           공연장 홈페이지 열기 ›
@@ -230,7 +227,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
                   ) : null}
                   {facilities.available.length > 0 ? (
                     <View style={styles.fact}>
-                      <AppText weight="bold" size={14} color={colors.textMuted}>
+                      <AppText weight="medium" size={13} color={colors.textMuted}>
                         편의시설
                       </AppText>
                       <View style={styles.pills}>
@@ -247,7 +244,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
                 </>
               ) : venue.facilities ? (
                 <View style={styles.fact}>
-                  <AppText weight="bold" size={14} color={colors.textMuted}>
+                  <AppText weight="medium" size={13} color={colors.textMuted}>
                     편의시설
                   </AppText>
                   <AppText size={16} style={styles.factValue}>
@@ -270,7 +267,7 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
                 </AppText>
                 {average !== null ? (
                   <View style={styles.average}>
-                    <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={16} />
+                    <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor={colors.star} size={16} />
                     <AppText weight="bold" size={14}>
                       {average.toFixed(1)}
                     </AppText>
@@ -346,7 +343,7 @@ function ReviewItem({ review, onBlocked }: { review: VenueReview; onBlocked: (us
   return (
     <View style={styles.review}>
       <View style={styles.reviewTop}>
-        <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={15} />
+        <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor={colors.star} size={15} />
         <AppText weight="bold" size={14}>
           {review.rating.toFixed(1)}
         </AppText>
@@ -398,7 +395,7 @@ function ActionButton({
 }) {
   return (
     <Pressable onPress={onPress} style={styles.action} accessibilityRole="button">
-      <SymbolView name={icon as never} tintColor={colors.text} size={22} />
+      <SymbolView name={icon as never} tintColor={colors.textSecondary} size={22} />
       <AppText size={13} weight="medium" color={colors.textSecondary}>
         {label}
       </AppText>
@@ -431,7 +428,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderRadius: radius.lg,
     backgroundColor: colors.white,
-    shadowColor: '#1a1a2e',
+    shadowColor: colors.shadowInk,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.07,
     shadowRadius: 14,

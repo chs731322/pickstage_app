@@ -8,7 +8,7 @@ import { FilterPill } from '@/components/FilterPill';
 import { TabHero } from '@/components/TabHero';
 import { useCalendarFestivals } from '@/features/calendar';
 import { buildLayout, buildWeeks, toDateStr } from '@/lib/calendar';
-import { colors, radius, spacing } from '@/theme';
+import { colors, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 const WEEKDAYS = ['월', '화', '수', '목', '금', '토', '일'];
 const WEEKDAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
@@ -18,7 +18,9 @@ const MAX_BARS = 3;
 const GRID_PADDING = spacing.md;
 
 export default function CalendarScreen() {
-  const { width } = useWindowDimensions();
+  const { width, fontScale } = useWindowDimensions();
+  // 글자를 키운 폰에서는 날짜 칸도 같이 높인다
+  const cellHeight = Math.round(CELL_HEIGHT * Math.min(Math.max(fontScale, 1), MAX_FONT_SCALE));
   const today = useMemo(() => new Date(), []);
   const [cursor, setCursor] = useState({ year: today.getFullYear(), month: today.getMonth() });
   const [selected, setSelected] = useState(toDateStr(today.getFullYear(), today.getMonth(), today.getDate()));
@@ -102,7 +104,7 @@ export default function CalendarScreen() {
                 <AppText
                   weight="semibold"
                   size={13}
-                  color={i === 6 ? colors.danger : i === 5 ? '#3b6fd4' : colors.textMuted}
+                  color={i === 6 ? colors.danger : i === 5 ? colors.saturday : colors.textMuted}
                   style={styles.center}>
                   {w}
                 </AppText>
@@ -112,7 +114,7 @@ export default function CalendarScreen() {
           {weeks.map((week, wi) => (
             <View key={wi} style={styles.weekRow}>
               {week.map((day, di) => {
-                if (!day) return <View key={di} style={{ width: cellWidth, height: CELL_HEIGHT }} />;
+                if (!day) return <View key={di} style={{ width: cellWidth, height: cellHeight }} />;
                 const isSelected = day.dateStr === selected;
                 const isToday = day.dateStr === todayStr;
                 // 줄 번호(slot) 순서대로 막대를 그린다 (며칠짜리 공연은 날짜가 바뀌어도 같은 줄)
@@ -123,14 +125,14 @@ export default function CalendarScreen() {
                   <Pressable
                     key={di}
                     onPress={() => setSelected(day.dateStr)}
-                    style={[styles.cell, { width: cellWidth }, isSelected && styles.cellSelected]}
+                    style={[styles.cell, { width: cellWidth, height: cellHeight }, isSelected && styles.cellSelected]}
                     accessibilityRole="button"
                     accessibilityLabel={`${cursor.month + 1}월 ${day.day}일, 공연 ${day.festivals.length}개`}>
                     <View style={[styles.dayBadge, isToday && styles.dayBadgeToday]}>
                       <AppText
                         weight={isToday || isSelected ? 'bold' : 'medium'}
                         size={14}
-                        color={isToday ? colors.white : di === 6 ? colors.danger : di === 5 ? '#3b6fd4' : colors.text}>
+                        color={isToday ? colors.white : di === 6 ? colors.danger : di === 5 ? colors.saturday : colors.text}>
                         {day.day}
                       </AppText>
                     </View>
@@ -202,7 +204,7 @@ const styles = StyleSheet.create({
   calendar: { borderRadius: radius.lg, backgroundColor: colors.white, paddingVertical: spacing.sm },
   weekRow: { flexDirection: 'row' },
   center: { textAlign: 'center', paddingVertical: spacing.sm },
-  cell: { height: CELL_HEIGHT, alignItems: 'center', paddingTop: spacing.xs, borderRadius: radius.md },
+  cell: { alignItems: 'center', paddingTop: spacing.xs, borderRadius: radius.md },
   cellSelected: { backgroundColor: colors.brandSoft },
   dayBadge: { width: 26, height: 26, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
   dayBadgeToday: { backgroundColor: colors.brand },

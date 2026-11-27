@@ -71,7 +71,7 @@ export function ReviewHighlightCard({ target, id, onWrite }: Props) {
                   <AppText weight="bold" size={14}>
                     {item.keyword}
                   </AppText>
-                  <AppText size={13} color={colors.textSecondary}>
+                  <AppText size={13} color={sentiment === 'positive' ? colors.onBrandSoft : colors.textSecondary}>
                     {item.count}회
                   </AppText>
                   <AppText size={12} color={sentiment === 'positive' ? colors.brandStrong : colors.textMuted}>

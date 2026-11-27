@@ -129,6 +129,7 @@ export default function MyPostsScreen() {
             seatSection: editing.seatSection,
             viewInfo: editing.viewInfo,
             standingTip: editing.standingTip,
+            images: editing.images,
           }}
           submitLabel="저장"
           successMessage="후기를 수정했어요"
@@ -173,7 +174,7 @@ function ReviewCard({ review, onEdit, onDelete }: { review: MyReview; onEdit: ()
         <AppText weight="bold" size={16} numberOfLines={1} style={styles.flex}>
           {review.venueName}
         </AppText>
-        <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor="#ffb400" size={15} />
+        <SymbolView name={{ ios: 'star.fill', android: 'star', web: 'star' }} tintColor={colors.star} size={15} />
         <AppText weight="bold" size={14}>
           {review.rating.toFixed(1)}
         </AppText>

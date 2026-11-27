@@ -7,9 +7,9 @@ import { AppText } from '@/components/AppText';
 import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
 import { useFaqs } from '@/features/faqs';
-import { cardShadow, colors, fontFamily, radius, spacing } from '@/theme';
+import { cardShadow, colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
-// 고객센터(자주 묻는 질문): 분류로 거르고 검색할 수 있고, 질문을 누르면 답이 펼쳐진다.
+// 자주 묻는 질문: 분류로 거르고 검색할 수 있고, 질문을 누르면 답이 펼쳐진다.
 export default function FaqScreen() {
   const headerHeight = useHeaderHeight();
   const { data, isPending, error, refetch, isRefetching } = useFaqs();
@@ -39,7 +39,7 @@ export default function FaqScreen() {
       showsVerticalScrollIndicator={false}>
       <View style={styles.search}>
         <SymbolView name={{ ios: 'magnifyingglass', android: 'search', web: 'search' }} tintColor={colors.textMuted} size={20} />
-        <TextInput
+        <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
           value={keyword}
           onChangeText={setKeyword}
           placeholder="궁금한 내용을 검색해보세요"
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1, gap: 2 },
   list: { flex: 1, backgroundColor: colors.pageBg },
   content: { gap: spacing.sm, paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
-  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, height: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
+  search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.white },
   searchInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, paddingVertical: 0 },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.xs },
   state: { marginTop: spacing.xl },

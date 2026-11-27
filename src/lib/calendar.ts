@@ -1,5 +1,7 @@
 // 캘린더 계산 (웹 MonthCalendarSection.jsx 와 같은 규칙): 날짜 칸 만들기, 며칠짜리 공연의 줄·색 정하기
 
+import { calendarPalette } from '@/theme';
+
 export type CalendarFestival = {
   id: number;
   title: string;
@@ -12,19 +14,6 @@ export type CalendarFestival = {
 
 export type CalendarDay = { day: number; dateStr: string; festivals: CalendarFestival[] };
 
-// 서로 구분되는 파스텔 색 (배경 / 글자)
-export const PASTELS: [string, string][] = [
-  ['#ffd9e6', '#a8335f'],
-  ['#d9e8ff', '#2c5aa0'],
-  ['#dcf3dd', '#2b7a4b'],
-  ['#fff0c7', '#8a6a00'],
-  ['#e6dcff', '#5a44ae'],
-  ['#d5f2f0', '#1e7872'],
-  ['#ffe2d3', '#a1461e'],
-  ['#f1dff7', '#84409a'],
-  ['#e5f1c8', '#53701a'],
-  ['#d6e9f3', '#2a6583'],
-];
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -45,7 +34,7 @@ export function buildLayout(festivals: CalendarFestival[]) {
     if (slot === -1) slot = slotEnds.length;
     slotEnds[slot] = f.endDate;
     slotById[f.id] = slot;
-    colorById[f.id] = PASTELS[index % PASTELS.length];
+    colorById[f.id] = calendarPalette[index % calendarPalette.length];
   });
   return { slotById, colorById };
 }

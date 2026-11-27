@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   more: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 46,
+    minHeight: 46,
     borderRadius: radius.pill,
     backgroundColor: colors.surface,
   },

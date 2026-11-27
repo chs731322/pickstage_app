@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
@@ -5,11 +6,11 @@ import { AppText } from '@/components/AppText';
 import { AppleSignInButton } from '@/components/AppleSignInButton';
 import { useAuth } from '@/lib/auth';
 import type { SocialProvider } from '@/lib/socialLogin';
-import { colors, radius, spacing } from '@/theme';
+import { colors, radius, socialColors, spacing } from '@/theme';
 
-const PROVIDERS: { id: SocialProvider; label: string; background: string; border?: string; textColor: string }[] = [
-  { id: 'kakao', label: '카카오로 계속하기', background: '#FEE500', textColor: 'rgba(0,0,0,0.85)' },
-  { id: 'google', label: 'Google로 계속하기', background: colors.white, border: colors.border, textColor: colors.text },
+const PROVIDERS: { id: SocialProvider; label: string; icon: number; background: string; border?: string; textColor: string }[] = [
+  { id: 'kakao', label: '카카오로 계속하기', icon: require('../../assets/images/brand/kakao.svg'), background: socialColors.kakao, textColor: 'rgba(0,0,0,0.85)' },
+  { id: 'google', label: 'Google로 계속하기', icon: require('../../assets/images/brand/google.svg'), background: colors.white, border: colors.border, textColor: colors.text },
 ];
 
 // 소셜 로그인 버튼 모음: 카카오, 구글, (아이폰에서는) Apple.
@@ -45,6 +46,7 @@ export function SocialLoginButtons({ onError }: { onError: (message: string) => 
             p.border ? { borderWidth: 1, borderColor: p.border } : null,
             (pressed || (busy !== null && busy !== p.id)) && styles.dim,
           ]}>
+          <Image source={p.icon} style={styles.icon} contentFit="contain" />
           {busy === p.id ? (
             <ActivityIndicator color={p.textColor} />
           ) : (
@@ -61,6 +63,8 @@ export function SocialLoginButtons({ onError }: { onError: (message: string) => 
 
 const styles = StyleSheet.create({
   wrap: { gap: spacing.sm },
-  button: { height: 48, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  button: { minHeight: 48, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
   dim: { opacity: 0.6 },
+  // 로고는 버튼 왼쪽에 고정해서 글자는 가운데에 그대로 둔다
+  icon: { position: 'absolute', left: spacing.lg, width: 20, height: 20 },
 });

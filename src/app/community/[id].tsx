@@ -35,7 +35,7 @@ import { errorMessage } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 import { SITE_URL } from '@/lib/links';
 import { timeAgo } from '@/lib/postContent';
-import { colors, fontFamily, radius, spacing } from '@/theme';
+import { colors, fontFamily, MAX_FONT_SCALE, radius, spacing } from '@/theme';
 
 export default function PostScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -242,7 +242,7 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
             </AppText>
           </Pressable>
           <Pressable onPress={handleShare} style={styles.shareButton} accessibilityRole="button" accessibilityLabel="공유">
-            <SymbolView name={{ ios: 'square.and.arrow.up', android: 'share', web: 'share' }} tintColor={colors.text} size={20} />
+            <SymbolView name={{ ios: 'square.and.arrow.up', android: 'share', web: 'share' }} tintColor={colors.textSecondary} size={20} />
           </Pressable>
         </View>
 
@@ -301,7 +301,7 @@ function PostBodyScreen({ post, topPadding }: { post: PostDetail; topPadding: nu
           </View>
         ) : null}
         <View style={styles.composerRow}>
-          <TextInput
+          <TextInput maxFontSizeMultiplier={MAX_FONT_SCALE}
             ref={inputRef}
             value={draft}
             onChangeText={setDraft}
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.sm,
     paddingHorizontal: spacing.md,
-    height: 46,
+    minHeight: 46,
     borderRadius: radius.pill,
     borderWidth: 1.5,
     borderColor: colors.brand,
@@ -378,6 +378,6 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   sendPressed: { backgroundColor: colors.brandStrong },
-  send: { height: 44, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
+  send: { minHeight: 44, paddingHorizontal: spacing.md, borderRadius: radius.pill, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
   sendDisabled: { opacity: 0.4 },
 });

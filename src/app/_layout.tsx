@@ -76,7 +76,9 @@ function RootNavigator() {
       <Stack.Screen name="user/[id]" options={{ title: '프로필' }} />
       <Stack.Screen name="notices" options={{ title: '공지사항' }} />
       <Stack.Screen name="notice/[id]" options={{ title: '공지사항' }} />
-      <Stack.Screen name="faq" options={{ title: '고객센터' }} />
+      <Stack.Screen name="faq" options={{ title: '자주 묻는 질문' }} />
+      <Stack.Screen name="terms" options={{ title: '이용약관' }} />
+      <Stack.Screen name="privacy" options={{ title: '개인정보처리방침' }} />
       <Stack.Screen name="community/[id]" options={{ title: '' }} />
 
       {/* 로그인한 사람만 (로그아웃 상태로 열면 로그인 화면으로 보낸다) */}
