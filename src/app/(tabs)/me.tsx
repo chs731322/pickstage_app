@@ -9,13 +9,12 @@ import { MenuCard, MenuRow } from '@/components/MenuRow';
 import { TabHero } from '@/components/TabHero';
 import { useInterestedArtists } from '@/features/artists';
 import { useBookmarks } from '@/features/bookmarks';
+import { useMyPosts } from '@/features/me';
 import { useAuth } from '@/lib/auth';
 import { colors, radius, spacing } from '@/theme';
 
 export default function MyScreen() {
   const { user, isLoggedIn, signOut } = useAuth();
-  const { data: bookmarks } = useBookmarks();
-  const { data: artists } = useInterestedArtists();
 
   const confirmSignOut = () =>
     Alert.alert('로그아웃할까요?', undefined, [
@@ -46,18 +45,19 @@ export default function MyScreen() {
               </AppText>
             </Pressable>
 
+            {/* 숫자 칸: 누르면 그 목록으로 */}
+            <ActivityStats />
+
             {/* 내 활동 */}
             <MenuCard>
               <MenuRow
                 label="찜한 공연"
                 icon={{ ios: 'heart', android: 'favorite_border', web: 'favorite_border' }}
-                value={bookmarks ? `${bookmarks.length}` : undefined}
                 onPress={() => router.push('/my/bookmarks')}
               />
               <MenuRow
                 label="관심 아티스트"
                 icon={{ ios: 'star', android: 'star_border', web: 'star_border' }}
-                value={artists ? `${artists.length}` : undefined}
                 onPress={() => router.push('/my/artists')}
               />
               <MenuRow
@@ -149,7 +149,42 @@ export default function MyScreen() {
   );
 }
 
+// 찜·관심 아티스트·내 글 개수 (로그인했을 때만 보인다)
+function ActivityStats() {
+  const { data: bookmarks } = useBookmarks();
+  const { data: artists } = useInterestedArtists();
+  const { data: posts } = useMyPosts('');
+  const stats = [
+    { label: '찜', value: bookmarks?.length, path: '/my/bookmarks' as const },
+    { label: '관심 아티스트', value: artists?.length, path: '/my/artists' as const },
+    { label: '내 글', value: posts?.pages[0]?.totalElements, path: '/my/posts' as const },
+  ];
+
+  return (
+    <View style={styles.stats}>
+      {stats.map((stat) => (
+        <Pressable
+          key={stat.label}
+          onPress={() => router.push(stat.path)}
+          style={({ pressed }) => [styles.stat, pressed && styles.statPressed]}
+          accessibilityRole="button"
+          accessibilityLabel={`${stat.label} ${stat.value ?? ''}`}>
+          <AppText weight="bold" size={22}>
+            {stat.value ?? '-'}
+          </AppText>
+          <AppText size={12} color={colors.textMuted}>
+            {stat.label}
+          </AppText>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
+  stats: { flexDirection: 'row', borderRadius: radius.lg, backgroundColor: colors.card, overflow: 'hidden' },
+  stat: { flex: 1, alignItems: 'center', gap: spacing.xs, paddingVertical: spacing.md },
+  statPressed: { backgroundColor: colors.surface },
   safe: { flex: 1, backgroundColor: colors.pageBg },
   scroll: { backgroundColor: colors.pageBg },
   content: { gap: spacing.md, padding: spacing.md, paddingTop: 0, paddingBottom: spacing.xl },

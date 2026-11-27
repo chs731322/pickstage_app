@@ -8,10 +8,18 @@ import { festivalStatus, formatDateRange } from '@/lib/format';
 import { colors, radius, spacing } from '@/theme';
 
 // 카드에 필요한 값만 (공연 목록, 아티스트·공연장의 공연 목록에서 같이 쓴다)
-export type PosterCardFestival = Pick<FestivalSummary, 'id' | 'title' | 'posterImage' | 'startDate' | 'endDate'>;
+export type PosterCardFestival = Pick<FestivalSummary, 'id' | 'title' | 'posterImage' | 'startDate' | 'endDate'> & { region?: string | null };
 
-// 포스터와 이름, 날짜가 있는 공연 카드 (가로로 넘겨 보는 목록용)
-export function PosterCard({ festival, width = 150 }: { festival: PosterCardFestival; width?: number }) {
+// 목록용 짧은 날짜: "12.18", "12.18 ~ 12.20". 올해가 아니면 연도를 붙인다.
+function shortPeriod(start: string | null, end: string | null) {
+  if (!start) return '일정 미정';
+  const thisYear = String(new Date().getFullYear());
+  const short = (date: string) => (date.startsWith(thisYear) ? date.slice(5, 10) : date.slice(2, 10)).replaceAll('-', '.');
+  return end && end !== start ? `${short(start)} ~ ${short(end)}` : short(start);
+}
+
+// 포스터와 이름, 날짜가 있는 공연 카드. 공연 목록(variant="list")은 이름 아래에 "날짜 · 지역"을 한 줄로 둔다.
+export function PosterCard({ festival, width = 150, variant = 'row' }: { festival: PosterCardFestival; width?: number; variant?: 'row' | 'list' }) {
   const status = festivalStatus(festival.startDate, festival.endDate);
   const ended = status?.kind === 'ended';
   return (
@@ -43,12 +51,25 @@ export function PosterCard({ festival, width = 150 }: { festival: PosterCardFest
           </View>
         ) : null}
       </View>
-      <AppText weight="medium" size={13} color={ended ? colors.textMuted : colors.brand} style={styles.date}>
-        {formatDateRange(festival.startDate, festival.endDate)}
-      </AppText>
-      <AppText weight="bold" size={16} numberOfLines={2} style={styles.title}>
-        {festival.title}
-      </AppText>
+      {variant === 'list' ? (
+        <>
+          <AppText weight="bold" size={14} numberOfLines={2} style={styles.listTitle}>
+            {festival.title}
+          </AppText>
+          <AppText size={13} color={colors.textMuted} numberOfLines={1} style={styles.meta}>
+            {[shortPeriod(festival.startDate, festival.endDate), festival.region].filter(Boolean).join(' · ')}
+          </AppText>
+        </>
+      ) : (
+        <>
+          <AppText weight="medium" size={13} color={ended ? colors.textMuted : colors.brand} style={styles.date}>
+            {formatDateRange(festival.startDate, festival.endDate)}
+          </AppText>
+          <AppText weight="bold" size={16} numberOfLines={2} style={styles.title}>
+            {festival.title}
+          </AppText>
+        </>
+      )}
     </Pressable>
   );
 }
@@ -79,4 +100,6 @@ const styles = StyleSheet.create({
   noPoster: { alignItems: 'center', justifyContent: 'center' },
   date: { marginBottom: spacing.xs },
   title: { lineHeight: 22 },
+  listTitle: { lineHeight: 20 },
+  meta: { marginTop: spacing.xs },
 });

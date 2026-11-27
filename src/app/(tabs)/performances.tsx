@@ -178,7 +178,7 @@ export default function PerformancesScreen() {
         columnWrapperStyle={styles.column}
         contentContainerStyle={styles.content}
         ListHeaderComponent={header}
-        renderItem={({ item }) => <PosterCard festival={item} width={cardWidth} />}
+        renderItem={({ item }) => <PosterCard festival={item} width={cardWidth} variant="list" />}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) fetchNextPage();
         }}
