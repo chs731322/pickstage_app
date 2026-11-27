@@ -27,6 +27,11 @@ export async function checkNicknameAvailable(nickname: string): Promise<{ availa
   return { available: res.data.data.available, message: res.data.message ?? '' };
 }
 
+// 비밀번호 재설정 링크를 메일로 보낸다 (새 비밀번호는 메일의 링크로 들어간 웹 화면에서 정한다)
+export async function sendPasswordResetEmail(email: string): Promise<void> {
+  await api.post('/api/auth/password/reset-email', { email }, { timeout: 30000 });
+}
+
 // 회원가입. 성공하면 바로 로그인된 상태의 토큰과 사용자 정보를 돌려준다.
 export async function signUp(input: { email: string; password: string; nickname: string }): Promise<AuthResult> {
   const res = await api.post<ApiResponse<AuthResult>>('/api/auth/signup', input);

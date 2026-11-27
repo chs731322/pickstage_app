@@ -134,7 +134,7 @@ export default function MyScreen() {
           <MenuRow
             label="고객센터"
             icon={{ ios: 'questionmark.circle', android: 'help_outline', web: 'help_outline' }}
-            onPress={() => openSitePage('/faq')}
+            onPress={() => router.push('/faq')}
           />
         </MenuCard>
 

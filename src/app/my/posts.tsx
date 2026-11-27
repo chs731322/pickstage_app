@@ -1,4 +1,5 @@
 import { SymbolView } from 'expo-symbols';
+import { router } from 'expo-router';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -17,7 +18,6 @@ import {
   type MyReview,
 } from '@/features/me';
 import { errorMessage } from '@/lib/api';
-import { openSitePage } from '@/lib/links';
 import { colors, spacing } from '@/theme';
 
 const REVIEW_FILTER = 'venue_review';
@@ -142,8 +142,7 @@ export default function MyPostsScreen() {
 
 function PostCard({ post }: { post: MyPost }) {
   return (
-    // 커뮤니티 글 화면을 앱에 만들기 전까지는 웹의 글 페이지를 앱 안 브라우저로 연다
-    <Pressable onPress={() => openSitePage(`/community/${post.id}`)} style={styles.card} accessibilityRole="link">
+    <Pressable onPress={() => router.push(`/community/${post.id}`)} style={styles.card} accessibilityRole="button">
       <View style={styles.cardHead}>
         <View style={styles.tag}>
           <AppText weight="bold" size={12} color={colors.brand}>
