@@ -14,7 +14,19 @@ npx expo start --web    # 컴퓨터 브라우저에서 화면만 빠르게 확�
 - **실제 폰으로 확인:** App Store에서 **Expo Go**를 설치하고, 컴퓨터와 같은 와이파이에서 `npx expo start`의 QR 코드를 찍습니다.
 - **웹 미리보기:** 서버의 CORS가 `http://localhost:5173`만 허용하므로 `npx expo start --web --port 5173`으로 띄워야 서버 데이터가 보입니다. (폰 앱은 CORS와 무관합니다.)
 - **iOS 시뮬레이터:** Xcode가 있어야 합니다 (`npx expo start --ios`).
-- Expo Go에 없는 네이티브 기능(푸시 알림 토큰 등)을 쓰는 단계부터는 개발 빌드가 필요합니다: `npx eas-cli@latest build --profile development` (Xcode 없이 클라우드에서 빌드).
+- Expo Go에 없는 네이티브 기능(푸시 알림 토큰 등)은 설치용 빌드에서 확인합니다.
+
+## 안드로이드 설치 파일(APK) 만들기
+
+```bash
+npx eas-cli@latest login                                      # 처음 한 번 (Expo 계정)
+npx eas-cli@latest build --platform android --profile preview  # 클라우드에서 빌드
+```
+
+- 빌드가 끝나면 설치 링크가 나옵니다. 안드로이드 폰에서 열어 설치합니다. (폰에서 "출처를 알 수 없는 앱 설치"를 허용해야 합니다.)
+- 설치한 앱은 운영 서버에 접속하므로 어떤 네트워크에서도 동작합니다.
+- 안드로이드 푸시 알림은 Firebase(FCM) 설정을 추가해야 동작합니다. 아직 설정하지 않았습니다.
+- 설정 파일은 `eas.json`입니다. (`preview`: 팀 확인용 APK, `production`: 스토어 제출용)
 
 ## 서버 주소
 
