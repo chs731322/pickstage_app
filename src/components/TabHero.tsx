@@ -5,7 +5,8 @@ import { AppText } from '@/components/AppText';
 import { colors, spacing } from '@/theme';
 
 type Props = {
-  title: string;
+  // 글자 또는 직접 만든 제목 (예: 목록을 고르는 제목)
+  title: ReactNode;
   subtitle?: string;
   // 제목 바로 옆에 붙는 작은 버튼 (예: 캘린더의 "오늘")
   action?: ReactNode;
@@ -18,9 +19,13 @@ export function TabHero({ title, subtitle, action, children }: Props) {
   return (
     <View style={styles.wrap}>
       <View style={styles.titleRow}>
-        <AppText weight="bold" size={22}>
-          {title}
-        </AppText>
+        {typeof title === 'string' ? (
+          <AppText weight="bold" size={22}>
+            {title}
+          </AppText>
+        ) : (
+          title
+        )}
         {action}
       </View>
       {subtitle ? (

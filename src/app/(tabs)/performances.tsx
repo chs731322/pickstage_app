@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useRef, useState } from 'react';
 import {
@@ -17,6 +16,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText } from '@/components/AppText';
 import { EmptyState } from '@/components/EmptyState';
 import { FilterPill } from '@/components/FilterPill';
+import { ArtistList } from '@/components/lists/ArtistList';
+import { VenueList } from '@/components/lists/VenueList';
+import { ListSwitcher, type ListKind } from '@/components/ListSwitcher';
 import { PosterCard } from '@/components/PosterCard';
 import { TabHero } from '@/components/TabHero';
 import { TOP_BUTTON_OFFSET, ToTopButton } from '@/components/ToTopButton';
@@ -42,6 +44,8 @@ export default function PerformancesScreen() {
   const [searchText, setSearchText] = useState('');
   const listRef = useRef<FlatListInstance>(null);
   const [showTop, setShowTop] = useState(false);
+  // 제목에서 고른 목록: 공연 / 아티스트 / 공연장
+  const [kind, setKind] = useState<ListKind>('festival');
   const { data, isPending, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching, error } =
     useFestivalList(filters);
 
@@ -60,24 +64,15 @@ export default function PerformancesScreen() {
     setFilters({ ...DEFAULT_FILTERS, sort: filters.sort });
   };
 
+  const changeKind = (next: ListKind) => {
+    setShowTop(false);
+    setKind(next);
+  };
+  const switcher = <ListSwitcher value={kind} onChange={changeKind} />;
+
   const header = (
     <View style={styles.header}>
-      <TabHero
-        title="공연 탐색"
-        subtitle="곧 열리는 공연을 찾아봐요">
-        <View style={styles.links}>
-          <Pressable onPress={() => router.push('/artists')} hitSlop={8} style={styles.venueLink} accessibilityRole="button">
-            <AppText weight="bold" size={14} color={colors.brand}>
-              아티스트
-            </AppText>
-          </Pressable>
-          <Pressable onPress={() => router.push('/venues')} hitSlop={8} style={styles.venueLink} accessibilityRole="button">
-            <AppText weight="bold" size={14} color={colors.brand}>
-              공연장
-            </AppText>
-          </Pressable>
-        </View>
-
+      <TabHero title={switcher} subtitle="곧 열리는 공연을 찾아봐요">
       {/* 공연명·아티스트 검색 */}
       <View style={styles.search}>
         <SymbolView
@@ -161,6 +156,15 @@ export default function PerformancesScreen() {
     </View>
   );
 
+  if (kind !== 'festival') {
+    const title = <TabHero title={switcher} subtitle={kind === 'artist' ? '예정된 공연에 출연하는 아티스트예요' : '공연이 열리는 곳을 찾아봐요'} />;
+    return (
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        {kind === 'artist' ? <ArtistList title={title} /> : <VenueList title={title} />}
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <FlatList
@@ -209,8 +213,6 @@ const styles = StyleSheet.create({
   list: { backgroundColor: colors.pageBg },
   content: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   column: { gap: GAP, marginBottom: spacing.lg },
-  links: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
-  venueLink: { paddingHorizontal: spacing.ms, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.white },
   header: { gap: spacing.ms, paddingBottom: spacing.md },
   search: {
     flexDirection: 'row',
