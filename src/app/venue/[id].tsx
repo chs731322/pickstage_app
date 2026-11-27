@@ -22,6 +22,7 @@ import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { PosterCard } from '@/components/PosterCard';
 import { ReportBlockMenu } from '@/components/ReportBlockMenu';
+import { ReviewHighlightCard } from '@/components/ReviewHighlightCard';
 import { ReviewFormSheet } from '@/components/ReviewFormSheet';
 import {
   parseFacilities,
@@ -256,6 +257,9 @@ function VenueBody({ venue, topPadding }: { venue: VenueDetail; topPadding: numb
               ) : null}
             </View>
           ) : null}
+
+          {/* 후기 하이라이트 (AI 요약) */}
+          <ReviewHighlightCard target="venue" id={venue.id} />
 
           {/* 후기 */}
           <View style={styles.card}>

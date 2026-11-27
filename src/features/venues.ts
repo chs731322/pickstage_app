@@ -74,7 +74,10 @@ export function useCreateReview(venueId: number) {
     mutationFn: async (input: ReviewInput) => {
       await api.post('/api/reviews', input);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['venue', String(venueId)] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviewHighlights', 'venue', venueId] });
+      return queryClient.invalidateQueries({ queryKey: ['venue', String(venueId)] });
+    },
   });
 }
 

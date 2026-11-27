@@ -19,8 +19,14 @@ import {
 import { colors, fontFamily, radius, spacing } from '@/theme';
 
 // 글쓰기·글 수정 (id가 있으면 수정). 사진은 본문에 `![사진](주소)` 줄로 들어간다.
+// 공연 상세에서 들어오면 festivalId·festivalTitle을 받아 그 공연에 연결한 글을 쓴다.
 export default function WriteScreen() {
-  const { id, category: initialCategory } = useLocalSearchParams<{ id?: string; category?: string }>();
+  const { id, category: initialCategory, festivalId, festivalTitle } = useLocalSearchParams<{
+    id?: string;
+    category?: string;
+    festivalId?: string;
+    festivalTitle?: string;
+  }>();
   const { data: existing } = usePost(id);
   // 수정할 글을 불러온 뒤에 입력칸을 채운다 (key로 다시 만든다)
   if (id && !existing) return <Screen topInset={false}><AppText color={colors.textMuted}>불러오는 중이에요...</AppText></Screen>;
@@ -28,6 +34,7 @@ export default function WriteScreen() {
     <WriteForm
       key={existing?.id ?? 'new'}
       editId={existing?.id}
+      festival={!id && festivalId ? { id: Number(festivalId), title: festivalTitle ?? '선택한 공연' } : null}
       initial={{
         category: existing?.category ?? (initialCategory && POST_CATEGORY_LABEL[initialCategory] ? initialCategory : 'free'),
         title: existing?.title ?? '',
@@ -37,7 +44,16 @@ export default function WriteScreen() {
   );
 }
 
-function WriteForm({ editId, initial }: { editId?: number; initial: { category: string; title: string; content: string } }) {
+function WriteForm({
+  editId,
+  initial,
+  festival: initialFestival,
+}: {
+  editId?: number;
+  initial: { category: string; title: string; content: string };
+  festival: { id: number; title: string } | null;
+}) {
+  const [festival, setFestival] = useState(initialFestival);
   const [category, setCategory] = useState(initial.category);
   const [title, setTitle] = useState(initial.title);
   const [content, setContent] = useState(initial.content);
@@ -69,7 +85,7 @@ function WriteForm({ editId, initial }: { editId?: number; initial: { category: 
     };
     const input = { category, title: title.trim(), content: content.trim() };
     if (editId) update.mutate(input, handlers);
-    else create.mutate(input, handlers);
+    else create.mutate({ ...input, festivalId: festival?.id }, handlers);
   };
 
   return (
@@ -79,6 +95,18 @@ function WriteForm({ editId, initial }: { editId?: number; initial: { category: 
           <FilterPill key={value} label={label} active={category === value} onPress={() => setCategory(value)} />
         ))}
       </View>
+      {festival ? (
+        <View style={styles.festival}>
+          <AppText size={14} color={colors.textSecondary} numberOfLines={1} style={styles.flex}>
+            연결한 공연 <AppText weight="bold" size={14}>{festival.title}</AppText>
+          </AppText>
+          <Pressable onPress={() => setFestival(null)} hitSlop={10} accessibilityRole="button" accessibilityLabel="공연 연결 해제">
+            <AppText weight="bold" size={14} color={colors.textMuted}>
+              해제
+            </AppText>
+          </Pressable>
+        </View>
+      ) : null}
       <TextInput value={title} onChangeText={setTitle} placeholder="제목" placeholderTextColor={colors.textMuted} maxLength={TITLE_MAX_LENGTH} style={styles.title} />
       <TextInput value={content} onChangeText={setContent} placeholder="내용을 입력해주세요" placeholderTextColor={colors.textMuted} multiline style={styles.content} />
       <Pressable onPress={addPhotos} disabled={uploading} style={styles.photo} accessibilityRole="button">
@@ -95,6 +123,8 @@ function WriteForm({ editId, initial }: { editId?: number; initial: { category: 
 }
 
 const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  festival: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.brandSoft },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   title: { padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.white, fontFamily: fontFamily.bold, fontSize: 18, color: colors.text },
   content: { minHeight: 240, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.white, fontFamily: fontFamily.regular, fontSize: 16, color: colors.text, textAlignVertical: 'top' },

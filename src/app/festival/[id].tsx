@@ -24,6 +24,7 @@ import { ConcertTicket } from '@/components/ConcertTicket';
 import { LineupSection } from '@/components/LineupSection';
 import { CustomNotificationSheet } from '@/components/CustomNotificationSheet';
 import { PosterCard } from '@/components/PosterCard';
+import { ReviewHighlightCard } from '@/components/ReviewHighlightCard';
 import { useBookmarks, useToggleBookmark } from '@/features/bookmarks';
 import { useFestival, useRelatedFestivals, type FestivalDetail } from '@/features/festivals';
 import { useAuth } from '@/lib/auth';
@@ -192,6 +193,21 @@ function FestivalBody({
     setNotifyOpen(true);
   };
 
+  // 공연을 연결한 후기 글쓰기 (연결해야 후기 하이라이트에 반영된다)
+  const handleWriteReview = () => {
+    if (!isLoggedIn) {
+      Alert.alert('로그인이 필요해요', '로그인하면 공연 후기를 쓸 수 있어요.', [
+        { text: '취소', style: 'cancel' },
+        { text: '로그인', onPress: () => router.push('/login') },
+      ]);
+      return;
+    }
+    router.push({
+      pathname: '/community/write',
+      params: { category: 'review', festivalId: String(festival.id), festivalTitle: festival.title },
+    });
+  };
+
   const handleShare = () =>
     Share.share({
       message: `${festival.title} — PICKSTAGE에서 확인해보세요.\n${SITE_URL}/performances/${festival.id}`,
@@ -292,6 +308,9 @@ function FestivalBody({
               </View>
             </Card>
           ) : null}
+
+          {/* 후기 하이라이트 (AI 요약) */}
+          <ReviewHighlightCard target="festival" id={festival.id} onWrite={handleWriteReview} />
         </View>
 
         {/* 함께 볼만한 공연 */}

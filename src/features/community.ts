@@ -93,6 +93,8 @@ function useInvalidatePosts() {
   return (id?: number) => {
     queryClient.invalidateQueries({ queryKey: ['posts'] });
     queryClient.invalidateQueries({ queryKey: ['my', 'posts'] });
+    // 공연 후기 글이 늘거나 줄면 후기 하이라이트도 다시 받는다
+    queryClient.invalidateQueries({ queryKey: ['reviewHighlights', 'festival'] });
     if (id !== undefined) queryClient.invalidateQueries({ queryKey: ['post', String(id)] });
   };
 }
